@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Soumya Furnishings Premium Glasomorphic Palette */
+  --brand-ivory: #fafaf8;
+  --brand-sand: #ede5d8;
+  --brand-sage: #b8c5ad;
+  --brand-charcoal: #2d2d2d;
+  --accent-gold: #d4af77;
+  --accent-gold-light: #e8c9a0;
+  --glass-light: rgba(255, 255, 255, 0.7);
+  --glass-dark: rgba(45, 45, 45, 0.08);
+
+  /* Design Tokens */
+  --background: var(--brand-ivory);
+  --foreground: var(--brand-charcoal);
+  --card: white;
+  --card-foreground: var(--brand-charcoal);
+  --primary: var(--accent-gold);
+  --primary-foreground: white;
+  --secondary: var(--brand-sand);
+  --secondary-foreground: var(--brand-charcoal);
+  --muted: var(--brand-sage);
+  --muted-foreground: var(--brand-charcoal);
+  --border: rgba(173, 171, 168, 0.3);
+  --input: white;
+  --destructive: #ef4444;
+  --destructive-foreground: white;
+
+  /* Premium Shadows & Elevations */
+  --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.15);
+
+  /* Radius */
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #1a1a1a;
+  --foreground: #f5f5f5;
+  --card: #2d2d2d;
+  --card-foreground: #f5f5f5;
+  --primary: var(--accent-gold);
+  --primary-foreground: #1a1a1a;
+  --secondary: #404040;
+  --secondary-foreground: #f5f5f5;
+  --muted: #595959;
+  --muted-foreground: #a3a3a3;
+  --border: rgba(100, 100, 100, 0.3);
+  --input: #2d2d2d;
+}
+
+@theme inline {
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent-gold);
+  --color-accent-foreground: white;
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--primary);
+  --color-chart-1: var(--primary);
+  --color-chart-2: var(--primary);
+  --color-chart-3: var(--primary);
+  --color-chart-4: var(--primary);
+  --color-chart-5: var(--primary);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-sidebar: var(--background);
+  --color-sidebar-foreground: var(--foreground);
+  --color-sidebar-primary: var(--primary);
+  --color-sidebar-primary-foreground: var(--primary-foreground);
+  --color-sidebar-accent: var(--secondary);
+  --color-sidebar-accent-foreground: var(--secondary-foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-playfair, serif);
+    letter-spacing: 0.75px;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  p,
+  span,
+  li {
+    font-family: var(--font-inter, sans-serif);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  ::selection {
+    background-color: rgba(212, 175, 119, 0.2);
+    color: var(--foreground);
+  }
+}
+
+@layer utilities {
+  /* Premium glasomorphic effects */
+  .glass {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-dark {
+    background: rgba(45, 45, 45, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-premium {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--shadow-glass);
+  }
+
+  /* Elevated shadow system */
+  .shadow-xs {
+    box-shadow: var(--shadow-xs);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* Premium gradient overlays */
+  .gradient-overlay {
+    background: linear-gradient(to bottom, transparent, transparent, rgba(0, 0, 0, 0.2));
+  }
+
+  .gradient-overlay-premium {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.3));
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+  }
+
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .text-balance-tight {
+    text-wrap: balance;
+  }
+
+  .focus-ring {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

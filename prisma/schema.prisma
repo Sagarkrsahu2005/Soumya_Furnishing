@@ -1,0 +1,177 @@
+// Dev target: SQLite for local development; migrate to Postgres by changing provider and DATABASE_URL
+// For production, set provider = "postgresql" and adjust the connection string.
+
+datasource db {
+  provider = "sqlite" // change to "postgresql" in production
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Admin users for CMS access
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // hashed
+  name      String?
+  role      String   @default("admin") // admin, super_admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// NOTE: Removed legacy duplicate Product model; unified single Product model definition below.
+
+model Image {
+  id        String  @id @default(cuid())
+  src       String
+  alt       String?
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Variant {
+  id        String  @id @default(cuid())
+  name      String
+  // Flattened options map as JSON string
+  options   String
+  price     Int      @default(0)
+  compareAtPrice Int?
+  sku       String?
+  inventoryQuantity Int @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Back relation to order items
+  orderItems OrderItem[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  descriptionHtml String?
+  sku         String?
+  price       Int      @default(0)
+  compareAtPrice Int?
+  currency    String   @default("INR")
+  materials   String?
+  colors      String?
+  badges      String?
+  room        String?
+  rating      Float?
+  reviewsCount Int?
+
+  images    Image[]
+  variants  Variant[]
+
+  collections ProductOnCollection[]
+  orderItems  OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([slug])
+}
+
+// Collections (categories) and their product relations
+model Collection {
+  id          String   @id @default(cuid())
+  handle      String   @unique
+  title       String
+  description String?
+
+  products ProductOnCollection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model ProductOnCollection {
+  productId   String
+  collectionId String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  collection  Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@id([productId, collectionId])
+}
+
+// Customers and addresses (passwords are not imported)
+model Customer {
+  id        String  @id @default(cuid())
+  email     String  @unique
+  firstName String?
+  lastName  String?
+  phone     String?
+  acceptsMarketing Boolean @default(false)
+
+  addresses Address[]
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  name       String?
+  line1      String?
+  line2      String?
+  city       String?
+  state      String?
+  postalCode String?
+  country    String?
+  phone      String?
+  isDefault  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+// Orders and order items
+model Order {
+  id          String   @id @default(cuid())
+  shopifyId   String?  @unique
+  orderNumber Int?
+  name        String?   // e.g., #1001
+  customerId  String?
+  customer    Customer? @relation(fields: [customerId], references: [id])
+
+  currency    String   @default("INR")
+  subtotal    Int      @default(0)
+  tax         Int      @default(0)
+  shipping    Int      @default(0)
+  discount    Int      @default(0)
+  total       Int      @default(0)
+
+  financialStatus  String? // e.g., PAID, PENDING
+  fulfillmentStatus String? // e.g., FULFILLED, PARTIAL
+
+  items      OrderItem[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id])
+  variantId  String?
+  variant    Variant? @relation(fields: [variantId], references: [id])
+
+  title        String
+  variantTitle String?
+  sku          String?
+  quantity     Int
+  unitPrice    Int      @default(0)
+  totalPrice   Int      @default(0)
+}
