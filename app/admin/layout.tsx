@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { 
   LayoutDashboard, 
   Package, 
@@ -13,14 +13,13 @@ import {
   FolderOpen
 } from "lucide-react"
 
-export default function AdminLayoutClient({
-  children,
-  session
+export default function AdminLayout({
+  children
 }: {
   children: React.ReactNode
-  session: any
 }) {
   const pathname = usePathname()
+  const { data: session } = useSession()
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/admin/login" })
