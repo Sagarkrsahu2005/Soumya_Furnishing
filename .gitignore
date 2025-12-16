@@ -31,6 +31,3 @@ next-env.d.ts
 *.db-journal
 /prisma/*.db
 /prisma/*.db-journal
-
-# product images (too large for git)
-/public/products/

@@ -12,7 +12,8 @@
     "seed": "tsx scripts/seed.ts",
     "mirror:images": "tsx scripts/mirror-images.ts",
     "import:shopify": "tsx scripts/import-shopify.ts",
-    "create-admin": "tsx scripts/create-admin.ts"
+    "create-admin": "tsx scripts/create-admin.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
