@@ -20,7 +20,7 @@ export default function PinterestGrid() {
   const heights = ["h-64", "h-80", "h-64", "h-72", "h-64", "h-80"]
 
   return (
-    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-stone-50 via-white to-stone-50">
+    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f7f5f2] via-[#efe9e3] to-[#f7f5f2]">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -29,11 +29,11 @@ export default function PinterestGrid() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 md:mb-24"
         >
-          <span className="text-sm font-light tracking-widest text-amber-700 uppercase">Inspiration</span>
-          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mt-3 leading-tight">
+          <span className="text-sm font-light tracking-widest text-[#c8b27c] uppercase">Inspiration</span>
+          <h2 className="text-4xl md:text-5xl font-playfair text-[#2b2b2b] mt-3 leading-tight">
             Curated Moments
           </h2>
-          <p className="text-lg text-slate-600 mt-4 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-[#5f5f5f] mt-4 font-light max-w-2xl mx-auto">
             Discover elegant interiors and timeless moments that inspire
           </p>
         </motion.div>
@@ -49,7 +49,7 @@ export default function PinterestGrid() {
               whileHover={{ scale: 1.02 }}
               className={`${heights[idx]} group relative rounded-xl overflow-hidden cursor-pointer`}
             >
-              <div className="absolute inset-0 backdrop-blur-sm bg-white/5 border border-white/30 rounded-xl overflow-hidden">
+              <div className="glass rounded-xl overflow-hidden">
                 <img
                   src={image}
                   alt={`Curated moment ${idx + 1}`}
@@ -57,7 +57,7 @@ export default function PinterestGrid() {
                 />
 
                 {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2b2b2b]/60 via-[#2b2b2b]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Hover text */}
                 <motion.div

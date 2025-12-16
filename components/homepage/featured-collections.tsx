@@ -6,10 +6,10 @@ import { useRef } from "react"
 import { ChevronRight } from "lucide-react"
 
 const collections = [
-  { name: "Cushions", count: "180+", color: "from-rose-100 to-rose-50" },
-  { name: "Curtains", count: "120+", color: "from-slate-100 to-stone-50" },
-  { name: "Bedsheets", count: "95+", color: "from-amber-100 to-orange-50" },
-  { name: "Table Linen", count: "65+", color: "from-teal-100 to-cyan-50" },
+  { name: "Cushions", count: "180+", gradientStart: "#c8b27c", gradientEnd: "#d9c4a3" },
+  { name: "Curtains", count: "120+", gradientStart: "#b6a99a", gradientEnd: "#c8b27c" },
+  { name: "Bedsheets", count: "95+", gradientStart: "#9dafa2", gradientEnd: "#b6a99a" },
+  { name: "Table Linen", count: "65+", gradientStart: "#d9c4a3", gradientEnd: "#efe9e3" },
 ]
 
 export default function FeaturedCollections() {
@@ -17,7 +17,7 @@ export default function FeaturedCollections() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-white">
+    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f7f5f2] via-[#efe9e3] to-[#f7f5f2]">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -26,8 +26,8 @@ export default function FeaturedCollections() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 md:mb-24"
         >
-          <span className="text-sm font-light tracking-widest text-amber-700 uppercase">Collections</span>
-          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mt-3 leading-tight">
+          <span className="text-sm font-light tracking-widest text-[#c8b27c] uppercase">Collections</span>
+          <h2 className="text-4xl md:text-5xl font-playfair text-[#2b2b2b] mt-3 leading-tight">
             Featured Collections
           </h2>
         </motion.div>
@@ -43,22 +43,27 @@ export default function FeaturedCollections() {
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
               className="group cursor-pointer"
             >
-              <div className={`bg-gradient-to-br ${collection.color} backdrop-blur-lg border border-white/40 rounded-2xl p-8 h-64 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-white/60`}>
+              <div 
+                style={{
+                  background: `linear-gradient(135deg, ${collection.gradientStart}20 0%, ${collection.gradientEnd}20 100%)`
+                }}
+                className="glass rounded-2xl p-8 h-64 flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:shadow-xl"
+              >
                 {/* Background glow effect */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/20 to-transparent" />
                 
                 <div className="relative z-10">
-                  <h3 className="text-2xl md:text-3xl font-serif text-slate-900 mb-2">
+                  <h3 className="text-2xl md:text-3xl font-playfair text-[#2b2b2b] mb-2">
                     {collection.name}
                   </h3>
-                  <p className="text-sm text-slate-600 font-light">
+                  <p className="text-sm text-[#5f5f5f] font-light">
                     {collection.count} Products
                   </p>
                 </div>
 
                 <div className="relative z-10 flex items-center justify-between">
-                  <span className="text-xs tracking-widest uppercase font-light text-slate-700">Explore</span>
-                  <ChevronRight className="w-5 h-5 text-slate-700 group-hover:translate-x-1 transition-transform duration-300" />
+                  <span className="text-xs tracking-widest uppercase font-light text-[#5f5f5f]">Explore</span>
+                  <ChevronRight className="w-5 h-5 text-[#c8b27c] group-hover:translate-x-1 transition-transform duration-300" />
                 </div>
               </div>
             </motion.div>
@@ -72,7 +77,7 @@ export default function FeaturedCollections() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-center mt-16"
         >
-          <button className="px-8 py-4 border-2 border-slate-900 text-slate-900 rounded-full hover:bg-slate-900 hover:text-white transition-all duration-300 font-medium">
+          <button className="px-8 py-4 border-2 border-[#2b2b2b] text-[#2b2b2b] rounded-full hover:bg-[#2b2b2b] hover:text-white transition-all duration-300 font-medium">
             View All Collections
           </button>
         </motion.div>

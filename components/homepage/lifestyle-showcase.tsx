@@ -17,7 +17,7 @@ export default function LifestyleShowcase() {
   const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1])
 
   return (
-    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-stone-50 via-white to-amber-50 relative">
+    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f7f5f2] via-[#efe9e3] to-[#f7f5f2] relative">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <motion.div
@@ -27,8 +27,8 @@ export default function LifestyleShowcase() {
           viewport={{ once: true }}
           className="text-center mb-16 md:mb-24"
         >
-          <span className="text-sm font-light tracking-widest text-amber-700 uppercase">Lifestyle</span>
-          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mt-3 leading-tight">
+          <span className="text-sm font-light tracking-widest text-[#c8b27c] uppercase">Lifestyle</span>
+          <h2 className="text-4xl md:text-5xl font-playfair text-[#2b2b2b] mt-3 leading-tight">
             Live the Soumya Experience
           </h2>
         </motion.div>
@@ -42,7 +42,7 @@ export default function LifestyleShowcase() {
               className="group relative h-96 md:h-[500px] rounded-xl overflow-hidden cursor-pointer"
             >
               {/* Glass Card Container */}
-              <div className="absolute inset-0 backdrop-blur-lg bg-white/5 border border-white/20 rounded-xl overflow-hidden">
+              <div className="glass rounded-xl overflow-hidden">
                 <img
                   src={image}
                   alt={`Lifestyle ${idx + 1}`}
@@ -50,7 +50,7 @@ export default function LifestyleShowcase() {
                 />
                 
                 {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2b2b2b]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                 {/* Text Overlay */}
                 <motion.div
@@ -72,9 +72,9 @@ export default function LifestyleShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="mt-20 md:mt-28 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl p-12 md:p-16"
+          className="mt-20 md:mt-28 glass rounded-2xl p-12 md:p-16"
         >
-          <p className="text-xl md:text-2xl font-serif text-slate-900 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl font-playfair text-[#2b2b2b] max-w-3xl mx-auto leading-relaxed">
             "Transform your living space into a sanctuary of elegance. Our carefully curated collections bring together timeless design and modern comfort, creating spaces where every moment feels intentional."
           </p>
         </motion.div>
