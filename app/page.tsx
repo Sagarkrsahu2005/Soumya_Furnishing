@@ -1,5 +1,5 @@
 import { Navbar } from "@/components/navbar"
-import HeroSection from "@/components/homepage/hero-section"
+import HeroParallax from "@/components/hero-parallax"
 import BrandPhilosophy from "@/components/homepage/brand-philosophy"
 import FeaturedCollections from "@/components/homepage/featured-collections"
 import LifestyleShowcase from "@/components/homepage/lifestyle-showcase"
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <main className="bg-white overflow-hidden">
       <Navbar />
-      <HeroSection />
+      <HeroParallax />
       <BrandPhilosophy />
       <FeaturedCollections />
       <LifestyleShowcase />
