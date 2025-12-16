@@ -1,22 +1,24 @@
 import { Navbar } from "@/components/navbar"
-import { HeroBanner } from "@/components/hero-banner"
-import { RoomTiles } from "@/components/room-tiles"
-import { CollectionsCarousel } from "@/components/collections-carousel"
-import { WhyUsCards } from "@/components/why-us-cards"
-import { UGCGrid } from "@/components/ugc-grid"
-import { NewsletterBlock } from "@/components/newsletter-block"
+import HeroSection from "@/components/homepage/hero-section"
+import BrandPhilosophy from "@/components/homepage/brand-philosophy"
+import FeaturedCollections from "@/components/homepage/featured-collections"
+import LifestyleShowcase from "@/components/homepage/lifestyle-showcase"
+import WhySoumya from "@/components/homepage/why-soumya"
+import PinterestGrid from "@/components/homepage/pinterest-grid"
+import FinalCTA from "@/components/homepage/final-cta"
 import { Footer } from "@/components/footer"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-brand-ivory">
+    <main className="bg-white overflow-hidden">
       <Navbar />
-      <HeroBanner />
-      <RoomTiles />
-      <CollectionsCarousel />
-      <WhyUsCards />
-      <UGCGrid />
-      <NewsletterBlock />
+      <HeroSection />
+      <BrandPhilosophy />
+      <FeaturedCollections />
+      <LifestyleShowcase />
+      <WhySoumya />
+      <PinterestGrid />
+      <FinalCTA />
       <Footer />
     </main>
   )
