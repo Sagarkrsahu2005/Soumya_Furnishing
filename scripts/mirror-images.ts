@@ -7,7 +7,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { prisma } from '@/lib/db'
-import fetch from 'node-fetch'
 
 const PUBLIC_DIR = path.join(process.cwd(), 'public', 'products')
 
