@@ -153,23 +153,34 @@
 @layer utilities {
   /* Premium glasomorphic effects */
   .glass {
-    background: var(--glass-premium);
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-glass);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   }
 
   .glass-dark {
-    background: rgba(45, 45, 45, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(45, 45, 45, 0.08);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   }
 
   .glass-premium {
-    background: linear-gradient(135deg, var(--glass-premium), rgba(255, 255, 255, 0.08));
-    backdrop-filter: blur(18px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-glass);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  }
+
+  .glass-xl {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
   }
 
   /* Elevated shadow system */

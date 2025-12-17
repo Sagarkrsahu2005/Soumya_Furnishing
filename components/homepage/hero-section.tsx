@@ -133,7 +133,7 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator with luxury styling */}
-      <motion.div
+      {/* <motion.div
         animate={{ y: [0, 12, 0] }}
         transition={{ duration: 2.5, repeat: Infinity }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
@@ -146,7 +146,7 @@ export default function HeroSection() {
             <ChevronDown className="w-5 h-5 text-[#c8b27c]" strokeWidth={1.5} />
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
     </section>
   )
 }

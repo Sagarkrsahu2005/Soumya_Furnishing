@@ -77,7 +77,14 @@ export default function HeroParallax() {
     >
       {/* Background with parallax */}
       <div ref={bgRef} className="absolute inset-0 will-change-transform">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f7f5f2] via-[#efe9e3] to-[#f7f5f2]" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1615876234886-fd9a39fda97f?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+            opacity: 100,
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f7f5f2]/90 via-[#efe9e3]/40 to-[#f7f5f2]/90" />
 
         {/* Subtle decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#c8b27c] rounded-full blur-3xl opacity-5" />

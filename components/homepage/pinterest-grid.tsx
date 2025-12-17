@@ -5,12 +5,12 @@ import { useInView } from "framer-motion"
 import { useRef } from "react"
 
 const gridImages = [
-  "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&h=600&fit=crop",
-  "https://images.unsplash.com/photo-1567016376408-0226e4d0cdd6?w=400&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1584622614875-e51df1bdc82f?w=400&h=500&fit=crop",
-  "https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=400&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=600&fit=crop",
+  "https://images.unsplash.com/photo-1617099443741-a9b51eabd2b8?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1606380588797-21fcaca88b62?q=80&w=1738&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1721523237766-7e1b014256a8?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1650091063553-58b5f50b59ca?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1721274503515-fb3f6ace82a4?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1722942631531-5b09fed44978?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ]
 
 export default function PinterestGrid() {
