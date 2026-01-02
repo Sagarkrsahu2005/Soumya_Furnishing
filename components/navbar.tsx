@@ -43,21 +43,21 @@ export function Navbar() {
     <>
       {/* Unified Navigation Bar with Logo, Menu, and Cart */}
       <div className={cn(
-        "fixed top-10 inset-x-0 max-w-fit mx-auto z-50 transition-transform duration-300",
+        "fixed top-10 inset-x-0 max-w-fit mx-auto z-50 transition-transform duration-300 px-4",
         isVisible ? "translate-y-0" : "-translate-y-32"
       )}>
         <div className="flex items-center justify-center">
-          {/* Navigation Menu with Logo and Cart inside */}
-          <div className="hidden md:block">
+          {/* Navigation Menu with Logo and Cart inside - Visible on all screens */}
+          <div className="w-full">
             <Menu setActive={setActive}>
               {/* Logo inside menu */}
-              <Link href="/" className="flex-shrink-0 mr-4">
+              <Link href="/" className="flex-shrink-0 mr-2 md:mr-4">
                 <Image
                   src="/logo.webp"
                   alt="Soumya Furnishings"
-                  width={160}
-                  height={58}
-                  className="h-8 w-auto"
+                  width={140}
+                  height={51}
+                  className="h-7 md:h-8 w-auto"
                   priority
                 />
               </Link>
@@ -73,7 +73,7 @@ export function Navbar() {
                 </div>
               </MenuItem>
               <MenuItem setActive={setActive} active={active} item="Collections">
-                <div className="text-sm grid grid-cols-2 gap-10 p-4">
+                <div className="text-sm grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-2 md:p-4">
                   <ProductItem
                     title="Bedroom Collection"
                     href="/products?room=bedroom"
@@ -120,7 +120,7 @@ export function Navbar() {
               {/* Cart Button inside menu */}
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-1.5 text-[#2b2b2b] hover:text-[#4A90E2] transition-colors ml-3"
+                className="relative p-1 md:p-1.5 text-[#2b2b2b] hover:text-[#4A90E2] transition-colors ml-2 md:ml-3"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
