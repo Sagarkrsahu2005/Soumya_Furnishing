@@ -41,8 +41,13 @@ export default function WhySoumya() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f7f5f2] via-[#efe9e3] to-[#f7f5f2]">
-      <div className="max-w-7xl mx-auto">
+    <section ref={ref} className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f1f8f2] via-[#e8f5e9] to-[#dcedc8] relative overflow-hidden">
+      {/* Decorative glow effects */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 right-20 w-[400px] h-[400px] bg-[#c8b27c] rounded-full blur-[120px]" />
+        <div className="absolute bottom-20 left-20 w-[500px] h-[500px] bg-[#9dafa2] rounded-full blur-[150px]" />
+      </div>
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -73,13 +78,13 @@ export default function WhySoumya() {
                   style={{
                     background: `linear-gradient(135deg, ${feature.gradientStart}20 0%, ${feature.gradientEnd}20 100%)`
                   }}
-                  className="glass rounded-2xl p-8 h-full flex flex-col relative overflow-hidden hover:shadow-xl transition-all duration-300"
+                  className="rounded-2xl p-8 h-full flex flex-col relative overflow-hidden hover:shadow-xl transition-all duration-300 bg-white/70 backdrop-blur-sm border border-[#e5e1da]"
                 >
                   {/* Glow effect on hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/20 to-transparent" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-[#4A90E2]/10 to-transparent" />
 
                   <div className="relative z-10">
-                    <div className="w-12 h-12 bg-[#2b2b2b]/10 rounded-full flex items-center justify-center mb-6 group-hover:bg-[#2b2b2b]/20 transition-colors duration-300">
+                    <div className="w-12 h-12 bg-[#4A90E2]/20 rounded-full flex items-center justify-center mb-6 group-hover:bg-[#4A90E2]/30 transition-colors duration-300">
                       <Icon className="w-6 h-6 text-[#2b2b2b]" />
                     </div>
 

@@ -3,6 +3,19 @@
 
 @custom-variant dark (&:is(.dark *));
 
+* {
+  scroll-behavior: smooth;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 :root {
   /* Soumya Furnishings Luxury Editorial Palette */
   /* Primary Neutrals */
@@ -116,6 +129,27 @@
 
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+  }
+
+  /* Smooth transitions for interactive elements */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Optimize rendering performance */
+  img,
+  video {
+    will-change: transform;
+  }
+
+  section {
+    will-change: transform, opacity;
   }
 
   h1,
@@ -183,6 +217,34 @@
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
   }
 
+  @keyframes scroll-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee-track {
+    min-width: 200%;
+    animation: scroll-marquee 28s linear infinite;
+    display: flex;
+  }
+
+  .marquee-track.reverse {
+    animation-direction: reverse;
+  }
+
+  .marquee-item {
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+  }
+
   /* Elevated shadow system */
   .shadow-xs {
     box-shadow: var(--shadow-xs);
@@ -246,5 +308,20 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
+  }
+  
+  /* Infinite Moving Cards Animation */
+  .animate-scroll {
+    animation: scroll var(--animation-duration, 40s) linear infinite;
+    animation-direction: var(--animation-direction, forwards);
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
   }
 }

@@ -1,0 +1,54 @@
+
+> my-v0-project@0.1.0 build /Users/sagarsahu/Developer/Soumya Furnishings
+> next build
+
+   ▲ Next.js 16.0.10 (Turbopack)
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 5.1s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+   Generating static pages using 7 workers (0/21) ...
+   Generating static pages using 7 workers (5/21) 
+   Generating static pages using 7 workers (10/21) 
+   Generating static pages using 7 workers (15/21) 
+Filtering products, total: [33m0[39m
+Filtered results: [33m0[39m
+ ✓ Generating static pages using 7 workers (21/21) in 569.9ms
+   Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ○ /admin
+├ ○ /admin/collections
+├ ○ /admin/customers
+├ ○ /admin/login
+├ ○ /admin/orders
+├ ○ /admin/products
+├ ƒ /admin/products/[id]/edit
+├ ○ /admin/products/new
+├ ○ /admin/settings
+├ ƒ /api/admin/customers
+├ ƒ /api/admin/orders
+├ ƒ /api/admin/products
+├ ƒ /api/admin/products/[id]
+├ ƒ /api/admin/stats
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/collections
+├ ƒ /api/collections/[handle]
+├ ƒ /api/products
+├ ƒ /api/products/[slug]
+├ ○ /cart
+├ ○ /contact
+├ ○ /products
+└ ƒ /products/[slug]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

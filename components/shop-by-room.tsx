@@ -65,8 +65,9 @@ export default function ShopByRoom() {
             trigger: card,
             start: "top center",
             end: "bottom center",
-            scrub: 1,
+            scrub: 2,
             markers: false,
+            invalidateOnRefresh: true,
           },
         })
       })
@@ -78,12 +79,12 @@ export default function ShopByRoom() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f7f5f2] via-[#efe9e3] to-[#f7f5f2]"
+      className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#e8f5e9] via-[#f1f8f2] to-[#e8f5e9]"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-24">
-          <span className="text-sm font-light tracking-widest text-[#c8b27c] uppercase">
+          <span className="text-sm font-light tracking-widest text-[#4A90E2] uppercase">
             Collections
           </span>
           <h2 className="text-4xl md:text-5xl font-playfair text-[#2b2b2b] mt-3 leading-tight">
@@ -107,7 +108,7 @@ export default function ShopByRoom() {
               {/* Image with parallax */}
               <div
                 data-parallax-image
-                className="absolute inset-0 will-change-transform"
+                className="absolute inset-0 will-change-transform scale-110"
               >
                 <Image
                   src={room.image}

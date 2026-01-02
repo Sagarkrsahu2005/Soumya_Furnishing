@@ -6,8 +6,8 @@ export default function FinalCTA() {
   return (
     <section className="py-24 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#2b2b2b] via-[#3a3a3a] to-[#2b2b2b] relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#c8b27c]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#9dafa2]/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#4A90E2]/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#7CB342]/5 rounded-full blur-3xl" />
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
         <motion.div
@@ -35,10 +35,10 @@ export default function FinalCTA() {
             viewport={{ once: true }}
             className="flex flex-col sm:flex-row gap-4 justify-center pt-8"
           >
-            <button className="px-10 py-4 bg-[#c8b27c] text-[#2b2b2b] rounded-lg hover:bg-[#d9c4a3] transition-all duration-300 text-lg font-medium shadow-xl hover:shadow-2xl font-inter font-semibold tracking-wide">
+            <button className="px-10 py-4 bg-[#4A90E2] text-white rounded-lg hover:bg-[#2E5C8A] transition-all duration-300 text-lg font-medium shadow-xl hover:shadow-2xl font-inter font-semibold tracking-wide">
               Shop the Collection
             </button>
-            <button className="px-10 py-4 border-2 border-[#c8b27c] text-[#c8b27c] rounded-lg hover:bg-[#c8b27c]/10 transition-all duration-300 text-lg font-medium backdrop-blur-lg font-inter font-semibold tracking-wide">
+            <button className="px-10 py-4 border-2 border-[#4A90E2] text-[#4A90E2] rounded-lg hover:bg-[#4A90E2]/10 transition-all duration-300 text-lg font-medium backdrop-blur-lg font-inter font-semibold tracking-wide">
               Learn More
             </button>
           </motion.div>

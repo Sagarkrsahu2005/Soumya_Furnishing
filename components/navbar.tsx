@@ -2,123 +2,140 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ShoppingCart, Menu, X } from "lucide-react"
+import Image from "next/image"
+import { ShoppingCart, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useCart } from "@/hooks/use-cart"
 import { CartSheet } from "@/components/cart-sheet"
+import { Menu, MenuItem, HoveredLink, ProductItem } from "@/components/ui/navbar-menu"
 import { cn } from "@/lib/utils"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [active, setActive] = useState<string | null>(null)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
   const { items } = useCart()
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      const currentScrollY = window.scrollY
+      
+      // Show navbar when scrolling up, hide when scrolling down
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false)
+      } else {
+        setIsVisible(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+      setIsScrolled(currentScrollY > 50)
     }
+    
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const navLinks = [
-    { label: "Shop", href: "/products" },
-    { label: "Collections", href: "#collections" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-  ]
+  }, [lastScrollY])
 
   return (
     <>
-      <nav
-        className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
-          isScrolled ? "glass border-b border-brand-sand/30" : "bg-transparent",
-        )}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex-shrink-0">
-              <div className="text-xl md:text-2xl font-bold tracking-tight">
-                <span className="text-brand-charcoal">Soumya</span>
-                <span className="text-accent-gold"> Furnishings</span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-brand-charcoal hover:text-accent-gold transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            {/* Cart & Mobile Menu */}
-            <div className="flex items-center gap-4">
+      {/* Unified Navigation Bar with Logo, Menu, and Cart */}
+      <div className={cn(
+        "fixed top-10 inset-x-0 max-w-fit mx-auto z-50 transition-transform duration-300",
+        isVisible ? "translate-y-0" : "-translate-y-32"
+      )}>
+        <div className="flex items-center justify-center">
+          {/* Navigation Menu with Logo and Cart inside */}
+          <div className="hidden md:block">
+            <Menu setActive={setActive}>
+              {/* Logo inside menu */}
+              <Link href="/" className="flex-shrink-0 mr-4">
+                <Image
+                  src="/logo.webp"
+                  alt="Soumya Furnishings"
+                  width={160}
+                  height={58}
+                  className="h-8 w-auto"
+                  priority
+                />
+              </Link>
+              
+              <MenuItem setActive={setActive} active={active} item="Shop">
+                <div className="flex flex-col space-y-4 text-sm">
+                  <HoveredLink href="/products">All Products</HoveredLink>
+                  <HoveredLink href="/products?category=bedding">Bedding</HoveredLink>
+                  <HoveredLink href="/products?category=cushions">Cushions</HoveredLink>
+                  <HoveredLink href="/products?category=curtains">Curtains</HoveredLink>
+                  <HoveredLink href="/products?category=rugs">Rugs</HoveredLink>
+                  <HoveredLink href="/products?category=table-linen">Table Linen</HoveredLink>
+                </div>
+              </MenuItem>
+              <MenuItem setActive={setActive} active={active} item="Collections">
+                <div className="text-sm grid grid-cols-2 gap-10 p-4">
+                  <ProductItem
+                    title="Bedroom Collection"
+                    href="/products?room=bedroom"
+                    src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&auto=format&fit=crop"
+                    description="Premium bedding and furnishings for your personal sanctuary."
+                  />
+                  <ProductItem
+                    title="Living Room"
+                    href="/products?room=living"
+                    src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&auto=format&fit=crop"
+                    description="Elegant pieces to elevate your living space."
+                  />
+                  <ProductItem
+                    title="Dining Collection"
+                    href="/products?room=dining"
+                    src="https://images.unsplash.com/photo-1617098900591-3f90928e8c54?w=400&auto=format&fit=crop"
+                    description="Refined table linens and dining essentials."
+                  />
+                  <ProductItem
+                    title="Outdoor Living"
+                    href="/products?room=outdoor"
+                    src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=400&auto=format&fit=crop"
+                    description="Weather-resistant furnishings for outdoor comfort."
+                  />
+                </div>
+              </MenuItem>
+              <MenuItem setActive={setActive} active={active} item="About">
+                <div className="flex flex-col space-y-4 text-sm">
+                  <HoveredLink href="/about">Our Story</HoveredLink>
+                  <HoveredLink href="/about#craftsmanship">Craftsmanship</HoveredLink>
+                  <HoveredLink href="/about#sustainability">Sustainability</HoveredLink>
+                  <HoveredLink href="/about#team">Meet the Team</HoveredLink>
+                </div>
+              </MenuItem>
+              <MenuItem setActive={setActive} active={active} item="Contact">
+                <div className="flex flex-col space-y-4 text-sm">
+                  <HoveredLink href="/contact">Get in Touch</HoveredLink>
+                  <HoveredLink href="/contact#stores">Store Locations</HoveredLink>
+                  <HoveredLink href="/contact#support">Customer Support</HoveredLink>
+                  <HoveredLink href="/contact#trade">Trade Program</HoveredLink>
+                </div>
+              </MenuItem>
+              
+              {/* Cart Button inside menu */}
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-2 text-brand-charcoal hover:text-accent-gold transition-colors"
+                className="relative p-1.5 text-[#2b2b2b] hover:text-[#4A90E2] transition-colors ml-3"
               >
-                <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+                <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-accent-gold rounded-full">
+                  <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-[#4A90E2] rounded-full">
                     {cartCount}
                   </span>
                 )}
               </button>
-
-              {/* Mobile Menu Button */}
-              <button
-                className="md:hidden p-2 text-brand-charcoal hover:text-accent-gold"
-                onClick={() => setIsMobileOpen(!isMobileOpen)}
-                aria-label="Toggle menu"
-              >
-                {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
+            </Menu>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="md:hidden bg-brand-ivory border-b border-brand-sand/30"
-            >
-              <div className="px-4 py-4 space-y-2">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="block px-3 py-2 text-brand-charcoal hover:bg-brand-sand/30 rounded transition-colors"
-                    onClick={() => setIsMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
+      </div>
 
       {/* Cart Sheet */}
       <CartSheet isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-
-      {/* Spacer */}
-      <div className="h-16 md:h-20" />
     </>
   )
 }

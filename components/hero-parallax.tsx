@@ -20,7 +20,12 @@ export default function HeroParallax() {
 
     if (!heroRef.current || prefersReducedMotion) return
 
-    // Background parallax
+    // Smooth scroll configuration
+    gsap.config({
+      force3D: true,
+    })
+
+    // Background parallax with smoother scrub
     gsap.to(bgRef.current, {
       yPercent: 25,
       ease: "none",
@@ -28,12 +33,13 @@ export default function HeroParallax() {
         trigger: heroRef.current,
         start: "top top",
         end: "bottom top",
-        scrub: 1,
+        scrub: 1.5,
         markers: false,
+        invalidateOnRefresh: true,
       },
     })
 
-    // Content card subtle parallax (upward)
+    // Content card subtle parallax (upward) with smoother scrub
     gsap.to(contentRef.current, {
       yPercent: -8,
       ease: "none",
@@ -41,29 +47,10 @@ export default function HeroParallax() {
         trigger: heroRef.current,
         start: "top top",
         end: "bottom top",
-        scrub: 1,
+        scrub: 1.5,
+        invalidateOnRefresh: true,
       },
     })
-
-    // Scroll indicator fade
-    const scrollIndicator = document.querySelector("[data-scroll-indicator]")
-    if (scrollIndicator) {
-      gsap.to(scrollIndicator, {
-        opacity: 0,
-        pointerEvents: "none",
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top center",
-          onUpdate: (self) => {
-            gsap.to(scrollIndicator, {
-              opacity: 1 - self.getVelocity() / 500,
-              overwrite: "auto",
-            })
-          },
-        },
-      })
-    }
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
@@ -73,28 +60,28 @@ export default function HeroParallax() {
   return (
     <section
       ref={heroRef}
-      className="relative h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative h-screen w-full overflow-hidden flex items-center justify-center pt-24"
     >
       {/* Background with parallax */}
-      <div ref={bgRef} className="absolute inset-0 will-change-transform">
+      <div ref={bgRef} className="absolute inset-0 will-change-transform scale-110">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1615876234886-fd9a39fda97f?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-            opacity: 100,
+            opacity: 0.55,
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f7f5f2]/90 via-[#efe9e3]/40 to-[#f7f5f2]/90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5e9]/50 via-[#f1f8f2]/50 to-[#e8f5e9]/50" />
 
         {/* Subtle decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#c8b27c] rounded-full blur-3xl opacity-5" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#9dafa2] rounded-full blur-3xl opacity-5" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#4A90E2] rounded-full blur-3xl opacity-5" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#7CB342] rounded-full blur-3xl opacity-5" />
       </div>
 
       {/* Fixed overlay for text readability */}
       <div
         ref={overlayRef}
-        className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f7f5f2]/40 pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#e8f5e9]/40 pointer-events-none"
       />
 
       {/* Content card with parallax */}
@@ -105,7 +92,7 @@ export default function HeroParallax() {
         <div className="space-y-8 text-center">
           {/* Luxury accent line */}
           <div className="flex justify-center">
-            <div className="h-px w-12 bg-gradient-to-r from-transparent via-[#c8b27c] to-transparent" />
+            <div className="h-px w-12 bg-gradient-to-r from-transparent via-[#4A90E2] to-transparent" />
           </div>
 
           {/* Main headline */}
@@ -113,7 +100,7 @@ export default function HeroParallax() {
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-playfair font-semibold text-[#2b2b2b] leading-tight"
             style={{ letterSpacing: "0.02em" }}
           >
-            Elevate Your <span className="text-[#c8b27c] block">Living</span>
+           Comfort Made <span className="text-[#4A90E2] block">Beautiful</span>
           </h1>
 
           {/* Subtext */}
@@ -126,18 +113,18 @@ export default function HeroParallax() {
 
           {/* Accent divider */}
           <div className="flex justify-center">
-            <div className="h-px w-16 bg-gradient-to-r from-[#9dafa2] via-[#c8b27c] to-[#9dafa2]" />
+            <div className="h-px w-10 bg-gradient-to-r from-[#7CB342] via-[#4A90E2] to-[#7CB342]" />
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             {/* Primary CTA */}
             <button
-              className="group px-10 sm:px-12 py-4 sm:py-5 bg-[#2b2b2b] text-white rounded-lg font-inter font-medium text-base sm:text-lg tracking-wide transition-all duration-500 hover:bg-[#c8b27c] hover:text-[#2b2b2b] hover:shadow-lg relative overflow-hidden"
+              className="group px-10 sm:px-12 py-4 sm:py-5 bg-[#2b2b2b] text-white rounded-lg font-inter font-medium text-base sm:text-lg tracking-wide transition-all duration-500 hover:bg-[#4A90E2] hover:text-white hover:shadow-lg relative overflow-hidden"
               style={{ letterSpacing: "0.12em" }}
             >
               <span className="relative z-10">Explore Collections</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#c8b27c] to-[#d9c4a3] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#4A90E2] to-[#2E5C8A] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </button>
 
             {/* Secondary CTA */}
@@ -155,32 +142,14 @@ export default function HeroParallax() {
             style={{ letterSpacing: "0.05em" }}
           >
             <div className="flex items-center gap-2">
-              <span className="text-[#c8b27c]">✓</span> Curated Collections
+              <span className="text-[#4A90E2]">✓</span> Curated Collections
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[#c8b27c]">✓</span> Premium Quality
+              <span className="text-[#4A90E2]">✓</span> Premium Quality
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-[#c8b27c]">✓</span> Expert Service
+              <span className="text-[#4A90E2]">✓</span> Expert Service
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div
-        data-scroll-indicator
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 transition-opacity duration-300"
-      >
-        <div className="flex flex-col items-center gap-3">
-          <span className="text-xs sm:text-sm text-[#8c8c8c] font-inter tracking-widest uppercase">
-            Scroll to Explore
-          </span>
-          <div className="flex items-center justify-center animate-bounce">
-            <ChevronDown
-              className="w-5 h-5 text-[#c8b27c]"
-              strokeWidth={1.5}
-            />
           </div>
         </div>
       </div>
