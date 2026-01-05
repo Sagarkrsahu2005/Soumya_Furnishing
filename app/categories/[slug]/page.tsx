@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
-import { FilterSidebar } from "@/components/filter-sidebar"
 import { SortSelect } from "@/components/sort-select"
 import { Pagination } from "@/components/pagination"
 
@@ -234,19 +233,9 @@ export default async function CategoryPage({
 
       {/* Products Section */}
       <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <aside className="lg:w-64 flex-shrink-0">
-            <FilterSidebar
-              materials={availableMaterials}
-              colors={availableColors}
-              rooms={availableRooms as Array<"Living" | "Bedroom" | "Dining" | "Outdoor">}
-              priceRange={priceRange}
-            />
-          </aside>
-
+        <div className="flex flex-col gap-8">
           {/* Products Grid */}
-          <div className="flex-1">
+          <div className="w-full">
             {/* Sort and Count */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm text-gray-600">
