@@ -4,7 +4,6 @@ import { prisma } from "@/lib/db"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
-import { SortSelect } from "@/components/sort-select"
 import { Pagination } from "@/components/pagination"
 
 interface CategoryPageProps {
@@ -236,13 +235,12 @@ export default async function CategoryPage({
         <div className="flex flex-col gap-8">
           {/* Products Grid */}
           <div className="w-full">
-            {/* Sort and Count */}
-            <div className="flex items-center justify-between mb-6">
+            {/* Product Count */}
+            <div className="mb-6">
               <p className="text-sm text-gray-600">
                 Showing {(page - 1) * limit + 1}-
                 {Math.min(page * limit, totalCount)} of {totalCount} products
               </p>
-              <SortSelect />
             </div>
 
             {/* Products Grid */}
