@@ -2,7 +2,7 @@
 // For production, set provider = "postgresql" and adjust the connection string.
 
 datasource db {
-  provider = "sqlite" // change to "postgresql" in production
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -63,6 +63,7 @@ model Product {
   colors      String?
   badges      String?
   room        String?
+  category    String?
   rating      Float?
   reviewsCount Int?
 

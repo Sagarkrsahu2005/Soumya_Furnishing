@@ -2,15 +2,30 @@
 
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
 
 interface PaginationProps {
   currentPage: number
   totalPages: number
-  onPageChange: (page: number) => void
+  onPageChange?: (page: number) => void
+  baseUrl?: string
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({ currentPage, totalPages, onPageChange, baseUrl }: PaginationProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  
   if (totalPages <= 1) return null
+
+  const handlePageChange = (page: number) => {
+    if (onPageChange) {
+      onPageChange(page)
+    } else if (baseUrl) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('page', page.toString())
+      router.push(`${baseUrl}?${params.toString()}`)
+    }
+  }
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = []
@@ -36,7 +51,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   return (
     <div className="flex items-center justify-center gap-2 mt-12 md:mt-16">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="p-2 rounded border border-brand-sand text-brand-charcoal hover:bg-brand-sand/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         aria-label="Previous page"
@@ -47,7 +62,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       {getPageNumbers().map((page, index) => (
         <motion.button
           key={index}
-          onClick={() => typeof page === "number" && onPageChange(page)}
+          onClick={() => typeof page === "number" && handlePageChange(page)}
           disabled={typeof page !== "number"}
           className={`w-10 h-10 rounded transition-all ${
             page === currentPage
@@ -63,7 +78,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
       ))}
 
       <button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className="p-2 rounded border border-brand-sand text-brand-charcoal hover:bg-brand-sand/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         aria-label="Next page"

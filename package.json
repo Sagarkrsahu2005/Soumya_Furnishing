@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "prisma generate && next build",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",
@@ -12,6 +13,7 @@
     "seed": "tsx scripts/seed.ts",
     "mirror:images": "tsx scripts/mirror-images.ts",
     "import:shopify": "tsx scripts/import-shopify.ts",
+    "categorize": "tsx scripts/categorize-products.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "postinstall": "prisma generate"
   },

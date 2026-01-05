@@ -1,0 +1,7 @@
+{
+  "buildCommand": "prisma generate && prisma migrate deploy && next build",
+  "framework": "nextjs",
+  "regions": ["bom1"],
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev"
+}

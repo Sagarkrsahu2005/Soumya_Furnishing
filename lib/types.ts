@@ -19,6 +19,7 @@ export type Product = {
   materials?: string[]
   colors?: string[]
   room?: "Living" | "Bedroom" | "Dining" | "Outdoor"
+  category?: string
   rating?: number
   reviewsCount?: number
   badges?: string[]

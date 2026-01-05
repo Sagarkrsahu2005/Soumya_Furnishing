@@ -99,6 +99,7 @@ async function importProducts() {
   const materialsTags = p.tags.filter((t: string) => t.startsWith('material:')).map((t: string) => t.replace('material:', ''))
   const colorsTags = p.tags.filter((t: string) => t.startsWith('color:')).map((t: string) => t.replace('color:', ''))
   const roomTag = p.tags.find((t: string) => t.startsWith('room:'))?.replace('room:', '')
+  const categoryTag = p.tags.find((t: string) => t.startsWith('category:'))?.replace('category:', '')
   const badgeTags = p.tags.filter((t: string) => t.startsWith('badge:')).map((t: string) => t.replace('badge:', ''))
 
       // Determine primary pricing from first variant (can refine later)
@@ -115,6 +116,7 @@ async function importProducts() {
           materials: materialsTags.length ? materialsTags.join('|') : null,
           colors: colorsTags.length ? colorsTags.join('|') : null,
           room: roomTag || null,
+          category: categoryTag || null,
           badges: badgeTags.length ? badgeTags.join('|') : null,
           price: basePrice,
           compareAtPrice: compareAt,
@@ -128,6 +130,7 @@ async function importProducts() {
           materials: materialsTags.length ? materialsTags.join('|') : null,
           colors: colorsTags.length ? colorsTags.join('|') : null,
           room: roomTag || null,
+          category: categoryTag || null,
           badges: badgeTags.length ? badgeTags.join('|') : null,
         },
       })

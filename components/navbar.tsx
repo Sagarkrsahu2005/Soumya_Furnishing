@@ -65,11 +65,12 @@ export function Navbar() {
               <MenuItem setActive={setActive} active={active} item="Shop">
                 <div className="flex flex-col space-y-4 text-sm">
                   <HoveredLink href="/products">All Products</HoveredLink>
-                  <HoveredLink href="/products?category=bedding">Bedding</HoveredLink>
-                  <HoveredLink href="/products?category=cushions">Cushions</HoveredLink>
-                  <HoveredLink href="/products?category=curtains">Curtains</HoveredLink>
-                  <HoveredLink href="/products?category=rugs">Rugs</HoveredLink>
-                  <HoveredLink href="/products?category=table-linen">Table Linen</HoveredLink>
+                  <HoveredLink href="/categories/bedding">Bedding</HoveredLink>
+                  <HoveredLink href="/categories/cushions">Cushions & Pillows</HoveredLink>
+                  <HoveredLink href="/categories/curtains">Curtains & Drapes</HoveredLink>
+                  <HoveredLink href="/categories/rugs">Rugs & Runners</HoveredLink>
+                  <HoveredLink href="/categories/table-linen">Table Linen</HoveredLink>
+                  <HoveredLink href="/categories/throws">Throws & Blankets</HoveredLink>
                 </div>
               </MenuItem>
               <MenuItem setActive={setActive} active={active} item="Collections">
