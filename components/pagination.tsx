@@ -69,9 +69,9 @@ export function Pagination({ currentPage, totalPages, onPageChange, baseUrl }: P
           key={index}
           onClick={() => typeof page === "number" && handlePageChange(page)}
           disabled={typeof page !== "number"}
-          className={`w-10 h-10 rounded-lg transition-all ${
+          className={`w-10 h-10 rounded-lg font-semibold transition-all ${
             page === currentPage
-              ? "bg-accent-gold text-white font-semibold shadow-lg"
+              ? "bg-brand-charcoal text-white shadow-lg ring-2 ring-accent-gold"
               : typeof page === "number"
                 ? "border-2 border-brand-sand text-brand-charcoal hover:bg-brand-sand/30 hover:border-accent-gold cursor-pointer"
                 : "text-brand-charcoal/50 cursor-default"
