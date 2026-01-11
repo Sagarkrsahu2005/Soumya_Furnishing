@@ -2,22 +2,58 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { PRODUCTS } from "@/data/products"
+import { useEffect, useState } from "react"
 import { formatPrice } from "@/lib/utils"
 import type { Product } from "@/lib/types"
 
-const featuredSlugs = [
-  "wall-hanging-textile",
-  "bedroom-canopy-sheer",
-  "patio-outdoor-rug",
-  "outdoor-garden-cushions",
-]
-
-const featuredProducts: Product[] = featuredSlugs
-  .map((slug) => PRODUCTS.find((product) => product.slug === slug))
-  .filter((product): product is Product => Boolean(product))
-
 export default function FeaturedProductsGrid() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        // Get 4 random products with badges
+        const productsWithBadges = data.filter((p: Product) => p.badges && p.badges.length > 0)
+        const shuffled = productsWithBadges.length >= 4 
+          ? [...productsWithBadges].sort(() => 0.5 - Math.random()).slice(0, 4)
+          : [...data].sort(() => 0.5 - Math.random()).slice(0, 4)
+        setProducts(shuffled)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to fetch products:', err)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#e8f5e9] via-[#f1f8f2] to-[#f9fdf9]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm uppercase tracking-[0.4em] text-[#4A90E2] mb-4">Discover More</p>
+            <h2 className="text-4xl md:text-5xl font-playfair font-semibold text-[#2b2b2b] leading-tight">
+              Handpicked for You
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="rounded-3xl border border-[#e5e1da] bg-white overflow-hidden animate-pulse">
+                <div className="h-80 bg-gray-200" />
+                <div className="p-6 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded" />
+                  <div className="h-3 bg-gray-200 rounded w-2/3" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#e8f5e9] via-[#f1f8f2] to-[#f9fdf9]">
       <div className="max-w-7xl mx-auto">
@@ -29,7 +65,7 @@ export default function FeaturedProductsGrid() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product) => (
+          {products.map((product) => (
             <Link
               key={product.slug}
               href={`/products/${product.slug}`}
