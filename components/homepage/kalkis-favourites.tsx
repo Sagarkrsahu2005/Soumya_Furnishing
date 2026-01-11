@@ -1,9 +1,8 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel"
-import { PRODUCTS } from "@/data/products"
 import type { Product } from "@/lib/types"
 
 type KalkiPick = {
@@ -14,57 +13,29 @@ type KalkiPick = {
   lifestyleImage: string
 }
 
-const kalkiSelections = [
-  {
-    slug: "dining-linen-napkins",
-    headline: "Where Meals Become Memories",
-    description: "Elegant tableware that makes every meal feel special",
-    category: "Tablescape",
-    lifestyleImage: "https://images.unsplash.com/photo-1515169273894-7e876dcf13da?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    slug: "heritage-indigo-cushion",
-    headline: "Wrap Yourself in Comfort",
-    description: "Premium comforters crafted for restful nights",
-    category: "Comforters",
-    lifestyleImage: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    slug: "bedroom-linen-sheets",
-    headline: "Sleep in Luxury",
-    description: "Breathe easy with soft, stylish bedsheets made for every season",
-    category: "Bedsheets",
-    lifestyleImage: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    slug: "wool-area-rug",
-    headline: "Drape Your World in Elegance",
-    description: "Premium fabrics that bring luxury and light control to your home",
-    category: "Curtains",
-    lifestyleImage: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    slug: "velvet-luxe-throw",
-    headline: "Soft, breathable comfort",
-    description: "Sustainable fabrics made from organic materials",
-    category: "Premium Fabrics",
-    lifestyleImage: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1200&auto=format&fit=crop",
-  },
+const lifestyleImages = [
+  "https://images.unsplash.com/photo-1515169273894-7e876dcf13da?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1200&auto=format&fit=crop",
 ]
 
-const kalkiDeck: KalkiPick[] = kalkiSelections
-  .map((selection) => {
-    const product = PRODUCTS.find((item) => item.slug === selection.slug)
-    if (!product) return null
-    return {
-      product,
-      headline: selection.headline,
-      description: selection.description,
-      category: selection.category,
-      lifestyleImage: selection.lifestyleImage,
-    }
-  })
-  .filter((entry): entry is KalkiPick => Boolean(entry))
+const headlines = [
+  "Where Meals Become Memories",
+  "Wrap Yourself in Comfort",
+  "Sleep in Luxury",
+  "Drape Your World in Elegance",
+  "Soft, breathable comfort",
+]
+
+const descriptions = [
+  "Elegant tableware that makes every meal feel special",
+  "Premium comforters crafted for restful nights",
+  "Breathe easy with soft, stylish bedsheets made for every season",
+  "Premium fabrics that bring luxury and light control to your home",
+  "Sustainable fabrics made from organic materials",
+]
 
 const beddingFilters = [
   "King Size",
@@ -122,6 +93,49 @@ const DummyContent = ({ pick }: { pick: KalkiPick }) => {
 }
 
 export default function KalkisFavourites() {
+  const [kalkiDeck, setKalkiDeck] = useState<KalkiPick[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then((data: Product[]) => {
+        // Get 5 random featured products
+        const shuffled = [...data].sort(() => 0.5 - Math.random()).slice(0, 5)
+        const picks: KalkiPick[] = shuffled.map((product, index) => ({
+          product,
+          headline: headlines[index] || "Premium Quality",
+          description: descriptions[index] || "Handcrafted with care",
+          category: product.category || "Home Decor",
+          lifestyleImage: lifestyleImages[index] || lifestyleImages[0],
+        }))
+        setKalkiDeck(picks)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to fetch products:', err)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="bg-gradient-to-br from-[#f1f8f2] via-[#e8f5e9] to-[#dcedc8] py-20 md:py-28 px-4 md:px-8">
+        <div className="w-full h-full">
+          <div className="max-w-7xl mx-auto text-center space-y-5 mb-10">
+            <p className="text-xs uppercase tracking-[0.5em] text-[#4A90E2]">Handpicked for You</p>
+            <h2 className="text-4xl md:text-5xl font-bold font-playfair text-[#2b2b2b]">
+              Living luxuries you&apos;ll love
+            </h2>
+          </div>
+          <div className="h-96 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4A90E2]" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   const cards = kalkiDeck.map((pick, index) => (
     <Card
       key={pick.product.id}
@@ -139,12 +153,12 @@ export default function KalkisFavourites() {
     <section className="bg-gradient-to-br from-[#f1f8f2] via-[#e8f5e9] to-[#dcedc8] py-20 md:py-28 px-4 md:px-8">
       <div className="w-full h-full">
         <div className="max-w-7xl mx-auto text-center space-y-5 mb-10">
-          <p className="text-xs uppercase tracking-[0.5em] text-[#4A90E2]">Kalki&apos;s Favourite</p>
+          <p className="text-xs uppercase tracking-[0.5em] text-[#4A90E2]">Handpicked for You</p>
           <h2 className="text-4xl md:text-5xl font-bold font-playfair text-[#2b2b2b]">
-            Living luxuries she reaches for first
+            Living luxuries you&apos;ll love
           </h2>
           <p className="text-base md:text-lg text-[#5f5f5f] max-w-3xl mx-auto">
-            A carousel of her current obsessions—from tables made for lingering brunches to beds draped in breathable layers.
+            A carousel of our current obsessions—from tables made for lingering brunches to beds draped in breathable layers.
           </p>
         </div>
         <Carousel items={cards} />
@@ -153,13 +167,13 @@ export default function KalkisFavourites() {
           <h3 className="text-xl md:text-2xl font-semibold text-[#2b2b2b] mb-6">Bestselling Bedsheets</h3>
           <div className="flex flex-wrap items-center justify-center gap-3">
             {beddingFilters.map((filter) => (
-              <button
+              <Link
                 key={filter}
+                href={`/products?category=Bedding&size=${filter}`}
                 className="rounded-full border border-[#e5e1da] bg-white px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#2b2b2b] transition-colors hover:bg-[#4A90E2] hover:border-[#4A90E2] hover:text-white"
-                type="button"
               >
                 {filter}
-              </button>
+              </Link>
             ))}
           </div>
         </div>
