@@ -50,41 +50,52 @@ export function Pagination({ currentPage, totalPages, onPageChange, baseUrl }: P
 
   return (
     <div className="flex items-center justify-center gap-2 mt-12 md:mt-16">
-      <button
+      <motion.button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 rounded border border-brand-sand text-brand-charcoal hover:bg-brand-sand/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="group relative p-3 rounded-lg border-2 border-brand-sand text-brand-charcoal hover:bg-accent-gold hover:text-white hover:border-accent-gold disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
         aria-label="Previous page"
+        whileHover={currentPage !== 1 ? { x: -4, scale: 1.05 } : {}}
+        whileTap={currentPage !== 1 ? { scale: 0.95 } : {}}
       >
         <ChevronLeft className="w-5 h-5" />
-      </button>
+        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-brand-charcoal text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          Previous
+        </span>
+      </motion.button>
 
       {getPageNumbers().map((page, index) => (
         <motion.button
           key={index}
           onClick={() => typeof page === "number" && handlePageChange(page)}
           disabled={typeof page !== "number"}
-          className={`w-10 h-10 rounded transition-all ${
+          className={`w-10 h-10 rounded-lg transition-all ${
             page === currentPage
-              ? "bg-accent-gold text-white font-semibold"
+              ? "bg-accent-gold text-white font-semibold shadow-lg"
               : typeof page === "number"
-                ? "border border-brand-sand text-brand-charcoal hover:bg-brand-sand/20"
+                ? "border-2 border-brand-sand text-brand-charcoal hover:bg-brand-sand/30 hover:border-accent-gold cursor-pointer"
                 : "text-brand-charcoal/50 cursor-default"
           }`}
-          whileHover={typeof page === "number" && page !== currentPage ? { scale: 1.05 } : {}}
+          whileHover={typeof page === "number" && page !== currentPage ? { scale: 1.1, y: -2 } : {}}
+          whileTap={typeof page === "number" && page !== currentPage ? { scale: 0.95 } : {}}
         >
           {page}
         </motion.button>
       ))}
 
-      <button
+      <motion.button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 rounded border border-brand-sand text-brand-charcoal hover:bg-brand-sand/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="group relative p-3 rounded-lg border-2 border-brand-sand text-brand-charcoal hover:bg-accent-gold hover:text-white hover:border-accent-gold disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
         aria-label="Next page"
+        whileHover={currentPage !== totalPages ? { x: 4, scale: 1.05 } : {}}
+        whileTap={currentPage !== totalPages ? { scale: 0.95 } : {}}
       >
         <ChevronRight className="w-5 h-5" />
-      </button>
+        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-brand-charcoal text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          Next
+        </span>
+      </motion.button>
     </div>
   )
 }
