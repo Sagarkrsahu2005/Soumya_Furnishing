@@ -142,7 +142,7 @@ export default function ContactPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#f9fdf9] via-[#f1f8f2] to-[#e8f5e9] overflow-hidden">
+    <main className="min-h-screen bg-gradient-to-br from-[#f9fdf9] via-[#f1f8f2] to-[#e8f5e9] overflow-hidden pt-20">
       <Navbar />
 
       {/* Hero Section with Parallax */}
@@ -192,8 +192,8 @@ export default function ContactPage() {
       </motion.div>
 
       {/* Glass Morphism Contact Cards */}
-      <div ref={glassCardsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20 mb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div ref={glassCardsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {contactMethods.map((method, index) => {
             const Icon = method.icon
             return (
