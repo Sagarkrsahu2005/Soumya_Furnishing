@@ -13,7 +13,8 @@
     "seed": "tsx scripts/seed.ts",
     "mirror:images": "tsx scripts/mirror-images.ts",
     "import:shopify": "tsx scripts/import-shopify.ts",
-    "categorize": "tsx scripts/categorize-products.ts",
+    "categorize": "tsx scripts/categorize-prod.ts",
+    "categorize:basic": "tsx scripts/categorize-products.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "postinstall": "prisma generate"
   },

@@ -54,6 +54,11 @@ export default function ProductsPage() {
       results = results.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase()))
     }
 
+    // Category filter
+    if (filters.categories.length > 0) {
+      results = results.filter((p) => p.category && filters.categories.includes(p.category))
+    }
+
     // Room filter
     if (filters.rooms.length > 0) {
       results = results.filter((p) => p.room && filters.rooms.includes(p.room as Room))
