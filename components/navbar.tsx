@@ -112,9 +112,6 @@ export function Navbar() {
               <MenuItem setActive={setActive} active={active} item="Contact">
                 <div className="flex flex-col space-y-4 text-sm">
                   <HoveredLink href="/contact">Get in Touch</HoveredLink>
-                  <HoveredLink href="/contact#stores">Store Locations</HoveredLink>
-                  <HoveredLink href="/contact#support">Customer Support</HoveredLink>
-                  <HoveredLink href="/contact#trade">Trade Program</HoveredLink>
                 </div>
               </MenuItem>
               
