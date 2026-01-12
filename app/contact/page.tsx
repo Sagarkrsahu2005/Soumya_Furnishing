@@ -108,7 +108,7 @@ export default function ContactPage() {
       icon: MapPin,
       title: "Visit Us",
       description: "Come say hello at our office",
-      value: "Bangalore, Karnataka, India",
+      value: "Panipat, Haryana, India",
       href: "#map",
       gradient: "from-amber-500/20 to-orange-500/20",
     },
@@ -388,12 +388,16 @@ export default function ContactPage() {
           viewport={{ once: true }}
           className="backdrop-blur-xl bg-white/60 border border-white/80 rounded-3xl overflow-hidden"
         >
-          <div className="aspect-[21/9] bg-gradient-to-br from-[#4A90E2]/10 to-[#7CB342]/10 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="w-16 h-16 text-[#4A90E2] mx-auto mb-4" />
-              <p className="text-2xl font-playfair font-semibold text-[#2b2b2b]">Bangalore, Karnataka</p>
-              <p className="text-[#5f5f5f] mt-2">Visit us at our showroom</p>
-            </div>
+          <div className="relative w-full" style={{ paddingBottom: "42.86%" }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27816.654397449976!2d76.96380484032522!3d29.36789401732649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ddbc68add3303%3A0x6322f96c7eab59d7!2sSoumya%20furnishings!5e0!3m2!1sen!2sin!4v1768137460113!5m2!1sen!2sin"
+              className="absolute top-0 left-0 w-full h-full"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Soumya Furnishings Location"
+            />
           </div>
         </motion.div>
       </div>
