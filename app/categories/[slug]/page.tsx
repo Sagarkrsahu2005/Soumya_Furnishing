@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
 import { Pagination } from "@/components/pagination"
+import { CategoryFilters } from "@/components/category-filters"
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>
@@ -232,9 +233,18 @@ export default async function CategoryPage({
 
       {/* Products Section */}
       <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Filters Sidebar */}
+          <CategoryFilters
+            availableMaterials={availableMaterials}
+            availableColors={availableColors}
+            availableRooms={availableRooms}
+            priceRange={priceRange}
+            categorySlug={slug}
+          />
+
           {/* Products Grid */}
-          <div className="w-full">
+          <div className="flex-1">
             {/* Product Count */}
             <div className="mb-6">
               <p className="text-sm text-gray-600">
