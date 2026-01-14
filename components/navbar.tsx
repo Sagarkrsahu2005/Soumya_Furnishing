@@ -71,6 +71,7 @@ export function Navbar() {
                   <HoveredLink href="/categories/rugs">Rugs & Runners</HoveredLink>
                   <HoveredLink href="/categories/table-linen">Table Linen</HoveredLink>
                   <HoveredLink href="/categories/throws">Throws & Blankets</HoveredLink>
+                  <HoveredLink href="/categories/kitchen">Kitchen Textiles</HoveredLink>
                 </div>
               </MenuItem>
               <MenuItem setActive={setActive} active={active} item="Collections">

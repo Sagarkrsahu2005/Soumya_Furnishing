@@ -19,18 +19,18 @@ const CATEGORY_NAMES: Record<string, string> = {
   "rugs": "Rugs & Runners",
   "table-linen": "Table Linen",
   "throws": "Throws & Blankets",
-  "wall-decor": "Wall Decor",
+  "kitchen": "Kitchen Textiles",
 }
 
 // Category descriptions
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  "bedding": "Transform your bedroom into a luxurious retreat with our premium bedding collection. From Egyptian cotton sheets to silk pillowcases.",
-  "cushions": "Add comfort and style to any space with our handcrafted cushions and pillows in various textures and colors.",
+  "bedding": "Transform your bedroom into a luxurious retreat with our premium bedding collection. From soft bedsheets to cozy comforters.",
+  "cushions": "Add comfort and style to any space with our handcrafted cushions and pillows in various textures, colors, and designs.",
   "curtains": "Elegant curtains and drapes to frame your windows beautifully while providing privacy and light control.",
-  "rugs": "Ground your space with our curated selection of hand-woven rugs and runners in traditional and modern designs.",
-  "table-linen": "Elevate your dining experience with our premium table linens, napkins, and runners.",
-  "throws": "Cozy up with our luxurious throws and blankets, perfect for any season.",
-  "wall-decor": "Make a statement with our unique wall hangings and textile art pieces.",
+  "rugs": "Ground your space with our curated selection of hand-woven rugs, runners, and mats in traditional and modern designs.",
+  "table-linen": "Elevate your dining experience with our premium table linens, napkins, placemats, and table covers.",
+  "throws": "Cozy up with our luxurious throws and blankets, perfect for adding warmth and style to any room.",
+  "kitchen": "Complete your kitchen with our practical and stylish aprons, pot holders, and kitchen textiles.",
 }
 
 export async function generateMetadata({

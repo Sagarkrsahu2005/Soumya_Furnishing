@@ -187,10 +187,10 @@ html {
 @layer utilities {
   /* Premium glasomorphic effects */
   .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   }
 
