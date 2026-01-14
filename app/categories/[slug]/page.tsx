@@ -177,7 +177,7 @@ export default async function CategoryPage({
     )
   )
   const availableRooms = Array.from(
-    new Set(allCategoryProducts.map((p) => p.room).filter(Boolean))
+    new Set(allCategoryProducts.map((p) => p.room).filter((r): r is string => r !== null))
   )
   const prices = allCategoryProducts.map((p) => p.price)
   const priceRange = {

@@ -78,27 +78,27 @@ export function Navbar() {
                 <div className="text-sm grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-2 md:p-4">
                   <ProductItem
                     title="Bedroom Collection"
-                    href="/products?room=bedroom"
-                    src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&auto=format&fit=crop"
+                    href="/collections/bedroom"
+                    src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&auto=format&fit=crop"
                     description="Premium bedding and furnishings for your personal sanctuary."
                   />
                   <ProductItem
                     title="Living Room"
-                    href="/products?room=living"
-                    src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&auto=format&fit=crop"
-                    description="Elegant pieces to elevate your living space."
+                    href="/collections/living-room"
+                    src="https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&auto=format&fit=crop"
+                    description="Elegant cushions, curtains & accents for your living space."
                   />
                   <ProductItem
                     title="Dining Collection"
-                    href="/products?room=dining"
-                    src="https://images.unsplash.com/photo-1617098900591-3f90928e8c54?w=400&auto=format&fit=crop"
+                    href="/collections/dining"
+                    src="https://images.unsplash.com/photo-1616486886892-ff366aa67ba4?w=400&auto=format&fit=crop"
                     description="Refined table linens and dining essentials."
                   />
                   <ProductItem
-                    title="Outdoor Living"
-                    href="/products?room=outdoor"
-                    src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=400&auto=format&fit=crop"
-                    description="Weather-resistant furnishings for outdoor comfort."
+                    title="Kitchen Collection"
+                    href="/collections/kitchen"
+                    src="https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?w=400&auto=format&fit=crop"
+                    description="Functional and beautiful kitchen textiles & accessories."
                   />
                 </div>
               </MenuItem>

@@ -9,16 +9,34 @@ interface CategoryFiltersProps {
   availableMaterials: string[]
   availableColors: string[]
   availableRooms: string[]
+  availableCategories?: string[]
   priceRange: { min: number; max: number }
-  categorySlug: string
+  categorySlug?: string
+  showCategoryFilter?: boolean
+  currentSort?: string
+  currentMinPrice?: number
+  currentMaxPrice?: number
+  currentMaterials?: string[]
+  currentColors?: string[]
+  currentRooms?: string[]
+  currentCategories?: string[]
 }
 
 export function CategoryFilters({
   availableMaterials,
   availableColors,
   availableRooms,
+  availableCategories = [],
   priceRange,
   categorySlug,
+  showCategoryFilter = false,
+  currentSort: propSort,
+  currentMinPrice: propMinPrice,
+  currentMaxPrice: propMaxPrice,
+  currentMaterials: propMaterials,
+  currentColors: propColors,
+  currentRooms: propRooms,
+  currentCategories: propCategories,
 }: CategoryFiltersProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -30,16 +48,18 @@ export function CategoryFilters({
     materials: true,
     colors: true,
     rooms: false,
+    categories: showCategoryFilter,
     sort: true,
   })
 
-  // Get current filter values
-  const currentMaterials = searchParams.get("materials")?.split(",") || []
-  const currentColors = searchParams.get("colors")?.split(",") || []
-  const currentRooms = searchParams.get("room")?.split(",") || []
-  const currentMinPrice = searchParams.get("minPrice")
-  const currentMaxPrice = searchParams.get("maxPrice")
-  const currentSort = searchParams.get("sort") || "featured"
+  // Get current filter values from props or URL
+  const currentMaterials = propMaterials || searchParams.get("materials")?.split(",") || []
+  const currentColors = propColors || searchParams.get("colors")?.split(",") || []
+  const currentRooms = propRooms || searchParams.get("room")?.split(",") || []
+  const currentCategories = propCategories || searchParams.get("categories")?.split(",") || []
+  const currentMinPrice = propMinPrice !== undefined ? String(propMinPrice) : searchParams.get("minPrice")
+  const currentMaxPrice = propMaxPrice !== undefined ? String(propMaxPrice) : searchParams.get("maxPrice")
+  const currentSort = propSort || searchParams.get("sort") || "newest"
 
   const [minPrice, setMinPrice] = useState(currentMinPrice || String(priceRange.min))
   const [maxPrice, setMaxPrice] = useState(currentMaxPrice || String(priceRange.max))
@@ -95,15 +115,16 @@ export function CategoryFilters({
   const activeFiltersCount = 
     currentMaterials.length + 
     currentColors.length + 
-    currentRooms.length + 
+    currentRooms.length +
+    currentCategories.length +
     (currentMinPrice || currentMaxPrice ? 1 : 0)
 
   const sortOptions = [
-    { value: "featured", label: "Featured" },
+    { value: "newest", label: "Newest" },
     { value: "price-asc", label: "Price: Low to High" },
     { value: "price-desc", label: "Price: High to Low" },
-    { value: "newest", label: "Newest" },
-    { value: "rating", label: "Top Rated" },
+    { value: "name-asc", label: "Name: A to Z" },
+    { value: "name-desc", label: "Name: Z to A" },
   ]
 
   const FilterSection = ({ 
@@ -267,6 +288,27 @@ export function CategoryFilters({
                 />
                 <span className="ml-3 text-sm text-gray-700 group-hover:text-gray-900">
                   {room}
+                </span>
+              </label>
+            ))}
+          </div>
+        </FilterSection>
+      )}
+
+      {/* Categories (for collection pages) */}
+      {showCategoryFilter && availableCategories.length > 0 && (
+        <FilterSection title="Category" section="categories">
+          <div className="space-y-2">
+            {availableCategories.map((category) => (
+              <label key={category} className="flex items-center cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={currentCategories.includes(category)}
+                  onChange={() => toggleArrayFilter("categories", category, currentCategories)}
+                  className="w-4 h-4 text-[#7CB342] border-gray-300 rounded focus:ring-[#7CB342]"
+                />
+                <span className="ml-3 text-sm text-gray-700 group-hover:text-gray-900">
+                  {category}
                 </span>
               </label>
             ))}
