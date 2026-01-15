@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/db"
+import bcrypt from "bcryptjs"
 
 // Simple hash function for demo - use bcrypt in production
 function hashPassword(password: string): string {
@@ -8,7 +9,7 @@ function hashPassword(password: string): string {
   return Buffer.from(password).toString('base64')
 }
 
-export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
+export const authOptions = {
   providers: [
     Credentials({
       credentials: {
@@ -20,46 +21,73 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
           return null
         }
 
+        // First check if it's an admin
         const admin = await (prisma as any).admin.findUnique({
           where: { email: credentials.email as string }
         })
 
-        if (!admin) {
-          return null
+        if (admin) {
+          const isValid = admin.password === hashPassword(credentials.password as string)
+          
+          if (isValid) {
+            return {
+              id: admin.id,
+              email: admin.email,
+              name: admin.name,
+              role: admin.role
+            }
+          }
         }
 
-        // For now, direct comparison - should use bcrypt in production
-        const isValid = admin.password === hashPassword(credentials.password as string)
-        
-        if (!isValid) {
-          return null
+        // If not admin, check if it's a customer
+        const customer = await prisma.customer.findUnique({
+          where: { email: credentials.email as string }
+        }) as any
+
+        if (customer && customer.password) {
+          const isValid = await bcrypt.compare(
+            credentials.password as string, 
+            customer.password
+          )
+          
+          if (isValid) {
+            return {
+              id: customer.id,
+              email: customer.email,
+              name: `${customer.firstName} ${customer.lastName}`,
+              firstName: customer.firstName,
+              lastName: customer.lastName,
+              role: "customer"
+            }
+          }
         }
 
-        return {
-          id: admin.id,
-          email: admin.email,
-          name: admin.name,
-          role: admin.role
-        }
+        return null
       }
     })
   ],
   pages: {
-    signIn: "/admin/login"
+    signIn: "/auth/login"
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
-        token.role = (user as any).role
+        token.role = user.role
+        token.firstName = user.firstName
+        token.lastName = user.lastName
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (session.user) {
-        (session.user as any).role = token.role
+        session.user.role = token.role
+        session.user.firstName = token.firstName
+        session.user.lastName = token.lastName
       }
       return session
     }
   },
   secret: process.env.NEXTAUTH_SECRET || "soumya-furnishings-secret-key-change-in-production"
-})
+}
+
+export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth(authOptions)

@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight } from "lucide-react"
+import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight, User, LogIn } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useCart } from "@/hooks/use-cart"
 import { CartSheet } from "@/components/cart-sheet"
 import { Menu, MenuItem, HoveredLink, ProductItem } from "@/components/ui/navbar-menu"
 import { cn } from "@/lib/utils"
+import { useSession } from "next-auth/react"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -18,6 +19,7 @@ export function Navbar() {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const { items } = useCart()
+  const { data: session, status } = useSession()
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0)
 
   useEffect(() => {
@@ -274,6 +276,25 @@ export function Navbar() {
                   <HoveredLink href="/contact">Get in Touch</HoveredLink>
                 </div>
               </MenuItem>
+              
+              {/* Account Menu */}
+              {session?.user ? (
+                <MenuItem setActive={setActive} active={active} item="Account">
+                  <div className="flex flex-col space-y-4 text-sm">
+                    <HoveredLink href="/account">My Orders</HoveredLink>
+                    <HoveredLink href="/account/profile">Profile</HoveredLink>
+                    <HoveredLink href="/account/addresses">Addresses</HoveredLink>
+                  </div>
+                </MenuItem>
+              ) : (
+                <Link
+                  href="/auth/login"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#2b2b2b] hover:text-[#7CB342] transition-colors"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span className="hidden md:inline">Login</span>
+                </Link>
+              )}
               
               {/* Cart Button inside menu */}
               <button

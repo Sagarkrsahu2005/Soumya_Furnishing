@@ -105,6 +105,7 @@ model ProductOnCollection {
 model Customer {
   id        String  @id @default(cuid())
   email     String  @unique
+  password  String? // hashed password for authentication
   firstName String?
   lastName  String?
   phone     String?

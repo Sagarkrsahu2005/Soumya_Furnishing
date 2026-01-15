@@ -580,12 +580,14 @@ export default function ProductsPage() {
                           {product.collections && product.collections.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-1">
                               {product.collections.slice(0, 2).map((col) => (
-                                <span
-                                  key={col.collectionId}
-                                  className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
-                                >
-                                  {col.collection.title}
-                                </span>
+                                col.collection ? (
+                                  <span
+                                    key={col.collectionId}
+                                    className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+                                  >
+                                    {col.collection.title}
+                                  </span>
+                                ) : null
                               ))}
                               {product.collections.length > 2 && (
                                 <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
