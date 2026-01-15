@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -22,10 +22,13 @@ export async function GET(
       return NextResponse.json({ error: "Customer not found" }, { status: 404 })
     }
 
+    // Await params in Next.js 15+
+    const { id } = await params
+
     // Fetch order with all details
     const order = await prisma.order.findFirst({
       where: {
-        id: params.id,
+        id,
         customerId: customer.id
       },
       include: {
