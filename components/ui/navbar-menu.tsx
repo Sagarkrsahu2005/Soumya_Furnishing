@@ -47,7 +47,7 @@ export const MenuItem = ({
               <motion.div
                 transition={transition}
                 layoutId="active"
-                className="bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-[#c8e6c9] shadow-xl max-h-[60vh] md:max-h-[70vh] overflow-y-auto"
+                className="bg-white/95 backdrop-blur-2xl rounded-2xl overflow-hidden border border-[#c8e6c9] shadow-2xl max-h-[60vh] md:max-h-[70vh] overflow-y-auto"
               >
                 <motion.div
                   layout
@@ -74,7 +74,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent bg-white shadow-input flex items-center justify-center space-x-3 md:space-x-6 px-4 md:px-6 py-3 "
+      className="relative rounded-full border border-transparent bg-white/90 backdrop-blur-xl shadow-lg flex items-center justify-center space-x-3 md:space-x-6 px-4 md:px-6 py-3 "
     >
       {children}
     </nav>
@@ -117,7 +117,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <a
       {...rest}
-      className="text-[#5f5f5f] hover:text-[#4A90E2] transition-colors"
+      className="block text-[#5f5f5f] hover:text-[#4A90E2] transition-colors"
     >
       {children}
     </a>

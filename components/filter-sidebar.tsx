@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { ChevronDown } from "lucide-react"
+import { useState, useEffect } from "react"
+import { ChevronDown, Search as SearchIcon } from "lucide-react"
 import type { Room } from "@/lib/types"
 
 interface FilterSidebarProps {
@@ -15,6 +15,7 @@ export interface FilterState {
   materials: string[]
   rooms: Room[]
   colors: string[]
+  collections: string[]
 }
 
 const defaultFilters: FilterState = {
@@ -23,6 +24,7 @@ const defaultFilters: FilterState = {
   materials: [],
   rooms: [],
   colors: [],
+  collections: [],
 }
 
 const rooms: Room[] = ["Living", "Bedroom", "Dining", "Outdoor"]
@@ -31,7 +33,16 @@ const colors = ["Indigo", "Ivory", "Sage", "Charcoal", "Gold", "Terracotta"]
 
 export function FilterSidebar({ onFiltersChange, isMobile }: FilterSidebarProps) {
   const [filters, setFilters] = useState<FilterState>(defaultFilters)
-  const [expandedSections, setExpandedSections] = useState<string[]>(["room", "material"])
+  const [expandedSections, setExpandedSections] = useState<string[]>(["room", "material", "collections"])
+  const [allCollections, setAllCollections] = useState<Array<{ id: string; title: string; handle: string }>>([])
+  const [collectionSearch, setCollectionSearch] = useState("")
+
+  useEffect(() => {
+    fetch("/api/collections")
+      .then((res) => res.json())
+      .then((data) => setAllCollections(data))
+      .catch((err) => console.error("Failed to fetch collections:", err))
+  }, [])
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => (prev.includes(section) ? prev.filter((s) => s !== section) : [...prev, section]))
@@ -143,6 +154,48 @@ export function FilterSidebar({ onFiltersChange, isMobile }: FilterSidebarProps)
                 title={color}
               />
             ))}
+          </div>
+        )}
+      </div>
+
+      {/* Collections Filter */}
+      <div className="space-y-4">
+        <button
+          onClick={() => toggleSection("collections")}
+          className="flex items-center justify-between w-full pb-3 border-b border-brand-sand"
+        >
+          <h4 className="font-semibold text-brand-charcoal">Collections ({allCollections.length})</h4>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${expandedSections.includes("collections") ? "rotate-180" : ""}`}
+          />
+        </button>
+        {expandedSections.includes("collections") && (
+          <div className="space-y-3">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search collections..."
+                value={collectionSearch}
+                onChange={(e) => setCollectionSearch(e.target.value)}
+                className="w-full px-3 py-2 pl-8 text-sm border border-brand-sand rounded focus:outline-none focus:border-accent-gold"
+              />
+              <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-brand-charcoal/40" />
+            </div>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {allCollections
+                .filter((c) => c.title.toLowerCase().includes(collectionSearch.toLowerCase()))
+                .map((collection) => (
+                  <label key={collection.id} className="flex items-center gap-2 cursor-pointer hover:bg-brand-sand/20 p-1 rounded">
+                    <input
+                      type="checkbox"
+                      checked={filters.collections.includes(collection.handle)}
+                      onChange={() => toggleFilter("collections", collection.handle)}
+                      className="w-4 h-4 accent-accent-gold"
+                    />
+                    <span className="text-sm text-brand-charcoal">{collection.title}</span>
+                  </label>
+                ))}
+            </div>
           </div>
         )}
       </div>

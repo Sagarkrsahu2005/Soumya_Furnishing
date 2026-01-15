@@ -25,6 +25,7 @@ export type Product = {
   badges?: string[]
   descriptionHtml?: string
   care?: string[]
+  collections?: Array<{ id: string; title: string; handle: string }>
 }
 
 export type Collection = {

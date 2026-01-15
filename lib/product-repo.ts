@@ -18,6 +18,13 @@ function mapProduct(p: any): Product {
   const variantPrices = variants.map((v: { price?: number }) => v.price || 0).filter((n: number) => Number.isFinite(n))
   const displayPrice = variantPrices.length > 0 ? Math.min(...variantPrices) : p.price
 
+  // Map collections
+  const collections = p.collections?.map((pc: any) => ({
+    id: pc.collection.id,
+    title: pc.collection.title,
+    handle: pc.collection.handle,
+  })) || []
+
   return {
     id: p.id,
     slug: p.slug,
@@ -36,6 +43,7 @@ function mapProduct(p: any): Product {
   badges: p.badges ? String(p.badges).split("|") : [],
     descriptionHtml: p.descriptionHtml ?? undefined,
     care: undefined, // Not yet persisted
+    collections,
   }
 }
 
@@ -44,7 +52,17 @@ export async function getProducts(): Promise<Product[]> {
     return PRODUCTS
   }
   try {
-    const data = await prisma.product.findMany({ include: { images: true, variants: true } })
+    const data = await prisma.product.findMany({ 
+      include: { 
+        images: true, 
+        variants: true,
+        collections: {
+          include: {
+            collection: true
+          }
+        }
+      } 
+    })
     if (!data || data.length === 0) return PRODUCTS
     return data.map(mapProduct)
   } catch (e) {
@@ -58,7 +76,18 @@ export async function getProductBySlug(slug: string): Promise<Product | undefine
     return PRODUCTS.find((p) => p.slug === slug)
   }
   try {
-    const p = await prisma.product.findUnique({ where: { slug }, include: { images: true, variants: true } })
+    const p = await prisma.product.findUnique({ 
+      where: { slug }, 
+      include: { 
+        images: true, 
+        variants: true,
+        collections: {
+          include: {
+            collection: true
+          }
+        }
+      } 
+    })
     return p ? mapProduct(p) : PRODUCTS.find((pr) => pr.slug === slug)
   } catch (e) {
     console.error("DB getProductBySlug fallback", e)

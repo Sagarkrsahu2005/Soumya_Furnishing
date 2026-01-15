@@ -175,9 +175,12 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button className="w-full px-6 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold mb-3">
+              <Link
+                href="/checkout"
+                className="w-full px-6 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold mb-3 block text-center"
+              >
                 Proceed to Checkout
-              </button>
+              </Link>
 
               <div className="bg-brand-sand/20 p-4 rounded text-sm text-brand-charcoal/70">
                 <p className="font-medium text-brand-charcoal mb-2">Free Shipping Threshold</p>

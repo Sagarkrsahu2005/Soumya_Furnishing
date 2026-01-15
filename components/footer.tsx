@@ -110,6 +110,11 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/track" className="text-white/70 hover:text-[#c8b27c] transition-colors">
+                    Track Order
+                  </Link>
+                </li>
+                <li>
                   <a href="#" className="text-white/70 hover:text-[#c8b27c] transition-colors">
                     Sustainability
                   </a>
@@ -117,11 +122,6 @@ export function Footer() {
                 <li>
                   <a href="#" className="text-white/70 hover:text-[#c8b27c] transition-colors">
                     Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-white/70 hover:text-[#c8b27c] transition-colors">
-                    Press
                   </a>
                 </li>
               </ul>

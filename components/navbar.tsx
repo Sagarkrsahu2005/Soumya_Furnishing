@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart, X } from "lucide-react"
+import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useCart } from "@/hooks/use-cart"
 import { CartSheet } from "@/components/cart-sheet"
@@ -41,6 +41,20 @@ export function Navbar() {
 
   return (
     <>
+      {/* Backdrop Blur Overlay - Apple Style */}
+      <AnimatePresence>
+        {active !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/5 backdrop-blur-md"
+            onClick={() => setActive(null)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Unified Navigation Bar with Logo, Menu, and Cart */}
       <div className={cn(
         "fixed top-10 inset-x-0 max-w-fit mx-auto z-50 transition-transform duration-300 px-4",
@@ -62,44 +76,189 @@ export function Navbar() {
                 />
               </Link>
               
-              <MenuItem setActive={setActive} active={active} item="Shop">
-                <div className="flex flex-col space-y-4 text-sm">
+              <MenuItem setActive={setActive} active={active} item="Shop by Category">
+                <div className="flex flex-col space-y-3 text-sm w-56">
                   <HoveredLink href="/products">All Products</HoveredLink>
-                  <HoveredLink href="/categories/bedding">Bedding</HoveredLink>
-                  <HoveredLink href="/categories/cushions">Cushions & Pillows</HoveredLink>
-                  <HoveredLink href="/categories/curtains">Curtains & Drapes</HoveredLink>
-                  <HoveredLink href="/categories/rugs">Rugs & Runners</HoveredLink>
-                  <HoveredLink href="/categories/table-linen">Table Linen</HoveredLink>
-                  <HoveredLink href="/categories/throws">Throws & Blankets</HoveredLink>
-                  <HoveredLink href="/categories/kitchen">Kitchen Textiles</HoveredLink>
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <HoveredLink href="/collections/bed-linen">Bedding</HoveredLink>
+                  <HoveredLink href="/collections/curtains">Curtains & Drapes</HoveredLink>
+                  <HoveredLink href="/collections/table-covers">Table Linen</HoveredLink>
+                  <HoveredLink href="/collections/cushion">Living Room</HoveredLink>
+                  <HoveredLink href="/collections/kitchen-linen">Kitchen</HoveredLink>
+                  <HoveredLink href="/collections/rugs">Rugs & Mats</HoveredLink>
                 </div>
               </MenuItem>
               <MenuItem setActive={setActive} active={active} item="Collections">
-                <div className="text-sm grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-2 md:p-4">
-                  <ProductItem
-                    title="Bedroom Collection"
-                    href="/collections/bedroom"
-                    src="https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&auto=format&fit=crop"
-                    description="Premium bedding and furnishings for your personal sanctuary."
-                  />
-                  <ProductItem
-                    title="Living Room"
-                    href="/collections/living-room"
-                    src="https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&auto=format&fit=crop"
-                    description="Elegant cushions, curtains & accents for your living space."
-                  />
-                  <ProductItem
-                    title="Dining Collection"
-                    href="/collections/dining"
-                    src="https://images.unsplash.com/photo-1616486886892-ff366aa67ba4?w=400&auto=format&fit=crop"
-                    description="Refined table linens and dining essentials."
-                  />
-                  <ProductItem
-                    title="Kitchen Collection"
-                    href="/collections/kitchen"
-                    src="https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?w=400&auto=format&fit=crop"
-                    description="Functional and beautiful kitchen textiles & accessories."
-                  />
+                <div className="grid grid-cols-2 gap-x-12 gap-y-8 p-6 w-[700px]">
+                  {/* Bedding Category */}
+                  <div className="space-y-3">
+                    <Link 
+                      href="/collections/bed-linen"
+                      className="block group"
+                      onClick={() => setActive(null)}
+                    >
+                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                        <span>Bedding</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">9 Collections</p>
+                    </Link>
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                      <HoveredLink href="/collections/bed-linen">Bed Linen</HoveredLink>
+                      <HoveredLink href="/collections/bed-covers-plain">Bed Covers Plain</HoveredLink>
+                      <HoveredLink href="/collections/bed-covers-woven">Bed Covers Woven</HoveredLink>
+                      <HoveredLink href="/collections/printed-bedsheets">Printed Bedsheets</HoveredLink>
+                      <HoveredLink href="/collections/pillow-cover">Pillow Covers</HoveredLink>
+                      <HoveredLink href="/collections/bolster-covers">Bolster Covers</HoveredLink>
+                      <HoveredLink href="/collections/comforters">Comforters</HoveredLink>
+                    </div>
+                  </div>
+
+                  {/* Curtains Category */}
+                  <div className="space-y-3">
+                    <Link 
+                      href="/collections/curtains"
+                      className="block group"
+                      onClick={() => setActive(null)}
+                    >
+                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                        <span>Curtains & Drapes</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">7 Collections</p>
+                    </Link>
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                      <HoveredLink href="/collections/curtains">All Curtains</HoveredLink>
+                      <HoveredLink href="/collections/plain-curtains">Plain Curtains</HoveredLink>
+                      <HoveredLink href="/collections/printed-curtains">Printed Curtains</HoveredLink>
+                      <HoveredLink href="/collections/linen-voile">Linen Voile</HoveredLink>
+                      <HoveredLink href="/collections/shear-curtains-plain">Sheer Plain</HoveredLink>
+                      <HoveredLink href="/collections/sheer-printed-curtains">Sheer Printed</HoveredLink>
+                    </div>
+                  </div>
+
+                  {/* Table Linen Category */}
+                  <div className="space-y-3">
+                    <Link 
+                      href="/collections/table-covers"
+                      className="block group"
+                      onClick={() => setActive(null)}
+                    >
+                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                        <span>Table Linen</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">7 Collections</p>
+                    </Link>
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                      <HoveredLink href="/collections/table-covers">Table Covers</HoveredLink>
+                      <HoveredLink href="/collections/table-covers-plain">Plain Covers</HoveredLink>
+                      <HoveredLink href="/collections/table-covers-printed">Printed Covers</HoveredLink>
+                      <HoveredLink href="/collections/table-runner">Table Runners</HoveredLink>
+                      <HoveredLink href="/collections/table-napkins">Napkins</HoveredLink>
+                      <HoveredLink href="/collections/table-placemats">Placemats</HoveredLink>
+                    </div>
+                  </div>
+
+                  {/* Living Room Category */}
+                  <div className="space-y-3">
+                    <Link 
+                      href="/collections/cushion"
+                      className="block group"
+                      onClick={() => setActive(null)}
+                    >
+                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                        <span>Living Room</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">4 Collections</p>
+                    </Link>
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                      <HoveredLink href="/collections/cushion">Cushion Covers</HoveredLink>
+                      <HoveredLink href="/collections/sofa-cover">Diwan Sets</HoveredLink>
+                      <HoveredLink href="/collections/sofa-throws">Sofa Throws</HoveredLink>
+                    </div>
+                  </div>
+
+                  {/* Kitchen Category */}
+                  <div className="space-y-3">
+                    <Link 
+                      href="/collections/kitchen-linen"
+                      className="block group"
+                      onClick={() => setActive(null)}
+                    >
+                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                        <span>Kitchen</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">5 Collections</p>
+                    </Link>
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                      <HoveredLink href="/collections/kitchen-linen">Kitchen Linen</HoveredLink>
+                      <HoveredLink href="/collections/aprons">Aprons</HoveredLink>
+                      <HoveredLink href="/collections/oven-mittens">Oven Mittens</HoveredLink>
+                      <HoveredLink href="/collections/pot-holder">Pot Holders</HoveredLink>
+                    </div>
+                  </div>
+
+                  {/* Rugs & Mats Category */}
+                  <div className="space-y-3">
+                    <Link 
+                      href="/collections/rugs"
+                      className="block group"
+                      onClick={() => setActive(null)}
+                    >
+                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                        <span>Rugs & Mats</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">5 Collections</p>
+                    </Link>
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                      <HoveredLink href="/collections/rugs">Rugs</HoveredLink>
+                      <HoveredLink href="/collections/round-rugs">Round Rugs</HoveredLink>
+                      <HoveredLink href="/collections/jute-door-mat">Door Mats</HoveredLink>
+                      <HoveredLink href="/collections/yoga-mat">Yoga Mats</HoveredLink>
+                    </div>
+                  </div>
+
+                  {/* Special Collections */}
+                  <div className="col-span-2 pt-6 mt-2 border-t border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-6">
+                        <Link 
+                          href="/collections/best-seller"
+                          className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#7CB342] transition-colors"
+                          onClick={() => setActive(null)}
+                        >
+                          <Tag className="w-4 h-4" />
+                          <span>Best Sellers</span>
+                        </Link>
+                        <Link 
+                          href="/collections/new"
+                          className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#7CB342] transition-colors"
+                          onClick={() => setActive(null)}
+                        >
+                          <Sparkles className="w-4 h-4" />
+                          <span>New Arrivals</span>
+                        </Link>
+                        <Link 
+                          href="/collections/christmas"
+                          className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#7CB342] transition-colors"
+                          onClick={() => setActive(null)}
+                        >
+                          <span>Christmas</span>
+                        </Link>
+                      </div>
+                      <Link 
+                        href="/products"
+                        className="text-sm font-medium text-[#7CB342] hover:text-[#689F38] transition-colors"
+                        onClick={() => setActive(null)}
+                      >
+                        View All →
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </MenuItem>
               <MenuItem setActive={setActive} active={active} item="About">

@@ -143,9 +143,12 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                       <span>Total</span>
                       <span>{formatPrice(total)}</span>
                     </div>
-                    <button className="w-full px-4 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold mb-2">
+                    <Link
+                      href="/checkout"
+                      className="w-full px-4 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold mb-2 block text-center"
+                    >
                       Proceed to Checkout
-                    </button>
+                    </Link>
                     <button
                       onClick={onClose}
                       className="w-full px-4 py-3 border-2 border-brand-sand text-brand-charcoal hover:bg-brand-sand/10 transition-all"

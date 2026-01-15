@@ -21,6 +21,7 @@ export default function ProductsPage() {
     materials: [],
     rooms: [],
     colors: [],
+    collections: [],
   })
   const [sort, setSort] = useState<SortOption>("featured")
   const [currentPage, setCurrentPage] = useState(1)
@@ -72,6 +73,13 @@ export default function ProductsPage() {
     // Color filter
     if (filters.colors.length > 0) {
   results = results.filter((p) => p.colors?.some((c) => filters.colors.includes(c)))
+    }
+
+    // Collections filter
+    if (filters.collections.length > 0) {
+      results = results.filter((p) => 
+        p.collections?.some((c: any) => filters.collections.includes(c.handle))
+      )
     }
 
     // Sort
@@ -160,7 +168,18 @@ export default function ProductsPage() {
             </motion.div>
 
             {/* Product Grid */}
-            {paginatedProducts.length > 0 ? (
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="relative w-24 h-24 mb-6">
+                  <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+                  <div className="absolute inset-0 border-4 border-[#7CB342] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p className="text-lg text-brand-charcoal/60 mb-2">Loading products...</p>
+                <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-[#7CB342] rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                </div>
+              </div>
+            ) : paginatedProducts.length > 0 ? (
               <>
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -177,8 +196,30 @@ export default function ProductsPage() {
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
               </>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-lg text-brand-charcoal/60">No products found. Try adjusting your filters.</p>
+              <div className="flex flex-col items-center justify-center py-20">
+                <div className="w-24 h-24 mb-6 text-gray-300">
+                  <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-brand-charcoal mb-2">No Products Found</h3>
+                <p className="text-brand-charcoal/60 mb-6">Try adjusting your filters or search query</p>
+                <button
+                  onClick={() => {
+                    setFilters({
+                      categories: [],
+                      priceRange: [0, 100000],
+                      materials: [],
+                      rooms: [],
+                      colors: [],
+                      collections: [],
+                    })
+                    setSearchQuery("")
+                  }}
+                  className="px-6 py-2 bg-[#7CB342] text-white rounded-lg hover:bg-[#689F38] transition-colors"
+                >
+                  Clear All Filters
+                </button>
               </div>
             )}
           </div>

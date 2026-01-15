@@ -33,18 +33,55 @@ export async function PUT(
   try {
     const { id } = await params
     const data = await request.json()
-    const { title, descriptionHtml, price, compareAtPrice, inventoryQuantity } = data
+    const { 
+      title, 
+      slug,
+      description, 
+      descriptionHtml,
+      price, 
+      compareAtPrice, 
+      inventoryQuantity,
+      category,
+      status,
+      room,
+      vendor,
+      productType,
+      tags,
+      images
+    } = data
 
     // Update product
     const product = await prisma.product.update({
       where: { id },
       data: {
         title,
-        descriptionHtml,
+        slug,
+        descriptionHtml: descriptionHtml || description,
         price,
         compareAtPrice,
+        room,
+        category,
       },
     })
+
+    // Update images if provided
+    if (images && Array.isArray(images)) {
+      // Delete existing images
+      await prisma.image.deleteMany({
+        where: { productId: id }
+      })
+
+      // Create new images
+      if (images.length > 0) {
+        await prisma.image.createMany({
+          data: images.map((img, index) => ({
+            productId: id,
+            src: img.src,
+            position: index + 1
+          }))
+        })
+      }
+    }
 
     // Update first variant's inventory
     if (inventoryQuantity !== undefined) {
