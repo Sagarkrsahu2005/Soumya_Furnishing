@@ -73,12 +73,12 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/collections/bedding" className="text-white/70 hover:text-[#c8b27c] transition-colors">
+                  <Link href="/collections/bed-linen" className="text-white/70 hover:text-[#c8b27c] transition-colors">
                     Bedding
                   </Link>
                 </li>
                 <li>
-                  <Link href="/collections/cushions" className="text-white/70 hover:text-[#c8b27c] transition-colors">
+                  <Link href="/collections/cushion" className="text-white/70 hover:text-[#c8b27c] transition-colors">
                     Cushions
                   </Link>
                 </li>

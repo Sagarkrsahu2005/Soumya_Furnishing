@@ -343,6 +343,49 @@ export default function ProductDetailPage() {
           <ProductTabs tabs={tabs} />
         </motion.div>
 
+        {/* Cushion Cover Features Image - Show for cushion products */}
+        {(() => {
+          // Check if it's a cushion product by title or collections
+          const titleHasCushion = product.title?.toLowerCase().includes('cushion')
+          const collectionHasCushion = product.collections?.some((col: any) => {
+            const handle = col.collection?.handle?.toLowerCase() || ''
+            const title = col.collection?.title?.toLowerCase() || ''
+            return handle.includes('cushion') || title.includes('cushion')
+          })
+          
+          const isCushionProduct = titleHasCushion || collectionHasCushion
+          
+          console.log('Product title:', product.title)
+          console.log('Title has cushion:', titleHasCushion)
+          console.log('Collection has cushion:', collectionHasCushion)
+          console.log('Is cushion product:', isCushionProduct)
+          
+          if (isCushionProduct) {
+            return (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="mb-16 md:mb-24"
+              >
+                <div className="max-w-5xl mx-auto px-4">
+                  <img 
+                    src="/cushion-features.jpg" 
+                    alt="Premium Cushion Cover Features" 
+                    className="w-full rounded-2xl shadow-lg"
+                    onError={(e) => {
+                      console.error('Image failed to load')
+                      console.log('Trying to load from:', (e.target as HTMLImageElement).src)
+                    }}
+                  />
+                </div>
+              </motion.div>
+            )
+          }
+          return null
+        })()}
+
         {relatedProducts.length > 0 && <PairWith products={relatedProducts} title="Complete the Look" />}
       </div>
 

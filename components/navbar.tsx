@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight, User, LogIn } from "lucide-react"
+import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight, User, UserCircle2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useCart } from "@/hooks/use-cart"
 import { CartSheet } from "@/components/cart-sheet"
@@ -135,6 +135,7 @@ export function Navbar() {
                       <HoveredLink href="/collections/printed-curtains">Printed Curtains</HoveredLink>
                       <HoveredLink href="/collections/linen-voile">Linen Voile</HoveredLink>
                       <HoveredLink href="/collections/shear-curtains-plain">Sheer Plain</HoveredLink>
+                      <HoveredLink href="/collections/shear-curtains-embroidery">Sheer Embroidery</HoveredLink>
                       <HoveredLink href="/collections/sheer-printed-curtains">Sheer Printed</HoveredLink>
                     </div>
                   </div>
@@ -291,7 +292,7 @@ export function Navbar() {
                   href="/auth/login"
                   className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#2b2b2b] hover:text-[#7CB342] transition-colors"
                 >
-                  <LogIn className="w-4 h-4" />
+                  <UserCircle2 className="w-5 h-5" />
                   <span className="hidden md:inline">Login</span>
                 </Link>
               )}
