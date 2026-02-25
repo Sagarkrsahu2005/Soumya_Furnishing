@@ -32,7 +32,6 @@ next-env.d.ts
 /prisma/*.db
 /prisma/*.db-journal
 
-# large media files
+# large media files (over 100MB)
 /public/ad-video.mp4
 /public/ad-video1.mp4
-/public/*.mp4
