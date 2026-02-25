@@ -6,15 +6,53 @@ import Image from "next/image"
 import { Heart, Eye, ShoppingCart } from "lucide-react"
 import type { Product } from "@/lib/types"
 import { formatPrice } from "@/lib/utils"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useCart } from "@/hooks/use-cart"
+import { useWishlist } from "@/hooks/use-wishlist"
+import { useToast } from "@/components/toasts"
+import { useRouter } from "next/navigation"
 
 interface ProductCardProps {
   product: Product
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const [isWishlisted, setIsWishlisted] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const { addItem } = useCart()
+  const { isInWishlist, toggleItem } = useWishlist()
+  const { addToast } = useToast()
+  const router = useRouter()
+  
+  const [isWishlisted, setIsWishlisted] = useState(false)
+
+  // Sync wishlist state with context
+  useEffect(() => {
+    setIsWishlisted(isInWishlist(product.id))
+  }, [isInWishlist, product.id])
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addItem(product)
+    addToast(`${product.title} added to cart`, "success")
+  }
+
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const newState = toggleItem(product)
+    setIsWishlisted(newState)
+    addToast(
+      newState ? `${product.title} added to wishlist` : `${product.title} removed from wishlist`,
+      newState ? "success" : "info"
+    )
+  }
+
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    router.push(`/products/${product.slug}`)
+  }
 
   return (
     <motion.div
@@ -88,29 +126,31 @@ export function ProductCard({ product }: ProductCardProps) {
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleQuickView}
                 className="p-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white/20 transition-all shadow-lg"
+                title="Quick View"
               >
                 <Eye className="w-4 h-4" />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIsWishlisted(!isWishlisted)
-                }}
+                onClick={handleToggleWishlist}
                 className={`p-3 rounded-full backdrop-blur-xl border transition-all shadow-lg ${
                   isWishlisted 
                     ? "bg-[#4A90E2] border-[#4A90E2] text-white" 
                     : "bg-white/10 border-white/20 text-white hover:bg-white/20"
                 }`}
+                title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
               >
                 <Heart className="w-4 h-4" fill={isWishlisted ? "currentColor" : "none"} />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleAddToCart}
                 className="p-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white/20 transition-all shadow-lg"
+                title="Add to Cart"
               >
                 <ShoppingCart className="w-4 h-4" />
               </motion.button>

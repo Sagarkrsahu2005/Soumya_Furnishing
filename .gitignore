@@ -31,3 +31,8 @@ next-env.d.ts
 *.db-journal
 /prisma/*.db
 /prisma/*.db-journal
+
+# large media files
+/public/ad-video.mp4
+/public/ad-video1.mp4
+/public/*.mp4

@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Playfair_Display, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { CartProvider } from "@/hooks/use-cart"
+import { WishlistProvider } from "@/hooks/use-wishlist"
 import { ToastProvider } from "@/components/toasts"
 import AuthProvider from "@/components/auth-provider"
 import "./globals.css"
@@ -53,7 +54,9 @@ export default function RootLayout({
       <body className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}>
         <AuthProvider>
           <ToastProvider>
-            <CartProvider>{children}</CartProvider>
+            <WishlistProvider>
+              <CartProvider>{children}</CartProvider>
+            </WishlistProvider>
           </ToastProvider>
         </AuthProvider>
         <Analytics />

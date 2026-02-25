@@ -14,15 +14,37 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { Heart, Share2, Truck, Shield, RotateCcw, Sparkles } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { useWishlist } from "@/hooks/use-wishlist"
+import { useToast } from "@/components/toasts"
 
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const [product, setProduct] = useState<Product | null>(null)
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
-  const [isWishlisted, setIsWishlisted] = useState(false)
   const [showStickyCart, setShowStickyCart] = useState(false)
   const { scrollY } = useScroll()
   const opacity = useTransform(scrollY, [0, 200], [1, 0])
+  const { isInWishlist, toggleItem } = useWishlist()
+  const { addToast } = useToast()
+  
+  const [isWishlisted, setIsWishlisted] = useState(false)
+
+  // Sync wishlist state
+  useEffect(() => {
+    if (product) {
+      setIsWishlisted(isInWishlist(product.id))
+    }
+  }, [product, isInWishlist])
+
+  const handleToggleWishlist = () => {
+    if (!product) return
+    const newState = toggleItem(product)
+    setIsWishlisted(newState)
+    addToast(
+      newState ? `${product.title} added to wishlist` : `${product.title} removed from wishlist`,
+      newState ? "success" : "info"
+    )
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -265,10 +287,10 @@ export default function ProductDetailPage() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setIsWishlisted(!isWishlisted)}
+                onClick={handleToggleWishlist}
                 className={`flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl transition-all duration-300 font-semibold text-sm ${
                   isWishlisted
-                    ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
+                    ? "bg-[#4A90E2] text-white shadow-lg shadow-[#4A90E2]/30"
                     : "bg-[#1a1a1a] border-2 border-white/20 text-gray-300 hover:border-white/30 hover:shadow-md"
                 }`}
               >

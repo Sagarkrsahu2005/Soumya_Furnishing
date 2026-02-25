@@ -76,24 +76,24 @@ function Toast({ toast, onRemove }: ToastProps) {
   const getIcon = () => {
     switch (toast.type) {
       case "success":
-        return <Check className="w-5 h-5 text-green-500" />
+        return <Check className="w-5 h-5 text-[#7CB342]" />
       case "error":
-        return <AlertCircle className="w-5 h-5 text-red-500" />
+        return <AlertCircle className="w-5 h-5 text-red-400" />
       default:
-        return <Info className="w-5 h-5 text-blue-500" />
+        return <Info className="w-5 h-5 text-[#4A90E2]" />
     }
   }
 
   const bgColor = {
-    success: "bg-green-50 border-green-200",
-    error: "bg-red-50 border-red-200",
-    info: "bg-blue-50 border-blue-200",
+    success: "bg-[#0f0f0f] border-[#7CB342]/30",
+    error: "bg-[#0f0f0f] border-red-500/30",
+    info: "bg-[#0f0f0f] border-[#4A90E2]/30",
   }[toast.type]
 
   const textColor = {
-    success: "text-green-900",
-    error: "text-red-900",
-    info: "text-blue-900",
+    success: "text-white",
+    error: "text-white",
+    info: "text-white",
   }[toast.type]
 
   return (
@@ -102,13 +102,13 @@ function Toast({ toast, onRemove }: ToastProps) {
       animate={{ opacity: 1, x: 0, y: 0 }}
       exit={{ opacity: 0, x: 100, y: 20 }}
       transition={{ duration: 0.3 }}
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg border ${bgColor} ${textColor} pointer-events-auto`}
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-xl ${bgColor} ${textColor} pointer-events-auto shadow-lg`}
     >
       {getIcon()}
       <p className="text-sm font-medium">{toast.message}</p>
       <button
         onClick={() => onRemove(toast.id)}
-        className="ml-2 text-inherit hover:opacity-70 transition-opacity"
+        className="ml-2 text-gray-400 hover:text-white transition-colors"
         aria-label="Close"
       >
         <X className="w-4 h-4" />

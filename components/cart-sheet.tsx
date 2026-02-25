@@ -28,7 +28,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 z-40"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
           />
 
           {/* Drawer */}
@@ -37,17 +37,17 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3 }}
-            className="fixed right-0 top-0 h-full w-full md:w-96 bg-white z-50 shadow-lg overflow-y-auto"
+            className="fixed right-0 top-0 h-full w-full md:w-96 bg-[#0f0f0f] z-50 shadow-2xl overflow-y-auto border-l border-white/10"
           >
             {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-brand-sand/30 p-4 md:p-6 flex items-center justify-between">
-              <h2 className="text-lg md:text-xl font-bold text-brand-charcoal">Shopping Cart</h2>
+            <div className="sticky top-0 bg-[#0f0f0f]/95 backdrop-blur-xl border-b border-white/10 p-4 md:p-6 flex items-center justify-between">
+              <h2 className="text-lg md:text-xl font-bold text-white">Shopping Cart</h2>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-brand-sand/20 rounded transition-colors"
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                 aria-label="Close cart"
               >
-                <X className="w-5 h-5 text-brand-charcoal" />
+                <X className="w-5 h-5 text-white" />
               </button>
             </div>
 
@@ -61,12 +61,12 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="flex gap-4 pb-4 border-b border-brand-sand/30 last:border-0"
+                      className="flex gap-4 pb-4 border-b border-white/10 last:border-0"
                     >
                       {/* Image */}
                       <Link
                         href={`/products/${item.product.slug}`}
-                        className="relative w-20 h-20 flex-shrink-0 overflow-hidden bg-brand-sand/30"
+                        className="relative w-20 h-20 flex-shrink-0 overflow-hidden bg-[#1a1a1a] rounded-lg"
                       >
                         <Image
                           src={item.product.images[0]?.src || "/placeholder.svg?key=crts"}
@@ -80,25 +80,25 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                       <div className="flex-1 min-w-0">
                         <Link
                           href={`/products/${item.product.slug}`}
-                          className="block text-sm font-semibold text-brand-charcoal hover:text-accent-gold transition-colors truncate mb-2"
+                          className="block text-sm font-semibold text-white hover:text-[#4A90E2] transition-colors truncate mb-2"
                         >
                           {item.product.title}
                         </Link>
-                        <p className="text-sm font-bold text-brand-charcoal mb-2">{formatPrice(item.product.price)}</p>
+                        <p className="text-sm font-bold text-gray-300 mb-2">{formatPrice(item.product.price)}</p>
 
                         {/* Quantity Controls */}
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1 w-fit">
                           <button
                             onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
-                            className="p-1 hover:bg-brand-sand/20 rounded transition-colors"
+                            className="p-1 hover:bg-white/10 rounded transition-colors text-white"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
-                          <span className="px-2 text-xs font-semibold">{item.quantity}</span>
+                          <span className="px-2 text-xs font-semibold text-white">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
-                            className="p-1 hover:bg-brand-sand/20 rounded transition-colors"
+                            className="p-1 hover:bg-white/10 rounded transition-colors text-white"
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-3 h-3" />
@@ -109,7 +109,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                       {/* Remove Button */}
                       <button
                         onClick={() => removeItem(item.productId, item.variantId)}
-                        className="p-2 text-brand-charcoal hover:text-red-500 transition-colors"
+                        className="p-2 text-gray-400 hover:text-red-400 transition-colors"
                         aria-label="Remove item"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -119,39 +119,39 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                 </div>
 
                 {/* Pricing Summary */}
-                <div className="sticky bottom-0 bg-brand-ivory border-t border-brand-sand/30 p-4 md:p-6 space-y-4">
+                <div className="sticky bottom-0 bg-[#0f0f0f]/95 backdrop-blur-xl border-t border-white/10 p-4 md:p-6 space-y-4">
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between text-brand-charcoal/70">
+                    <div className="flex justify-between text-gray-400">
                       <span>Subtotal</span>
                       <span>{formatPrice(subtotal)}</span>
                     </div>
-                    <div className="flex justify-between text-brand-charcoal/70">
+                    <div className="flex justify-between text-gray-400">
                       <span>Shipping</span>
                       <span>
                         {shipping === 0 ? (
-                          <span className="text-accent-gold font-semibold">Free</span>
+                          <span className="text-[#7CB342] font-semibold">Free</span>
                         ) : (
                           formatPrice(shipping)
                         )}
                       </span>
                     </div>
-                    {shipping === 0 && <p className="text-xs text-accent-gold">Free shipping applied!</p>}
+                    {shipping === 0 && <p className="text-xs text-[#7CB342]">Free shipping applied!</p>}
                   </div>
 
-                  <div className="border-t border-brand-sand/30 pt-4">
-                    <div className="flex justify-between font-bold text-lg text-brand-charcoal mb-4">
+                  <div className="border-t border-white/10 pt-4">
+                    <div className="flex justify-between font-bold text-lg text-white mb-4">
                       <span>Total</span>
                       <span>{formatPrice(total)}</span>
                     </div>
                     <Link
                       href="/checkout"
-                      className="w-full px-4 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold mb-2 block text-center"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] hover:from-[#3A7BC8] hover:to-[#4A90E2] text-white font-semibold transition-all rounded-lg mb-2 block text-center shadow-lg shadow-[#4A90E2]/20"
                     >
                       Proceed to Checkout
                     </Link>
                     <button
                       onClick={onClose}
-                      className="w-full px-4 py-3 border-2 border-brand-sand text-brand-charcoal hover:bg-brand-sand/10 transition-all"
+                      className="w-full px-4 py-3 border border-white/20 text-white hover:bg-white/10 transition-all rounded-lg"
                     >
                       Continue Shopping
                     </button>
@@ -160,12 +160,12 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
               </>
             ) : (
               <div className="h-full flex flex-col items-center justify-center p-6 text-center">
-                <ShoppingBag className="w-16 h-16 text-brand-sand mb-4" />
-                <h3 className="text-lg font-semibold text-brand-charcoal mb-2">Your cart is empty</h3>
-                <p className="text-brand-charcoal/60 mb-6">Start shopping to add items to your cart</p>
+                <ShoppingBag className="w-16 h-16 text-gray-600 mb-4" />
+                <h3 className="text-lg font-semibold text-white mb-2">Your cart is empty</h3>
+                <p className="text-gray-400 mb-6">Start shopping to add items to your cart</p>
                 <button
                   onClick={onClose}
-                  className="px-6 py-2 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold"
+                  className="px-6 py-2 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] hover:from-[#3A7BC8] hover:to-[#4A90E2] text-white font-semibold transition-all rounded-lg shadow-lg shadow-[#4A90E2]/20"
                 >
                   Continue Shopping
                 </button>
