@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 export default function FinalCTA() {
   return (
-    <section className="py-24 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#2b2b2b] via-[#3a3a3a] to-[#2b2b2b] relative overflow-hidden">
+    <section className="py-24 md:py-32 px-4 md:px-8 bg-gradient-to-br from-black via-[#0a0a0a] to-black relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#4A90E2]/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#7CB342]/5 rounded-full blur-3xl" />
@@ -23,7 +23,7 @@ export default function FinalCTA() {
           </h2>
 
           {/* Subtext */}
-          <p className="text-lg md:text-xl text-[#e8ddd5] font-light max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-300 font-light max-w-2xl mx-auto">
             Every piece in our collection is selected with intention, designed to elevate your everyday moments and bring lasting beauty to your home.
           </p>
 
@@ -49,7 +49,7 @@ export default function FinalCTA() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="text-sm text-[#8c8c8c] font-light tracking-widest uppercase pt-8"
+            className="text-sm text-gray-500 font-light tracking-widest uppercase pt-8"
           >
             Luxury redefined for modern Indian homes
           </motion.p>

@@ -44,17 +44,17 @@ export function ProductTabs({ tabs }: ProductTabsProps) {
   const [activeTab, setActiveTab] = useState(0)
 
   return (
-    <div className="border-t border-brand-sand/30 pt-8 md:pt-12">
+    <div className="border-t border-white/10 pt-8 md:pt-12">
       {/* Tab Buttons */}
-      <div className="flex gap-1 md:gap-2 border-b border-brand-sand/30 mb-6 md:mb-8 flex-wrap">
+      <div className="flex gap-1 md:gap-2 border-b border-white/10 mb-6 md:mb-8 flex-wrap">
         {tabs.map((tab, index) => (
           <button
             key={index}
             onClick={() => setActiveTab(index)}
             className={`px-4 md:px-6 py-3 md:py-4 font-medium text-sm md:text-base transition-all border-b-2 -mb-px ${
               index === activeTab
-                ? "border-accent-gold text-accent-gold"
-                : "border-transparent text-brand-charcoal/60 hover:text-brand-charcoal"
+                ? "border-[#4A90E2] text-[#4A90E2]"
+                : "border-transparent text-gray-400 hover:text-white"
             }`}
           >
             {tab.label}
@@ -68,7 +68,7 @@ export function ProductTabs({ tabs }: ProductTabsProps) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="text-brand-charcoal/80"
+        className="text-gray-300"
       >
         {Array.isArray(tabs[activeTab].content) ? (
           <ul className="space-y-2 list-disc list-inside">
@@ -88,21 +88,21 @@ export function ProductTabs({ tabs }: ProductTabsProps) {
               )}
               
               {tableData && (
-                <div className="bg-white rounded-xl shadow-sm border border-brand-sand/20 overflow-hidden">
-                  <div className="bg-gradient-to-r from-accent-gold/5 to-transparent px-6 py-4 border-b border-brand-sand/20">
-                    <h3 className="text-lg font-bold text-brand-charcoal">Product Specifications</h3>
+                <div className="bg-[#1a1a1a] rounded-xl border border-white/10 overflow-hidden">
+                  <div className="bg-gradient-to-r from-[#4A90E2]/10 to-transparent px-6 py-4 border-b border-white/10">
+                    <h3 className="text-lg font-bold text-white">Product Specifications</h3>
                   </div>
-                  <div className="divide-y divide-brand-sand/20">
+                  <div className="divide-y divide-white/10">
                     {tableData.map((row, index) => (
                       <div 
                         key={index}
-                        className="grid grid-cols-2 gap-4 px-6 py-4 hover:bg-brand-sand/5 transition-colors"
+                        className="grid grid-cols-2 gap-4 px-6 py-4 hover:bg-white/5 transition-colors"
                       >
-                        <div className="font-semibold text-brand-charcoal flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent-gold"></span>
+                        <div className="font-semibold text-white flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#4A90E2]"></span>
                           {row.label}
                         </div>
-                        <div className="text-brand-charcoal/70">{row.value}</div>
+                        <div className="text-gray-300">{row.value}</div>
                       </div>
                     ))}
                   </div>

@@ -55,11 +55,11 @@ const testimonials = [
 
 export default function TestimonialsParallax() {
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#e8f5e9] via-[#f9fdf9] to-[#f1f8f2]">
+    <section className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#1a1a1a] via-black to-[#0a0a0a]">
       <div className="max-w-7xl mx-auto space-y-10">
         <div className="text-center space-y-4">
           <p className="text-sm uppercase tracking-[0.4em] text-[#4A90E2]">Stories</p>
-          <h2 className="text-4xl md:text-5xl font-playfair text-[#2b2b2b] leading-tight">
+          <h2 className="text-4xl md:text-5xl font-playfair text-white leading-tight">
             Homes that feel curated, calm, collected
           </h2>
         </div>

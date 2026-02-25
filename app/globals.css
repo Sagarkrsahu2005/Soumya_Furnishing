@@ -17,41 +17,42 @@ html {
 }
 
 :root {
-  /* Soumya Furnishings Luxury Editorial Palette */
-  /* Primary Neutrals */
-  --brand-ivory: #f7f5f2;
-  --brand-beige: #efe9e3;
-  --brand-sand: #e8ddd5;
+  /* Soumya Furnishings Dark Mode Palette */
+  /* Primary Colors */
+  --brand-black: #000000;
+  --brand-dark-gray: #1a1a1a;
+  --brand-medium-gray: #2d2d2d;
   
-  /* Accents */
+  /* Accent Brand Colors */
+  --accent-blue: #4A90E2;
+  --accent-green: #7CB342;
   --accent-gold: #c8b27c;
-  --accent-gold-light: #d9c4a3;
   --accent-taupe: #b6a99a;
   --accent-sage: #9dafa2;
   
   /* Text Colors */
-  --text-charcoal: #2b2b2b;
-  --text-warm-gray: #5f5f5f;
-  --text-light-gray: #8c8c8c;
+  --text-white: #ffffff;
+  --text-light-gray: #e5e5e5;
+  --text-medium-gray: #a3a3a3;
   
   /* Glass Effects */
-  --glass-light: rgba(255, 255, 255, 0.7);
-  --glass-premium: rgba(255, 255, 255, 0.12);
-  --glass-dark: rgba(45, 45, 45, 0.08);
+  --glass-light: rgba(255, 255, 255, 0.1);
+  --glass-premium: rgba(255, 255, 255, 0.05);
+  --glass-dark: rgba(0, 0, 0, 0.5);
 
   /* Design Tokens */
-  --background: var(--brand-ivory);
-  --foreground: var(--text-charcoal);
-  --card: white;
-  --card-foreground: var(--text-charcoal);
-  --primary: var(--accent-gold);
-  --primary-foreground: var(--text-charcoal);
-  --secondary: var(--brand-beige);
-  --secondary-foreground: var(--text-charcoal);
-  --muted: var(--accent-sage);
-  --muted-foreground: var(--text-warm-gray);
-  --border: rgba(200, 178, 124, 0.15);
-  --input: white;
+  --background: var(--brand-black);
+  --foreground: var(--text-white);
+  --card: var(--brand-dark-gray);
+  --card-foreground: var(--text-white);
+  --primary: var(--accent-blue);
+  --primary-foreground: var(--text-white);
+  --secondary: var(--accent-green);
+  --secondary-foreground: var(--text-white);
+  --muted: var(--brand-medium-gray);
+  --muted-foreground: var(--text-medium-gray);
+  --border: rgba(74, 144, 226, 0.2);
+  --input: var(--brand-dark-gray);
   --destructive: #ef4444;
   --destructive-foreground: white;
 
@@ -215,6 +216,17 @@ html {
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes scroll-marquee {

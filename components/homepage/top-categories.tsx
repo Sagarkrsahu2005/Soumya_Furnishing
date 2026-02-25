@@ -137,7 +137,7 @@ export default function TopCategories() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-[#f1f8f2] via-[#f9fdf9] to-[#e8f5e9] relative overflow-hidden"
+      className="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-br from-black via-[#0a0a0a] to-[#1a1a1a] relative overflow-hidden"
       style={{ perspective: "2000px" }}
     >
       {/* Animated background elements */}
@@ -151,7 +151,7 @@ export default function TopCategories() {
       <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
-          backgroundImage: `linear-gradient(#2b2b2b 1px, transparent 1px), linear-gradient(90deg, #2b2b2b 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)`,
           backgroundSize: "50px 50px",
         }}
       />
@@ -163,11 +163,11 @@ export default function TopCategories() {
             Discover Our World
           </p>
           <h2
-            className="text-4xl md:text-5xl font-playfair font-semibold text-[#2b2b2b] leading-[1.1] mb-8 animate-[fadeInUp_0.6s_ease-out_0.2s_forwards]"
+            className="text-4xl md:text-5xl font-playfair font-semibold text-white leading-[1.1] mb-8 animate-[fadeInUp_0.6s_ease-out_0.2s_forwards]"
           >
             Top Categories
           </h2>
-          <p className="text-lg md:text-xl text-[#5f5f5f] max-w-2xl mx-auto leading-relaxed animate-[fadeInUp_0.6s_ease-out_0.3s_forwards]">
+          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed animate-[fadeInUp_0.6s_ease-out_0.3s_forwards]">
             Where heritage craftsmanship meets contemporary elegance
           </p>
         </div>
@@ -188,7 +188,7 @@ export default function TopCategories() {
                 className="group relative h-[450px] md:h-[520px]"
                 style={{ transformStyle: "preserve-3d" }}
               >
-                <div className="absolute inset-0 rounded-[40px] bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-sm border border-[#e5e1da] overflow-hidden transition-all duration-700 group-hover:border-[#4A90E2] group-hover:shadow-2xl group-hover:shadow-[#4A90E2]/10">
+                <div className="absolute inset-0 rounded-[40px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#2d2d2d]/60 backdrop-blur-sm border border-white/10 overflow-hidden transition-all duration-700 group-hover:border-[#4A90E2] group-hover:shadow-2xl group-hover:shadow-[#4A90E2]/10">
                   {/* Image with parallax */}
                   <div className="absolute inset-0 overflow-hidden">
                     <div
@@ -236,7 +236,7 @@ export default function TopCategories() {
                       >
                         Collection
                       </div>
-                      <div className="text-[#2b2b2b]/40 text-sm font-light opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
+                      <div className="text-white/40 text-sm font-light opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
                         0{idx + 1}
                       </div>
                     </div>
@@ -306,7 +306,7 @@ export default function TopCategories() {
         <div className="text-center animate-[fadeInUp_0.6s_ease-out_0.6s_forwards]">
           <Link
             href="/collections"
-            className="group inline-flex items-center gap-4 px-10 py-5 rounded-full bg-[#2b2b2b] text-white text-sm uppercase tracking-[0.3em] font-semibold hover:bg-[#c8b27c] transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-[#c8b27c]/20"
+            className="group inline-flex items-center gap-4 px-10 py-5 rounded-full bg-white text-black text-sm uppercase tracking-[0.3em] font-semibold hover:bg-[#4A90E2] hover:text-white transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-[#4A90E2]/20"
           >
             <span>View All Collections</span>
             <svg

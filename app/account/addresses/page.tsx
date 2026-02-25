@@ -23,11 +23,11 @@ export default function AddressesPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen pt-32 pb-16 px-4">
+        <main className="min-h-screen pt-32 pb-16 px-4 bg-black">
           <div className="max-w-7xl mx-auto">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-48 mb-4"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+              <div className="h-8 bg-gray-700 rounded w-48 mb-4"></div>
+              <div className="h-64 bg-gray-700 rounded"></div>
             </div>
           </div>
         </main>
@@ -39,15 +39,15 @@ export default function AddressesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50 pt-32 pb-16 px-4">
+      <main className="min-h-screen bg-black pt-32 pb-16 px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Account</h1>
-            <p className="text-gray-600">Manage your saved addresses</p>
+            <h1 className="text-4xl font-bold text-white mb-2">My Account</h1>
+            <p className="text-gray-300">Manage your saved addresses</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -57,31 +57,31 @@ export default function AddressesPage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-1"
             >
-              <div className="bg-white rounded-xl shadow-sm p-6 space-y-2">
+              <div className="bg-[#1a1a1a] rounded-xl shadow-sm p-6 space-y-2">
                 <Link
                   href="/account"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
                 >
                   <Package className="w-5 h-5" />
                   <span>Orders</span>
                 </Link>
                 <Link
                   href="/account/profile"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
                 >
                   <User className="w-5 h-5" />
                   <span>Profile</span>
                 </Link>
                 <Link
                   href="/account/addresses"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#7CB342]/10 text-[#7CB342] font-medium"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#4A90E2]/20 text-[#4A90E2] font-medium"
                 >
                   <MapPin className="w-5 h-5" />
                   <span>Addresses</span>
                 </Link>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Sign Out</span>
@@ -95,16 +95,16 @@ export default function AddressesPage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-3"
             >
-              <div className="bg-white rounded-xl shadow-sm p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Saved Addresses</h2>
+              <div className="bg-[#2d2d2d] rounded-xl shadow-sm p-8 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-6">Saved Addresses</h2>
                 
                 <div className="text-center py-12">
-                  <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No Saved Addresses</h3>
-                  <p className="text-gray-600 mb-6">Your addresses will be saved here after your first order</p>
+                  <MapPin className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">No Saved Addresses</h3>
+                  <p className="text-gray-300 mb-6">Your addresses will be saved here after your first order</p>
                   <Link
                     href="/products"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#7CB342] text-white rounded-lg hover:bg-[#689F38] transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#4A90E2] text-white rounded-lg hover:bg-[#4A90E2]/80 transition-colors"
                   >
                     Start Shopping
                   </Link>

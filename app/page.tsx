@@ -13,7 +13,7 @@ import { Footer } from "@/components/footer"
 
 export default function Home() {
   return (
-    <main className="bg-gradient-to-br from-[#e8f5e9] via-[#f1f8f2] to-[#e8f5e9] overflow-hidden">
+    <main className="bg-black overflow-hidden">
       <Navbar />
       <HeroParallax />
       <ImmersiveMarquee />

@@ -10,7 +10,7 @@ const marqueeData = [
 
 export default function ImmersiveMarquee() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-[#e8f5e9] via-[#f1f8f2] to-[#e8f5e9] border-y border-[#c8e6c9] mt-16">
+    <section className="relative overflow-hidden bg-gradient-to-r from-[#1a1a1a] via-black to-[#1a1a1a] border-y border-white/10 mt-16">
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#4A90E2]/10 to-transparent" />
 
       <div className="py-8 space-y-6">
@@ -22,12 +22,12 @@ export default function ImmersiveMarquee() {
                   {marqueeData.map((item, dataIdx) => (
                     <div
                       key={`${loopIdx}-${item.label}-${dataIdx}`}
-                      className="marquee-item text-[#2b2b2b]"
+                      className="marquee-item text-white"
                     >
                       <span className="text-2xl md:text-3xl font-playfair tracking-wide">
                         {item.label}
                       </span>
-                      <span className="text-sm uppercase tracking-[0.3em] text-[#6f6f6f] font-inter">
+                      <span className="text-sm uppercase tracking-[0.3em] text-gray-400 font-inter">
                         {item.description}
                       </span>
                     </div>

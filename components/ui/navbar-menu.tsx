@@ -32,7 +32,7 @@ export const MenuItem = ({
     >
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-[#2b2b2b] hover:text-[#4A90E2] text-sm md:text-base font-medium"
+        className="cursor-pointer text-white hover:text-[#4A90E2] text-sm md:text-base font-medium"
       >
         {item}
       </motion.p>
@@ -47,7 +47,7 @@ export const MenuItem = ({
               <motion.div
                 transition={transition}
                 layoutId="active"
-                className="bg-white/95 backdrop-blur-2xl rounded-2xl overflow-hidden border border-[#c8e6c9] shadow-2xl max-h-[60vh] md:max-h-[70vh] overflow-y-auto"
+                className="bg-[#0a0a0a]/95 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-h-[60vh] md:max-h-[70vh] overflow-y-auto"
               >
                 <motion.div
                   layout
@@ -74,7 +74,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent bg-white/90 backdrop-blur-xl shadow-lg flex items-center justify-center space-x-3 md:space-x-6 px-4 md:px-6 py-3 "
+      className="relative rounded-full border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl shadow-lg flex items-center justify-center space-x-3 md:space-x-6 px-4 md:px-6 py-3 "
     >
       {children}
     </nav>
@@ -102,10 +102,10 @@ export const ProductItem = ({
         className="w-full md:w-[120px] h-[120px] md:h-[80px] object-cover shrink-0 rounded-lg shadow-md group-hover:shadow-lg transition-shadow"
       />
       <div className="flex-1">
-        <h4 className="text-base md:text-lg font-bold mb-1 text-[#2b2b2b] line-clamp-1">
+        <h4 className="text-base md:text-lg font-bold mb-1 text-white line-clamp-1">
           {title}
         </h4>
-        <p className="text-[#5f5f5f] text-xs md:text-sm line-clamp-2">
+        <p className="text-gray-400 text-xs md:text-sm line-clamp-2">
           {description}
         </p>
       </div>
@@ -117,7 +117,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <a
       {...rest}
-      className="block text-[#5f5f5f] hover:text-[#4A90E2] transition-colors"
+      className="block text-gray-400 hover:text-[#4A90E2] transition-colors"
     >
       {children}
     </a>

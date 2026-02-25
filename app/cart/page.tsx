@@ -18,18 +18,18 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-brand-ivory">
+      <main className="min-h-screen bg-black">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
           <div className="text-center">
-            <ShoppingBag className="w-16 h-16 text-brand-sand mx-auto mb-6" />
-            <h1 className="text-3xl md:text-4xl font-bold text-brand-charcoal mb-4">Your cart is empty</h1>
-            <p className="text-lg text-brand-charcoal/60 mb-8">
+            <ShoppingBag className="w-16 h-16 text-gray-600 mx-auto mb-6" />
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Your cart is empty</h1>
+            <p className="text-lg text-gray-300 mb-8">
               Start shopping to fill your cart with beautiful furnishings
             </p>
             <Link
               href="/products"
-              className="inline-block px-8 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold"
+              className="inline-block px-8 py-3 bg-[#4A90E2] text-white font-semibold hover:bg-[#3A7BC8] transition-all border-2 border-[#4A90E2]"
             >
               Continue Shopping
             </Link>
@@ -41,11 +41,11 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-brand-ivory">
+    <main className="min-h-screen bg-black">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        <h1 className="text-4xl md:text-5xl font-bold text-brand-charcoal mb-8 md:mb-12">Shopping Cart</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 md:mb-12">Shopping Cart</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
           {/* Cart Items */}
@@ -55,7 +55,7 @@ export default function CartPage() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-2"
           >
-            <div className="bg-white rounded border border-brand-sand/30 divide-y divide-brand-sand/30">
+            <div className="bg-[#1a1a1a] rounded border border-white/10 divide-y divide-white/10">
               {items.map((item) => (
                 <motion.div
                   key={`${item.productId}-${item.variantId}`}
@@ -66,7 +66,7 @@ export default function CartPage() {
                   {/* Image */}
                   <Link
                     href={`/products/${item.product.slug}`}
-                    className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden bg-brand-sand/30"
+                    className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden bg-[#2d2d2d]"
                   >
                     <Image
                       src={item.product.images[0]?.src || "/placeholder.svg"}
@@ -81,27 +81,27 @@ export default function CartPage() {
                     <div>
                       <Link
                         href={`/products/${item.product.slug}`}
-                        className="text-lg font-semibold text-brand-charcoal hover:text-accent-gold transition-colors mb-2"
+                        className="text-lg font-semibold text-white hover:text-[#4A90E2] transition-colors mb-2"
                       >
                         {item.product.title}
                       </Link>
-                      <p className="text-lg font-bold text-brand-charcoal mb-2">{formatPrice(item.product.price)}</p>
+                      <p className="text-lg font-bold text-white mb-2">{formatPrice(item.product.price)}</p>
                     </div>
 
                     {/* Quantity Controls */}
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center border-2 border-brand-sand">
+                      <div className="flex items-center border-2 border-white/20">
                         <button
                           onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
-                          className="p-2 text-brand-charcoal hover:bg-brand-sand/30 transition-colors"
+                          className="p-2 text-white hover:bg-white/10 transition-colors"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="px-6 py-2 font-semibold text-brand-charcoal">{item.quantity}</span>
+                        <span className="px-6 py-2 font-semibold text-white">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
-                          className="p-2 text-brand-charcoal hover:bg-brand-sand/30 transition-colors"
+                          className="p-2 text-white hover:bg-white/10 transition-colors"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-4 h-4" />
@@ -110,12 +110,12 @@ export default function CartPage() {
 
                       {/* Subtotal & Remove */}
                       <div className="text-right">
-                        <p className="text-sm text-brand-charcoal/60 mb-2">
+                        <p className="text-sm text-gray-400 mb-2">
                           {formatPrice(item.product.price * item.quantity)}
                         </p>
                         <button
                           onClick={() => removeItem(item.productId, item.variantId)}
-                          className="text-red-500 hover:text-red-700 transition-colors flex items-center gap-1"
+                          className="text-red-400 hover:text-red-300 transition-colors flex items-center gap-1"
                         >
                           <Trash2 className="w-4 h-4" />
                           Remove
@@ -131,7 +131,7 @@ export default function CartPage() {
             <div className="mt-6">
               <Link
                 href="/products"
-                className="text-accent-gold font-medium hover:text-brand-charcoal transition-colors"
+                className="text-[#4A90E2] font-medium hover:text-[#3A7BC8] transition-colors"
               >
                 ← Continue Shopping
               </Link>
@@ -145,31 +145,31 @@ export default function CartPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-1"
           >
-            <div className="sticky top-24 bg-white rounded border border-brand-sand/30 p-6 md:p-8">
-              <h2 className="text-xl font-bold text-brand-charcoal mb-6">Order Summary</h2>
+            <div className="sticky top-24 bg-[#1a1a1a] rounded border border-white/10 p-6 md:p-8">
+              <h2 className="text-xl font-bold text-white mb-6">Order Summary</h2>
 
-              <div className="space-y-4 mb-6 pb-6 border-b border-brand-sand/30">
-                <div className="flex justify-between text-brand-charcoal/70">
+              <div className="space-y-4 mb-6 pb-6 border-b border-white/10">
+                <div className="flex justify-between text-gray-300">
                   <span>Subtotal</span>
                   <span>{formatPrice(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-brand-charcoal/70">
+                <div className="flex justify-between text-gray-300">
                   <span>Shipping</span>
                   <span>
                     {shipping === 0 ? (
-                      <span className="text-accent-gold font-semibold">Free</span>
+                      <span className="text-[#7CB342] font-semibold">Free</span>
                     ) : (
                       formatPrice(shipping)
                     )}
                   </span>
                 </div>
                 {shipping === 0 && (
-                  <p className="text-xs text-accent-gold font-medium">Congratulations! Free shipping applied.</p>
+                  <p className="text-xs text-[#7CB342] font-medium">Congratulations! Free shipping applied.</p>
                 )}
               </div>
 
               <div className="mb-6">
-                <div className="flex justify-between font-bold text-lg text-brand-charcoal">
+                <div className="flex justify-between font-bold text-lg text-white">
                   <span>Total</span>
                   <span>{formatPrice(total)}</span>
                 </div>
@@ -177,13 +177,13 @@ export default function CartPage() {
 
               <Link
                 href="/checkout"
-                className="w-full px-6 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold mb-3 block text-center"
+                className="w-full px-6 py-3 bg-[#4A90E2] text-white font-semibold hover:bg-[#3A7BC8] transition-all border-2 border-[#4A90E2] mb-3 block text-center"
               >
                 Proceed to Checkout
               </Link>
 
-              <div className="bg-brand-sand/20 p-4 rounded text-sm text-brand-charcoal/70">
-                <p className="font-medium text-brand-charcoal mb-2">Free Shipping Threshold</p>
+              <div className="bg-[#2d2d2d] p-4 rounded text-sm text-gray-300">
+                <p className="font-medium text-white mb-2">Free Shipping Threshold</p>
                 <p>
                   {subtotal < 2000
                     ? `Add ${formatPrice(2000 - subtotal)} more to get free shipping`

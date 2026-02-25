@@ -114,15 +114,15 @@ export default function AuthPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50 pt-32 pb-16 px-4">
+      <main className="min-h-screen bg-black pt-32 pb-16 px-4">
         <div className="max-w-md mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl shadow-lg p-8"
+            className="bg-[#1a1a1a] rounded-2xl shadow-lg p-8 border border-white/10"
           >
             {/* Toggle Buttons */}
-            <div className="flex gap-2 mb-8 bg-gray-100 p-1 rounded-lg">
+            <div className="flex gap-2 mb-8 bg-[#2d2d2d] p-1 rounded-lg">
               <button
                 onClick={() => {
                   setIsLogin(true)
@@ -130,8 +130,8 @@ export default function AuthPage() {
                 }}
                 className={`flex-1 py-2 rounded-lg font-medium transition-all ${
                   isLogin
-                    ? "bg-white text-[#7CB342] shadow"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-[#4A90E2] text-white shadow"
+                    : "text-gray-400 hover:text-white"
                 }`}
               >
                 Login
@@ -143,8 +143,8 @@ export default function AuthPage() {
                 }}
                 className={`flex-1 py-2 rounded-lg font-medium transition-all ${
                   !isLogin
-                    ? "bg-white text-[#7CB342] shadow"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-[#4A90E2] text-white shadow"
+                    : "text-gray-400 hover:text-white"
                 }`}
               >
                 Sign Up
@@ -152,45 +152,45 @@ export default function AuthPage() {
             </div>
 
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
                 {error}
               </div>
             )}
 
             {isLogin ? (
               <form onSubmit={handleLogin} className="space-y-6">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-                <p className="text-gray-600 mb-6">Sign in to your account</p>
+                <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
+                <p className="text-gray-300 mb-6">Sign in to your account</p>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
                       type="email"
                       required
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="you@example.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
                       type="password"
                       required
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="••••••••"
                     />
                   </div>
@@ -199,36 +199,36 @@ export default function AuthPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-[#7CB342] text-white rounded-lg font-medium hover:bg-[#689F38] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 bg-[#4A90E2] text-white rounded-lg font-medium hover:bg-[#3A7BC8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Signing in..." : "Sign In"}
                 </button>
               </form>
             ) : (
               <form onSubmit={handleSignup} className="space-y-5">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">Create Account</h1>
-                <p className="text-gray-600 mb-6">Join us to start shopping</p>
+                <h1 className="text-2xl font-bold text-white mb-2">Create Account</h1>
+                <p className="text-gray-300 mb-6">Join us to start shopping</p>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       First Name
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                       <input
                         type="text"
                         required
                         value={signupData.firstName}
                         onChange={(e) => setSignupData({ ...signupData, firstName: e.target.value })}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                        className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                         placeholder="John"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       Last Name
                     </label>
                     <input
@@ -236,75 +236,75 @@ export default function AuthPage() {
                       required
                       value={signupData.lastName}
                       onChange={(e) => setSignupData({ ...signupData, lastName: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full px-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="Doe"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
                       type="email"
                       required
                       value={signupData.email}
                       onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="you@example.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Phone Number
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
                       type="tel"
                       required
                       value={signupData.phone}
                       onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="+91 98765 43210"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
                       type="password"
                       required
                       value={signupData.password}
                       onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="••••••••"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                     <input
                       type="password"
                       required
                       value={signupData.confirmPassword}
                       onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="••••••••"
                     />
                   </div>
@@ -313,7 +313,7 @@ export default function AuthPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-[#7CB342] text-white rounded-lg font-medium hover:bg-[#689F38] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 bg-[#4A90E2] text-white rounded-lg font-medium hover:bg-[#3A7BC8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Creating Account..." : "Create Account"}
                 </button>
@@ -321,7 +321,7 @@ export default function AuthPage() {
             )}
 
             <div className="mt-6 text-center">
-              <Link href="/" className="text-sm text-gray-600 hover:text-[#7CB342]">
+              <Link href="/" className="text-sm text-gray-400 hover:text-[#4A90E2]">
                 ← Back to Home
               </Link>
             </div>

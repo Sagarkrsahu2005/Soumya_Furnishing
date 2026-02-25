@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight, User, UserCircle2 } from "lucide-react"
+import { ShoppingCart, X, Bed, Sparkles, UtensilsCrossed, Sofa, Flower2, Tag, ChevronRight, User } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useCart } from "@/hooks/use-cart"
 import { CartSheet } from "@/components/cart-sheet"
@@ -51,7 +51,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/5 backdrop-blur-md"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-md"
             onClick={() => setActive(null)}
           />
         )}
@@ -81,7 +81,7 @@ export function Navbar() {
               <MenuItem setActive={setActive} active={active} item="Shop by Category">
                 <div className="flex flex-col space-y-3 text-sm w-56">
                   <HoveredLink href="/products">All Products</HoveredLink>
-                  <div className="border-t border-gray-200 my-2"></div>
+                  <div className="border-t border-white/10 my-2"></div>
                   <HoveredLink href="/collections/bed-linen">Bedding</HoveredLink>
                   <HoveredLink href="/collections/curtains">Curtains & Drapes</HoveredLink>
                   <HoveredLink href="/collections/table-covers">Table Linen</HoveredLink>
@@ -99,13 +99,13 @@ export function Navbar() {
                       className="block group"
                       onClick={() => setActive(null)}
                     >
-                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                      <div className="flex items-center justify-between text-sm font-bold text-white group-hover:text-[#4A90E2] transition-colors">
                         <span>Bedding</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">9 Collections</p>
+                      <p className="text-xs text-gray-400 mt-0.5">9 Collections</p>
                     </Link>
-                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-white/20 pl-3">
                       <HoveredLink href="/collections/bed-linen">Bed Linen</HoveredLink>
                       <HoveredLink href="/collections/bed-covers-plain">Bed Covers Plain</HoveredLink>
                       <HoveredLink href="/collections/bed-covers-woven">Bed Covers Woven</HoveredLink>
@@ -123,13 +123,13 @@ export function Navbar() {
                       className="block group"
                       onClick={() => setActive(null)}
                     >
-                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                      <div className="flex items-center justify-between text-sm font-bold text-white group-hover:text-[#4A90E2] transition-colors">
                         <span>Curtains & Drapes</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">7 Collections</p>
+                      <p className="text-xs text-gray-400 mt-0.5">7 Collections</p>
                     </Link>
-                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-white/20 pl-3">
                       <HoveredLink href="/collections/curtains">All Curtains</HoveredLink>
                       <HoveredLink href="/collections/plain-curtains">Plain Curtains</HoveredLink>
                       <HoveredLink href="/collections/printed-curtains">Printed Curtains</HoveredLink>
@@ -147,13 +147,13 @@ export function Navbar() {
                       className="block group"
                       onClick={() => setActive(null)}
                     >
-                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                      <div className="flex items-center justify-between text-sm font-bold text-white group-hover:text-[#4A90E2] transition-colors">
                         <span>Table Linen</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">7 Collections</p>
+                      <p className="text-xs text-gray-400 mt-0.5">7 Collections</p>
                     </Link>
-                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-white/20 pl-3">
                       <HoveredLink href="/collections/table-covers">Table Covers</HoveredLink>
                       <HoveredLink href="/collections/table-covers-plain">Plain Covers</HoveredLink>
                       <HoveredLink href="/collections/table-covers-printed">Printed Covers</HoveredLink>
@@ -170,13 +170,13 @@ export function Navbar() {
                       className="block group"
                       onClick={() => setActive(null)}
                     >
-                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                      <div className="flex items-center justify-between text-sm font-bold text-white group-hover:text-[#4A90E2] transition-colors">
                         <span>Living Room</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">4 Collections</p>
+                      <p className="text-xs text-gray-400 mt-0.5">4 Collections</p>
                     </Link>
-                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-white/20 pl-3">
                       <HoveredLink href="/collections/cushion">Cushion Covers</HoveredLink>
                       <HoveredLink href="/collections/sofa-cover">Diwan Sets</HoveredLink>
                       <HoveredLink href="/collections/sofa-throws">Sofa Throws</HoveredLink>
@@ -190,13 +190,13 @@ export function Navbar() {
                       className="block group"
                       onClick={() => setActive(null)}
                     >
-                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                      <div className="flex items-center justify-between text-sm font-bold text-white group-hover:text-[#4A90E2] transition-colors">
                         <span>Kitchen</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">5 Collections</p>
+                      <p className="text-xs text-gray-400 mt-0.5">5 Collections</p>
                     </Link>
-                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-white/20 pl-3">
                       <HoveredLink href="/collections/kitchen-linen">Kitchen Linen</HoveredLink>
                       <HoveredLink href="/collections/aprons">Aprons</HoveredLink>
                       <HoveredLink href="/collections/oven-mittens">Oven Mittens</HoveredLink>
@@ -211,13 +211,13 @@ export function Navbar() {
                       className="block group"
                       onClick={() => setActive(null)}
                     >
-                      <div className="flex items-center justify-between text-sm font-bold text-gray-900 group-hover:text-[#7CB342] transition-colors">
+                      <div className="flex items-center justify-between text-sm font-bold text-white group-hover:text-[#4A90E2] transition-colors">
                         <span>Rugs & Mats</span>
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">5 Collections</p>
+                      <p className="text-xs text-gray-400 mt-0.5">5 Collections</p>
                     </Link>
-                    <div className="ml-4 space-y-2 text-sm border-l-2 border-gray-100 pl-3">
+                    <div className="ml-4 space-y-2 text-sm border-l-2 border-white/20 pl-3">
                       <HoveredLink href="/collections/rugs">Rugs</HoveredLink>
                       <HoveredLink href="/collections/round-rugs">Round Rugs</HoveredLink>
                       <HoveredLink href="/collections/jute-door-mat">Door Mats</HoveredLink>
@@ -226,12 +226,12 @@ export function Navbar() {
                   </div>
 
                   {/* Special Collections */}
-                  <div className="col-span-2 pt-6 mt-2 border-t border-gray-200">
+                  <div className="col-span-2 pt-6 mt-2 border-t border-white/10">
                     <div className="flex items-center justify-between">
                       <div className="flex gap-6">
                         <Link 
                           href="/collections/best-seller"
-                          className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#7CB342] transition-colors"
+                          className="flex items-center gap-2 text-sm font-bold text-white hover:text-[#4A90E2] transition-colors"
                           onClick={() => setActive(null)}
                         >
                           <Tag className="w-4 h-4" />
@@ -239,7 +239,7 @@ export function Navbar() {
                         </Link>
                         <Link 
                           href="/collections/new"
-                          className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#7CB342] transition-colors"
+                          className="flex items-center gap-2 text-sm font-bold text-white hover:text-[#4A90E2] transition-colors"
                           onClick={() => setActive(null)}
                         >
                           <Sparkles className="w-4 h-4" />
@@ -247,7 +247,7 @@ export function Navbar() {
                         </Link>
                         <Link 
                           href="/collections/christmas"
-                          className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-[#7CB342] transition-colors"
+                          className="flex items-center gap-2 text-sm font-bold text-white hover:text-[#4A90E2] transition-colors"
                           onClick={() => setActive(null)}
                         >
                           <span>Christmas</span>
@@ -255,7 +255,7 @@ export function Navbar() {
                       </div>
                       <Link 
                         href="/products"
-                        className="text-sm font-medium text-[#7CB342] hover:text-[#689F38] transition-colors"
+                        className="text-sm font-medium text-[#4A90E2] hover:text-[#5AA5E8] transition-colors"
                         onClick={() => setActive(null)}
                       >
                         View All →
@@ -290,9 +290,13 @@ export function Navbar() {
               ) : (
                 <Link
                   href="/auth/login"
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#2b2b2b] hover:text-[#7CB342] transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white hover:text-[#4A90E2] transition-colors"
                 >
-                  <UserCircle2 className="w-5 h-5" />
+                  <img 
+                    src="https://img.icons8.com/?size=100&id=11727&format=png&color=000000" 
+                    alt="Login" 
+                    className="w-5 h-5"
+                  />
                   <span className="hidden md:inline">Login</span>
                 </Link>
               )}
@@ -300,7 +304,7 @@ export function Navbar() {
               {/* Cart Button inside menu */}
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-1 md:p-1.5 text-[#2b2b2b] hover:text-[#4A90E2] transition-colors ml-2 md:ml-3"
+                className="relative p-1 md:p-1.5 text-white hover:text-[#4A90E2] transition-colors ml-2 md:ml-3"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (

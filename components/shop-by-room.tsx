@@ -125,7 +125,7 @@ export default function ShopByRoom() {
   return (
     <section
       ref={containerRef}
-      className="relative py-32 md:py-48 px-4 md:px-8 overflow-hidden bg-gradient-to-b from-[#fafffe] via-[#f5faf8] to-[#edf7f2]"
+      className="relative py-32 md:py-48 px-4 md:px-8 overflow-hidden bg-gradient-to-b from-black via-[#0a0a0a] to-[#1a1a1a]"
     >
       {/* Animated background orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -165,14 +165,14 @@ export default function ShopByRoom() {
             </span>
           </motion.div>
           
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-playfair text-[#1a1a1a] font-bold mb-6 leading-[1.1] tracking-tight">
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-playfair text-white font-bold mb-6 leading-[1.1] tracking-tight">
             Choose by
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4A90E2] via-[#7CB342] to-[#4A90E2] bg-[length:200%_auto] animate-gradient">
               Your Space
             </span>
           </h2>
           
-          <p className="text-lg md:text-xl text-[#5f5f5f] font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
             Thoughtfully curated collections that transform every corner of your home into a sanctuary
           </p>
         </div>
@@ -292,8 +292,8 @@ export default function ShopByRoom() {
                     {/* CTA Button */}
                     <Link href={room.href}>
                       <motion.button
-                        className="group/btn relative flex items-center gap-3 px-8 py-4 rounded-2xl bg-white text-[#2b2b2b] font-semibold text-sm tracking-wide overflow-hidden"
-                        whileHover={{ scale: 1.05, boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)" }}
+                        className="group/btn relative flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#1a1a1a] text-white font-semibold text-sm tracking-wide overflow-hidden border border-white/20"
+                        whileHover={{ scale: 1.05, boxShadow: "0 20px 60px rgba(74, 144, 226, 0.4)" }}
                         whileTap={{ scale: 0.98 }}
                       >
                         {/* Button gradient overlay on hover */}

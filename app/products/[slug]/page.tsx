@@ -48,10 +48,10 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-brand-ivory">
+      <main className="min-h-screen bg-black">
         <Navbar />
         <div className="flex items-center justify-center h-screen">
-          <p className="text-2xl text-brand-charcoal">Product not found</p>
+          <p className="text-2xl text-white">Product not found</p>
         </div>
         <Footer />
       </main>
@@ -74,32 +74,32 @@ export default function ProductDetailPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-stone-50 via-white to-stone-50">
+    <main className="min-h-screen bg-black">
       <Navbar />
 
       {/* Floating Add to Cart Box - Bottom Right */}
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: showStickyCart ? 0 : 100, opacity: showStickyCart ? 1 : 0 }}
-        className="fixed bottom-6 right-6 z-40 w-80 bg-white rounded-2xl shadow-2xl border border-stone-200 overflow-hidden"
+        className="fixed bottom-6 right-6 z-40 w-80 bg-[#1a1a1a] rounded-2xl shadow-2xl border border-white/10 overflow-hidden"
       >
         <div className="p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-16 h-16 rounded-xl overflow-hidden bg-stone-100 flex-shrink-0">
+            <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#2d2d2d] flex-shrink-0">
               {product?.images[0] && (
                 <img src={product.images[0].src} alt={product.title} className="w-full h-full object-cover" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-stone-900 text-sm line-clamp-2">{product?.title}</h3>
-              <p className="text-lg font-bold text-stone-900 mt-1">{product && formatPrice(product.price)}</p>
+              <h3 className="font-semibold text-white text-sm line-clamp-2">{product?.title}</h3>
+              <p className="text-lg font-bold text-white mt-1">{product && formatPrice(product.price)}</p>
             </div>
           </div>
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => product && document.getElementById('main-add-to-cart')?.scrollIntoView({ behavior: 'smooth' })}
-            className="w-full px-4 py-3 bg-gradient-to-r from-[#7CB342] to-[#558B2F] text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+            className="w-full px-4 py-3 bg-[#4A90E2] text-white text-sm font-semibold rounded-xl hover:bg-[#3A7BC8] hover:shadow-lg transition-all duration-300"
           >
             Add to Cart
           </motion.button>
@@ -111,19 +111,19 @@ export default function ProductDetailPage() {
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 flex items-center gap-2 text-sm text-stone-600"
+          className="mb-6 flex items-center gap-2 text-sm text-gray-400"
         >
-          <a href="/" className="hover:text-stone-900 transition-colors">Home</a>
+          <a href="/" className="hover:text-white transition-colors">Home</a>
           <span>/</span>
           {product?.category && (
             <>
-              <a href={`/categories/${product.category.toLowerCase().replace(/ /g, '-')}`} className="hover:text-stone-900 transition-colors">
+              <a href={`/categories/${product.category.toLowerCase().replace(/ /g, '-')}`} className="hover:text-white transition-colors">
                 {product.category}
               </a>
               <span>/</span>
             </>
           )}
-          <span className="text-stone-900 font-medium">{product?.title}</span>
+          <span className="text-white font-medium">{product?.title}</span>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mb-16 md:mb-24">
@@ -144,16 +144,16 @@ export default function ProductDetailPage() {
               transition={{ delay: 0.2 }}
               className="mb-4"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500/10 to-amber-600/10 border border-amber-500/20 rounded-full">
-                <Sparkles className="w-4 h-4 text-amber-600" />
-                <span className="text-amber-900 text-xs font-bold tracking-wide uppercase">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span className="text-amber-300 text-xs font-bold tracking-wide uppercase">
                   Premium Collection
                 </span>
               </div>
             </motion.div>
 
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 mb-3 leading-tight">{product.title}</h1>
-            {product.sku && <p className="text-sm text-stone-500 font-medium mb-4">SKU: {product.sku}</p>}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">{product.title}</h1>
+            {product.sku && <p className="text-sm text-gray-400 font-medium mb-4">SKU: {product.sku}</p>}
 
             {product.rating && (
               <div className="flex items-center gap-3 mb-6">
@@ -164,14 +164,14 @@ export default function ProductDetailPage() {
                       initial={{ opacity: 0, scale: 0 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.3 + i * 0.05 }}
-                      className={`text-xl ${i < Math.round(product.rating!) ? "text-amber-500" : "text-stone-300"}`}
+                      className={`text-xl ${i < Math.round(product.rating!) ? "text-amber-500" : "text-gray-600"}`}
                     >
                       ★
                     </motion.span>
                   ))}
                 </div>
-                <span className="text-sm text-stone-600 font-medium">
-                  {formatRating(product.rating)} <span className="text-stone-400">({product.reviewsCount || 0} reviews)</span>
+                <span className="text-sm text-gray-300 font-medium">
+                  {formatRating(product.rating)} <span className="text-gray-500">({product.reviewsCount || 0} reviews)</span>
                 </span>
               </div>
             )}
@@ -184,7 +184,7 @@ export default function ProductDetailPage() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + i * 0.1 }}
-                    className="px-3 py-1.5 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-500/20"
+                    className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/20"
                   >
                     {badge}
                   </motion.span>
@@ -193,12 +193,12 @@ export default function ProductDetailPage() {
             )}
 
             {/* Price Section */}
-            <div className="mb-8 pb-8 border-b border-stone-200">
+            <div className="mb-8 pb-8 border-b border-white/10">
               <div className="flex items-baseline gap-4 mb-3">
-                <span className="text-4xl md:text-5xl font-bold text-stone-900">{formatPrice(product.price)}</span>
+                <span className="text-4xl md:text-5xl font-bold text-white">{formatPrice(product.price)}</span>
                 {product.compareAtPrice && (
                   <>
-                    <span className="text-2xl text-stone-400 line-through">
+                    <span className="text-2xl text-gray-500 line-through">
                       {formatPrice(product.compareAtPrice)}
                     </span>
                     <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
@@ -207,7 +207,7 @@ export default function ProductDetailPage() {
                   </>
                 )}
               </div>
-              <div className="flex items-center gap-2 text-sm text-emerald-600 font-medium">
+              <div className="flex items-center gap-2 text-sm text-emerald-400 font-medium">
                 <Truck className="w-4 h-4" />
                 <p>Free shipping on orders above ₹2,000</p>
               </div>
@@ -215,13 +215,13 @@ export default function ProductDetailPage() {
 
             {/* Material & Color Info */}
             {(product.materials || product.colors) && (
-              <div className="mb-8 pb-8 border-b border-stone-200 space-y-4">
+              <div className="mb-8 pb-8 border-b border-white/10 space-y-4">
                 {product.materials && (
                   <div>
-                    <p className="text-sm font-bold text-stone-900 mb-2 uppercase tracking-wider">Material</p>
+                    <p className="text-sm font-bold text-white mb-2 uppercase tracking-wider">Material</p>
                     <div className="flex flex-wrap gap-2">
                       {product.materials.map((material) => (
-                        <span key={material} className="px-3 py-1.5 bg-stone-100 text-stone-700 text-sm font-medium rounded-lg">
+                        <span key={material} className="px-3 py-1.5 bg-[#2d2d2d] text-gray-300 text-sm font-medium rounded-lg">
                           {material}
                         </span>
                       ))}
@@ -230,10 +230,10 @@ export default function ProductDetailPage() {
                 )}
                 {product.colors && (
                   <div>
-                    <p className="text-sm font-bold text-stone-900 mb-2 uppercase tracking-wider">Color</p>
+                    <p className="text-sm font-bold text-white mb-2 uppercase tracking-wider">Color</p>
                     <div className="flex flex-wrap gap-2">
                       {product.colors.map((color) => (
-                        <span key={color} className="px-3 py-1.5 bg-stone-100 text-stone-700 text-sm font-medium rounded-lg capitalize">
+                        <span key={color} className="px-3 py-1.5 bg-[#2d2d2d] text-gray-300 text-sm font-medium rounded-lg capitalize">
                           {color.toLowerCase()}
                         </span>
                       ))}
@@ -261,15 +261,15 @@ export default function ProductDetailPage() {
             </motion.div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 mb-8 pb-8 border-b border-stone-200">
+            <div className="flex gap-3 mb-8 pb-8 border-b border-white/10">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsWishlisted(!isWishlisted)}
                 className={`flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl transition-all duration-300 font-semibold text-sm ${
                   isWishlisted
-                    ? "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30"
-                    : "bg-white border-2 border-stone-200 text-stone-700 hover:border-stone-300 hover:shadow-md"
+                    ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
+                    : "bg-[#1a1a1a] border-2 border-white/20 text-gray-300 hover:border-white/30 hover:shadow-md"
                 }`}
               >
                 <Heart className="w-5 h-5" fill={isWishlisted ? "currentColor" : "none"} />
@@ -278,7 +278,7 @@ export default function ProductDetailPage() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white border-2 border-stone-200 text-stone-700 hover:border-stone-300 hover:shadow-md transition-all duration-300 font-semibold text-sm"
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#1a1a1a] border-2 border-white/20 text-gray-300 hover:border-white/30 hover:shadow-md transition-all duration-300 font-semibold text-sm"
               >
                 <Share2 className="w-5 h-5" />
                 Share
@@ -291,42 +291,42 @@ export default function ProductDetailPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-200"
+                className="flex items-start gap-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20"
               >
                 <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
                   <Truck className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-stone-900 text-sm">Free Shipping</p>
-                  <p className="text-xs text-stone-600">Free delivery on orders above ₹2,000</p>
+                  <p className="font-bold text-emerald-400 text-sm">Free Shipping</p>
+                  <p className="text-xs text-gray-400">Free delivery on orders above ₹2,000</p>
                 </div>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 border border-blue-200"
+                className="flex items-start gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20"
               >
                 <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
                   <RotateCcw className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-stone-900 text-sm">30-Day Returns</p>
-                  <p className="text-xs text-stone-600">Hassle-free returns within 30 days of purchase</p>
+                  <p className="font-bold text-blue-400 text-sm">30-Day Returns</p>
+                  <p className="text-xs text-gray-400">Hassle-free returns within 30 days of purchase</p>
                 </div>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200"
+                className="flex items-start gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20"
               >
                 <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-stone-900 text-sm">Secure Payment</p>
-                  <p className="text-xs text-stone-600">SSL encrypted checkout with multiple payment options</p>
+                  <p className="font-bold text-amber-400 text-sm">Secure Payment</p>
+                  <p className="text-xs text-gray-400">SSL encrypted checkout with multiple payment options</p>
                 </div>
               </motion.div>
             </div>

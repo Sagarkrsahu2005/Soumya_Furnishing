@@ -142,7 +142,7 @@ export default function ContactPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#f9fdf9] via-[#f1f8f2] to-[#e8f5e9] overflow-hidden pt-20">
+    <main className="min-h-screen bg-black overflow-hidden pt-20">
       <Navbar />
 
       {/* Hero Section with Parallax */}
@@ -178,13 +178,13 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
           >
             <p className="text-sm uppercase tracking-[0.4em] text-[#4A90E2] mb-4">Get in Touch</p>
-            <h1 className="text-5xl md:text-7xl font-playfair font-bold text-[#2b2b2b] mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-playfair font-bold text-white mb-6 leading-tight">
               Let's Create Something
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4A90E2] to-[#7CB342]">
                 Beautiful Together
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-[#5f5f5f] max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
               Whether you have a question, feedback, or just want to say hello, we'd love to hear from you.
             </p>
           </motion.div>
@@ -200,7 +200,7 @@ export default function ContactPage() {
               <motion.a
                 key={index}
                 href={method.href}
-                className="glass-card group relative overflow-hidden rounded-3xl backdrop-blur-xl bg-white/40 border border-white/60 p-8 hover:bg-white/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                className="glass-card group relative overflow-hidden rounded-3xl backdrop-blur-xl bg-[#1a1a1a]/80 border border-white/20 p-8 hover:bg-[#1a1a1a] transition-all duration-500 hover:scale-105 hover:shadow-2xl"
                 whileHover={{ y: -10 }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${method.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
@@ -208,9 +208,9 @@ export default function ContactPage() {
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#4A90E2]/20 to-[#7CB342]/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-500">
                     <Icon className="w-7 h-7 text-[#4A90E2]" />
                   </div>
-                  <h3 className="text-xl font-playfair font-semibold text-[#2b2b2b] mb-2">{method.title}</h3>
-                  <p className="text-sm text-[#5f5f5f] mb-3">{method.description}</p>
-                  <p className="text-[#2b2b2b] font-medium">{method.value}</p>
+                  <h3 className="text-xl font-playfair font-semibold text-white mb-2">{method.title}</h3>
+                  <p className="text-sm text-gray-400 mb-3">{method.description}</p>
+                  <p className="text-white font-medium">{method.value}</p>
                 </div>
               </motion.a>
             )
@@ -223,37 +223,37 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Form */}
           <div ref={formRef}>
-            <div className="backdrop-blur-xl bg-white/60 border border-white/80 rounded-3xl p-8 md:p-10 shadow-2xl">
+            <div className="backdrop-blur-xl bg-[#1a1a1a]/90 border border-white/20 rounded-3xl p-8 md:p-10 shadow-2xl">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#4A90E2] to-[#7CB342] flex items-center justify-center">
                   <MessageCircle className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-playfair font-bold text-[#2b2b2b]">Send a Message</h2>
+                <h2 className="text-3xl font-playfair font-bold text-white">Send a Message</h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-[#2b2b2b] mb-2">Name *</label>
+                    <label className="block text-sm font-semibold text-white mb-2">Name *</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-5 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 text-[#2b2b2b] placeholder-[#5f5f5f]/50 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
+                      className="w-full px-5 py-4 rounded-2xl bg-[#2d2d2d] backdrop-blur-sm border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-[#2b2b2b] mb-2">Email *</label>
+                    <label className="block text-sm font-semibold text-white mb-2">Email *</label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-5 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 text-[#2b2b2b] placeholder-[#5f5f5f]/50 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
+                      className="w-full px-5 py-4 rounded-2xl bg-[#2d2d2d] backdrop-blur-sm border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -261,24 +261,24 @@ export default function ContactPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-[#2b2b2b] mb-2">Phone</label>
+                    <label className="block text-sm font-semibold text-white mb-2">Phone</label>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-5 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 text-[#2b2b2b] placeholder-[#5f5f5f]/50 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
+                      className="w-full px-5 py-4 rounded-2xl bg-[#2d2d2d] backdrop-blur-sm border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
                       placeholder="+91 XXXXX XXXXX"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-[#2b2b2b] mb-2">Subject *</label>
+                    <label className="block text-sm font-semibold text-white mb-2">Subject *</label>
                     <select
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-5 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 text-[#2b2b2b] focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
+                      className="w-full px-5 py-4 rounded-2xl bg-[#2d2d2d] backdrop-blur-sm border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all"
                     >
                       <option value="">Select a subject</option>
                       <option value="general">General Inquiry</option>
@@ -291,14 +291,14 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-[#2b2b2b] mb-2">Message *</label>
+                  <label className="block text-sm font-semibold text-white mb-2">Message *</label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                     required
                     rows={6}
-                    className="w-full px-5 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 text-[#2b2b2b] placeholder-[#5f5f5f]/50 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all resize-none"
+                    className="w-full px-5 py-4 rounded-2xl bg-[#2d2d2d] backdrop-blur-sm border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4A90E2] transition-all resize-none"
                     placeholder="Tell us about your inquiry..."
                   />
                 </div>
@@ -331,10 +331,10 @@ export default function ContactPage() {
           {/* FAQ Section */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-[#2b2b2b] mb-4">
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-white mb-4">
                 Frequently Asked Questions
               </h2>
-              <p className="text-[#5f5f5f] text-lg">
+              <p className="text-gray-300 text-lg">
                 Quick answers to questions you may have. Can't find what you're looking for? Contact us directly!
               </p>
             </div>
@@ -347,30 +347,30 @@ export default function ContactPage() {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="backdrop-blur-xl bg-white/60 border border-white/80 rounded-2xl p-6 hover:bg-white/80 transition-all duration-300"
+                  className="backdrop-blur-xl bg-[#1a1a1a]/90 border border-white/20 rounded-2xl p-6 hover:bg-[#1a1a1a] transition-all duration-300"
                 >
-                  <h3 className="text-lg font-semibold text-[#2b2b2b] mb-3">{faq.question}</h3>
-                  <p className="text-[#5f5f5f]">{faq.answer}</p>
+                  <h3 className="text-lg font-semibold text-white mb-3">{faq.question}</h3>
+                  <p className="text-gray-300">{faq.answer}</p>
                 </motion.div>
               ))}
             </div>
 
             {/* Quick Info Card */}
-            <div className="backdrop-blur-xl bg-gradient-to-br from-[#4A90E2]/20 to-[#7CB342]/20 border border-white/60 rounded-3xl p-8">
-              <h3 className="text-2xl font-playfair font-bold text-[#2b2b2b] mb-4">Need Immediate Help?</h3>
-              <p className="text-[#5f5f5f] mb-6">
+            <div className="backdrop-blur-xl bg-[#1a1a1a]/90 border border-white/20 rounded-3xl p-8">
+              <h3 className="text-2xl font-playfair font-bold text-white mb-4">Need Immediate Help?</h3>
+              <p className="text-gray-300 mb-6">
                 Our customer service team is available during business hours to assist you with any urgent inquiries.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href="tel:+919876543210"
-                  className="flex-1 px-6 py-4 rounded-2xl bg-white/80 backdrop-blur-sm text-[#2b2b2b] font-semibold text-center hover:bg-white transition-all"
+                  className="flex-1 px-6 py-4 rounded-2xl bg-[#2d2d2d] backdrop-blur-sm text-white font-semibold text-center hover:bg-[#3d3d3d] transition-all"
                 >
                   Call Now
                 </a>
                 <a
                   href="mailto:hello@soumyafurnishings.com"
-                  className="flex-1 px-6 py-4 rounded-2xl bg-[#2b2b2b] text-white font-semibold text-center hover:bg-[#1f1f1f] transition-all"
+                  className="flex-1 px-6 py-4 rounded-2xl bg-[#4A90E2] text-white font-semibold text-center hover:bg-[#3A7BC8] transition-all"
                 >
                   Email Us
                 </a>
@@ -386,7 +386,7 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="backdrop-blur-xl bg-white/60 border border-white/80 rounded-3xl overflow-hidden"
+          className="backdrop-blur-xl bg-[#1a1a1a]/90 border border-white/20 rounded-3xl overflow-hidden"
         >
           <div className="relative w-full" style={{ paddingBottom: "42.86%" }}>
             <iframe

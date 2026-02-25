@@ -93,11 +93,11 @@ export default function ProfilePage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen pt-32 pb-16 px-4">
+        <main className="min-h-screen pt-32 pb-16 px-4 bg-black">
           <div className="max-w-7xl mx-auto">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-48 mb-4"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+              <div className="h-8 bg-gray-700 rounded w-48 mb-4"></div>
+              <div className="h-64 bg-gray-700 rounded"></div>
             </div>
           </div>
         </main>
@@ -109,15 +109,15 @@ export default function ProfilePage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-gray-50 pt-32 pb-16 px-4">
+      <main className="min-h-screen bg-black pt-32 pb-16 px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Account</h1>
-            <p className="text-gray-600">Manage your profile information</p>
+            <h1 className="text-4xl font-bold text-white mb-2">My Account</h1>
+            <p className="text-gray-300">Manage your profile information</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -127,31 +127,31 @@ export default function ProfilePage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-1"
             >
-              <div className="bg-white rounded-xl shadow-sm p-6 space-y-2">
+              <div className="bg-[#1a1a1a] rounded-xl shadow-sm p-6 space-y-2">
                 <Link
                   href="/account"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
                 >
                   <Package className="w-5 h-5" />
                   <span>Orders</span>
                 </Link>
                 <Link
                   href="/account/profile"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#7CB342]/10 text-[#7CB342] font-medium"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#4A90E2]/20 text-[#4A90E2] font-medium"
                 >
                   <User className="w-5 h-5" />
                   <span>Profile</span>
                 </Link>
                 <Link
                   href="/account/addresses"
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
                 >
                   <MapPin className="w-5 h-5" />
                   <span>Addresses</span>
                 </Link>
                 <button
                   onClick={() => signOut({ callbackUrl: "/" })}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Sign Out</span>
@@ -165,17 +165,17 @@ export default function ProfilePage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-3"
             >
-              <div className="bg-white rounded-xl shadow-sm p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
+              <div className="bg-[#2d2d2d] rounded-xl shadow-sm p-8 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
 
                 {success && (
-                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                  <div className="mb-6 p-4 bg-green-500/20 border border-green-500/30 rounded-lg text-green-400 text-sm">
                     Profile updated successfully!
                   </div>
                 )}
 
                 {error && (
-                  <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                  <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
                     {error}
                   </div>
                 )}
@@ -183,7 +183,7 @@ export default function ProfilePage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-white mb-2">
                         First Name
                       </label>
                       <input
@@ -191,12 +191,12 @@ export default function ProfilePage() {
                         required
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                        className="w-full px-4 py-3 bg-[#2d2d2d] border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-white mb-2">
                         Last Name
                       </label>
                       <input
@@ -204,33 +204,33 @@ export default function ProfilePage() {
                         required
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                        className="w-full px-4 py-3 bg-[#2d2d2d] border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       Email Address
                     </label>
                     <input
                       type="email"
                       disabled
                       value={formData.email}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-white/10 rounded-lg text-gray-400 cursor-not-allowed"
                     />
-                    <p className="text-sm text-gray-500 mt-1">Email cannot be changed</p>
+                    <p className="text-sm text-gray-400 mt-1">Email cannot be changed</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-white mb-2">
                       Phone Number
                     </label>
                     <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                      className="w-full px-4 py-3 bg-[#2d2d2d] border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
                       placeholder="+91 98765 43210"
                     />
                   </div>
@@ -238,7 +238,7 @@ export default function ProfilePage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#7CB342] text-white rounded-lg font-medium hover:bg-[#689F38] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-6 py-3 bg-[#4A90E2] text-white rounded-lg font-medium hover:bg-[#4A90E2]/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Save className="w-5 h-5" />
                     {loading ? "Saving..." : "Save Changes"}
