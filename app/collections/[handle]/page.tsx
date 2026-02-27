@@ -1,13 +1,17 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PrismaClient } from '@prisma/client'
-import { ProductCard } from '@/components/product-card'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
+import { CollectionContent } from '@/components/collection-content'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 
 const prisma = new PrismaClient()
+
+// Disable caching to always fetch fresh data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
   const { handle } = await params
@@ -57,7 +61,6 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
     // Transform products
     const products = collection.products.map((pc: any) => {
       const product = pc.product
-      const firstVariant = product.variants[0]
       
       return {
         id: product.id,
@@ -69,8 +72,15 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
           src: img.src,
           alt: img.alt || product.title
         })),
+        variants: product.variants.map((v: any) => ({
+          id: v.id,
+          name: v.name,
+          inventoryQuantity: v.inventoryQuantity || 0,
+        })),
         category: product.category,
-        inventory: firstVariant ? firstVariant.inventoryQuantity : 0
+        badges: product.badges ? product.badges.split('|') : [],
+        rating: product.rating,
+        reviewsCount: product.reviewsCount,
       }
     })
 
@@ -129,91 +139,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ han
           </div>
 
           {/* Products Section */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-            {products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-32 px-4">
-                <div className="w-32 h-32 mb-8 relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#4A90E2]/20 to-[#7CB342]/20 rounded-full blur-2xl" />
-                  <div className="relative w-full h-full rounded-full bg-[#1a1a1a] border border-white/10 flex items-center justify-center">
-                    <svg className="w-16 h-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                  </div>
-                </div>
-                <h3 className="text-2xl font-semibold text-white mb-3">Collection Coming Soon</h3>
-                <p className="text-gray-400 mb-10 text-center max-w-md leading-relaxed">
-                  We're curating beautiful pieces for this collection. Check back soon for stunning new additions.
-                </p>
-                <Link
-                  href="/products"
-                  className="group relative px-8 py-3.5 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] text-white rounded-xl font-medium overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#7CB342] to-[#689F38] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative flex items-center gap-2">
-                    Explore All Products
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                </Link>
-              </div>
-            ) : (
-              <>
-                {/* Filter/Sort Bar */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-white/5">
-                  <div>
-                    <p className="text-sm text-gray-500 mb-1">Showing</p>
-                    <p className="text-lg font-semibold text-white">
-                      {products.length} <span className="text-gray-600">handpicked {products.length === 1 ? 'piece' : 'pieces'}</span>
-                    </p>
-                  </div>
-                </div>
-
-                {/* Premium Product Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {products.map((product: any) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
-
-                {/* Collection CTA */}
-                <div className="mt-20 pt-16 border-t border-white/5">
-                  <div className="text-center max-w-2xl mx-auto">
-                    <h3 className="text-3xl font-bold text-white mb-4">
-                      Looking for something specific?
-                    </h3>
-                    <p className="text-gray-400 mb-8">
-                      Explore our complete catalog or get in touch for custom orders
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Link
-                        href="/products"
-                        className="group px-8 py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium transition-all"
-                      >
-                        <span className="flex items-center justify-center gap-2">
-                          View All Products
-                          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                          </svg>
-                        </span>
-                      </Link>
-                      <Link
-                        href="/contact"
-                        className="group px-8 py-3.5 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] hover:from-[#7CB342] hover:to-[#689F38] text-white rounded-xl font-medium transition-all"
-                      >
-                        <span className="flex items-center justify-center gap-2">
-                          Contact Us
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                          </svg>
-                        </span>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+          <CollectionContent products={products} collectionTitle={collection.title} />
         </main>
         <Footer />
       </>

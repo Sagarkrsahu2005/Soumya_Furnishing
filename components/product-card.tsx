@@ -33,6 +33,14 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    
+    // Check stock before adding to cart
+    const totalStock = product.variants?.reduce((sum, variant) => sum + (variant.inventoryQuantity || 0), 0) || 0
+    if (totalStock === 0) {
+      addToast(`Sorry, ${product.title} is out of stock`, "error")
+      return
+    }
+    
     addItem(product)
     addToast(`${product.title} added to cart`, "success")
   }
@@ -53,6 +61,10 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation()
     router.push(`/products/${product.slug}`)
   }
+
+  // Check if product is in stock
+  const totalStock = product.variants?.reduce((sum, variant) => sum + (variant.inventoryQuantity || 0), 0) || 0
+  const isOutOfStock = totalStock === 0
 
   return (
     <motion.div
@@ -79,7 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
               src={product.images[0]?.src || "/placeholder.svg?key=1q3mn"}
               alt={product.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
+              className={`object-cover group-hover:scale-105 transition-transform duration-700 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
             />
 
             {/* Gradient Overlay */}
@@ -102,8 +114,22 @@ export function ProductCard({ product }: ProductCardProps) {
               </motion.div>
             )}
 
+            {/* Out of Stock Badge */}
+            {isOutOfStock && (
+              <motion.div
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="absolute top-3 left-3 z-10"
+              >
+                <div className="px-3 py-1.5 bg-red-500/90 backdrop-blur-sm text-white text-xs font-bold rounded-full">
+                  Out of Stock
+                </div>
+              </motion.div>
+            )}
+
             {/* Premium Badge */}
-            {product.badges && product.badges.length > 0 && (
+            {!isOutOfStock && product.badges && product.badges.length > 0 && (
               <motion.div
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -146,11 +172,16 @@ export function ProductCard({ product }: ProductCardProps) {
                 <Heart className="w-4 h-4" fill={isWishlisted ? "currentColor" : "none"} />
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleAddToCart}
-                className="p-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white hover:bg-white/20 transition-all shadow-lg"
-                title="Add to Cart"
+                whileHover={{ scale: isOutOfStock ? 1 : 1.1 }}
+                whileTap={{ scale: isOutOfStock ? 1 : 0.95 }}
+                onClick={isOutOfStock ? undefined : handleAddToCart}
+                disabled={isOutOfStock}
+                className={`p-3 rounded-full backdrop-blur-xl border transition-all shadow-lg ${
+                  isOutOfStock 
+                    ? "bg-gray-800/50 border-gray-700/50 text-gray-600 cursor-not-allowed" 
+                    : "bg-white/10 border-white/20 text-white hover:bg-white/20"
+                }`}
+                title={isOutOfStock ? "Out of Stock" : "Add to Cart"}
               >
                 <ShoppingCart className="w-4 h-4" />
               </motion.button>
@@ -192,14 +223,17 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
 
           {/* Price */}
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <span className={`text-xl font-bold ${isOutOfStock ? 'text-gray-600' : 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'}`}>
               {formatPrice(product.price)}
             </span>
             {product.compareAtPrice && (
               <span className="text-xs text-gray-600 line-through">
                 {formatPrice(product.compareAtPrice)}
               </span>
+            )}
+            {isOutOfStock && (
+              <span className="text-xs text-red-500 font-semibold">• Out of Stock</span>
             )}
           </div>
         </div>

@@ -30,7 +30,7 @@ export default function HeroParallax() {
         loop
         playsInline
       >
-        <source src="/ad-video-compressed.mp4" type="video/mp4" />
+        <source src="/ad-video-hq.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 

@@ -293,7 +293,7 @@ export function Navbar() {
                   className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white hover:text-[#4A90E2] transition-colors"
                 >
                   <img 
-                    src="https://img.icons8.com/?size=100&id=11727&format=png&color=000000" 
+                    src="https://img.icons8.com/?size=100&id=11727&format=png&color=ffffff" 
                     alt="Login" 
                     className="w-5 h-5"
                   />

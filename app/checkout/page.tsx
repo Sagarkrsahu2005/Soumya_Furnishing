@@ -4,20 +4,38 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { useCart } from "@/hooks/use-cart"
 import { formatPrice } from "@/lib/utils"
+import { loadRazorpayScript, RazorpayPaymentResponse } from "@/lib/razorpay"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Check, MapPin, CreditCard, ShoppingBag, Package, Truck, Lock } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-type PaymentMethod = "cod" | "upi" | "card"
+type PaymentMethod = "cod" | "razorpay"
+
+declare global {
+  interface Window {
+    Razorpay: any
+  }
+}
 
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, clearCart } = useCart()
   const [isProcessing, setIsProcessing] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("cod")
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false)
+
+  // Load Razorpay script
+  useEffect(() => {
+    loadRazorpayScript().then((loaded) => {
+      setRazorpayLoaded(loaded)
+      if (!loaded) {
+        console.error("Failed to load Razorpay SDK")
+      }
+    })
+  }, [])
 
   // Form State
   const [formData, setFormData] = useState({
@@ -33,13 +51,6 @@ export default function CheckoutPage() {
     city: "",
     state: "",
     pincode: "",
-
-    // Payment Details (for UPI/Card)
-    upiId: "",
-    cardNumber: "",
-    cardName: "",
-    cardExpiry: "",
-    cardCvv: "",
 
     // Special Instructions
     notes: "",
@@ -84,23 +95,95 @@ export default function CheckoutPage() {
     if (!formData.pincode) newErrors.pincode = "Pincode is required"
     else if (!/^\d{6}$/.test(formData.pincode)) newErrors.pincode = "Pincode must be 6 digits"
 
-    // Payment validation
-    if (selectedPayment === "upi" && !formData.upiId) {
-      newErrors.upiId = "UPI ID is required"
-    }
-    if (selectedPayment === "card") {
-      if (!formData.cardNumber) newErrors.cardNumber = "Card number is required"
-      else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s/g, "")))
-        newErrors.cardNumber = "Invalid card number"
-
-      if (!formData.cardName) newErrors.cardName = "Cardholder name is required"
-      if (!formData.cardExpiry) newErrors.cardExpiry = "Expiry date is required"
-      if (!formData.cardCvv) newErrors.cardCvv = "CVV is required"
-      else if (!/^\d{3,4}$/.test(formData.cardCvv)) newErrors.cardCvv = "Invalid CVV"
-    }
-
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
+  }
+
+  const handleRazorpayPayment = async () => {
+    try {
+      // Create order on backend
+      const response = await fetch("/api/razorpay/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: total * 100, // convert to paise
+          currency: "INR",
+          receipt: `receipt_${Date.now()}`,
+          notes: {
+            customerEmail: formData.email,
+            customerPhone: formData.phone,
+            customerName: `${formData.firstName} ${formData.lastName}`,
+          },
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!data.success) {
+        throw new Error("Failed to create order")
+      }
+
+      // Initialize Razorpay checkout
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Soumya Furnishings",
+        description: "Order Payment",
+        order_id: data.order.id,
+        handler: async (response: RazorpayPaymentResponse) => {
+          // Verify payment on backend
+          const verifyResponse = await fetch("/api/razorpay/verify-payment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(response),
+          })
+
+          const verifyData = await verifyResponse.json()
+
+          if (verifyData.success) {
+            // Payment successful
+            clearCart()
+            router.push(
+              `/checkout/success?orderId=${data.order.receipt}&total=${total}&payment=razorpay&paymentId=${response.razorpay_payment_id}`
+            )
+          } else {
+            alert("Payment verification failed")
+            setIsProcessing(false)
+          }
+        },
+        prefill: {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        notes: {
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode,
+        },
+        theme: {
+          color: "#4A90E2",
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false)
+          },
+        },
+      }
+
+      const razorpay = new window.Razorpay(options)
+      razorpay.open()
+    } catch (error) {
+      console.error("Razorpay payment error:", error)
+      alert("Failed to initiate payment. Please try again.")
+      setIsProcessing(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -112,14 +195,21 @@ export default function CheckoutPage() {
 
     setIsProcessing(true)
 
-    // Simulate order processing
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    // Clear cart and redirect to success page
-    clearCart()
-    router.push(
-      `/checkout/success?orderId=ORD-${Date.now()}&total=${total}&payment=${selectedPayment}`
-    )
+    if (selectedPayment === "razorpay") {
+      if (!razorpayLoaded) {
+        alert("Payment system is loading. Please try again in a moment.")
+        setIsProcessing(false)
+        return
+      }
+      await handleRazorpayPayment()
+    } else {
+      // COD order
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      clearCart()
+      router.push(
+        `/checkout/success?orderId=ORD-${Date.now()}&total=${total}&payment=${selectedPayment}`
+      )
+    }
   }
 
   if (items.length === 0) {
@@ -395,10 +485,10 @@ export default function CheckoutPage() {
                     {selectedPayment === "cod" && <Check className="w-5 h-5 text-[#4A90E2]" />}
                   </label>
 
-                  {/* UPI */}
+                  {/* Razorpay (UPI/Cards/Netbanking) */}
                   <label
                     className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all ${
-                      selectedPayment === "upi"
+                      selectedPayment === "razorpay"
                         ? "border-[#4A90E2] bg-[#4A90E2]/10"
                         : "border-white/20 hover:border-[#4A90E2]/50 bg-[#1a1a1a]"
                     }`}
@@ -406,154 +496,21 @@ export default function CheckoutPage() {
                     <input
                       type="radio"
                       name="payment"
-                      value="upi"
-                      checked={selectedPayment === "upi"}
-                      onChange={(e) => setSelectedPayment(e.target.value as PaymentMethod)}
-                      className="w-5 h-5 text-[#4A90E2]"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white">UPI Payment</span>
-                      </div>
-                      <p className="text-sm text-gray-400 mt-1">Pay using Google Pay, PhonePe, Paytm</p>
-                    </div>
-                    {selectedPayment === "upi" && <Check className="w-5 h-5 text-[#4A90E2]" />}
-                  </label>
-
-                  {/* Credit/Debit Card */}
-                  <label
-                    className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all ${
-                      selectedPayment === "card"
-                        ? "border-[#4A90E2] bg-[#4A90E2]/10"
-                        : "border-white/20 hover:border-[#4A90E2]/50 bg-[#1a1a1a]"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="card"
-                      checked={selectedPayment === "card"}
+                      value="razorpay"
+                      checked={selectedPayment === "razorpay"}
                       onChange={(e) => setSelectedPayment(e.target.value as PaymentMethod)}
                       className="w-5 h-5 text-[#4A90E2]"
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <CreditCard className="w-5 h-5 text-gray-400" />
-                        <span className="font-semibold text-white">Credit/Debit Card</span>
+                        <span className="font-semibold text-white">Pay Online</span>
                       </div>
-                      <p className="text-sm text-gray-400 mt-1">Visa, Mastercard, Rupay accepted</p>
+                      <p className="text-sm text-gray-400 mt-1">UPI, Cards, Netbanking (Powered by Razorpay)</p>
                     </div>
-                    {selectedPayment === "card" && <Check className="w-5 h-5 text-[#4A90E2]" />}
+                    {selectedPayment === "razorpay" && <Check className="w-5 h-5 text-[#4A90E2]" />}
                   </label>
                 </div>
-
-                {/* UPI Details */}
-                {selectedPayment === "upi" && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="pt-4 border-t border-white/10"
-                  >
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      UPI ID <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="upiId"
-                      value={formData.upiId}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 bg-[#1a1a1a] border ${
-                        errors.upiId ? "border-red-500" : "border-white/10"
-                      } focus:border-[#4A90E2] outline-none transition-colors rounded-lg text-white placeholder:text-gray-500`}
-                      placeholder="yourname@paytm"
-                    />
-                    {errors.upiId && <p className="mt-1 text-xs text-red-500">{errors.upiId}</p>}
-                  </motion.div>
-                )}
-
-                {/* Card Details */}
-                {selectedPayment === "card" && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="pt-4 border-t border-white/10 space-y-4"
-                  >
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Card Number <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-[#1a1a1a] border ${
-                          errors.cardNumber ? "border-red-500" : "border-white/10"
-                        } focus:border-[#4A90E2] outline-none transition-colors rounded-lg text-white placeholder:text-gray-500`}
-                        placeholder="1234 5678 9012 3456"
-                        maxLength={19}
-                      />
-                      {errors.cardNumber && <p className="mt-1 text-xs text-red-500">{errors.cardNumber}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Cardholder Name <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="cardName"
-                        value={formData.cardName}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-[#1a1a1a] border ${
-                          errors.cardName ? "border-red-500" : "border-white/10"
-                        } focus:border-[#4A90E2] outline-none transition-colors rounded-lg text-white placeholder:text-gray-500`}
-                        placeholder="JOHN DOE"
-                      />
-                      {errors.cardName && <p className="mt-1 text-xs text-red-500">{errors.cardName}</p>}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
-                          Expiry Date <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="cardExpiry"
-                          value={formData.cardExpiry}
-                          onChange={handleInputChange}
-                          className={`w-full px-4 py-3 bg-[#1a1a1a] border ${
-                            errors.cardExpiry ? "border-red-500" : "border-white/10"
-                          } focus:border-[#4A90E2] outline-none transition-colors rounded-lg text-white placeholder:text-gray-500`}
-                          placeholder="MM/YY"
-                          maxLength={5}
-                        />
-                        {errors.cardExpiry && <p className="mt-1 text-xs text-red-500">{errors.cardExpiry}</p>}
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
-                          CVV <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="cardCvv"
-                          value={formData.cardCvv}
-                          onChange={handleInputChange}
-                          className={`w-full px-4 py-3 bg-[#1a1a1a] border ${
-                            errors.cardCvv ? "border-red-500" : "border-white/10"
-                          } focus:border-[#4A90E2] outline-none transition-colors rounded-lg text-white placeholder:text-gray-500`}
-                          placeholder="123"
-                          maxLength={4}
-                        />
-                        {errors.cardCvv && <p className="mt-1 text-xs text-red-500">{errors.cardCvv}</p>}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
               </motion.div>
 
               {/* Special Instructions */}
