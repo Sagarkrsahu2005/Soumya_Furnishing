@@ -40,10 +40,10 @@ export default function HeroParallax() {
   return (
     <section
       ref={heroRef}
-      className="relative w-full h-screen min-h-[100dvh] bg-black overflow-hidden"
+      className="relative w-full h-screen min-h-[100dvh] bg-black"
     >
       {/* Full Screen Video */}
-      <div className="absolute inset-0 w-full h-full">
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
         <video
           ref={videoRef}
           className="w-full h-full"
