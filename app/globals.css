@@ -14,13 +14,16 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  /* Prevent horizontal scroll on mobile */
+  /* Explicitly allow vertical scroll */
   overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
 }
 
 body {
-  /* Prevent horizontal scroll */
+  /* Prevent horizontal scroll but allow vertical */
   overflow-x: hidden;
+  overflow-y: auto;
   /* Improve touch scrolling on iOS */
   -webkit-overflow-scrolling: touch;
   /* Prevent text size adjustment on orientation change */
@@ -28,6 +31,9 @@ body {
   -moz-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Ensure body can scroll */
+  position: relative;
+  min-height: 100vh;
 }
 
 /* Better touch targets on mobile */
