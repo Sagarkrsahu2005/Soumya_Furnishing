@@ -32,7 +32,7 @@ export const MenuItem = ({
     >
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-white hover:text-[#4A90E2] text-sm md:text-base font-medium"
+        className="cursor-pointer text-white hover:text-[#4A90E2] text-sm md:text-base font-medium whitespace-nowrap"
       >
         {item}
       </motion.p>
@@ -73,8 +73,8 @@ export const Menu = ({
 }) => {
   return (
     <nav
-      onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl shadow-lg flex items-center justify-center space-x-3 md:space-x-6 px-4 md:px-6 py-3 "
+      onMouseLeave={() => setActive(null)}
+      className="relative rounded-full border border-white/20 bg-black/80 backdrop-blur-2xl shadow-2xl flex items-center justify-between space-x-2 md:space-x-4 px-4 md:px-6 py-2.5 md:py-3"
     >
       {children}
     </nav>
