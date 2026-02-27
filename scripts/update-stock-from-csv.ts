@@ -6,6 +6,13 @@ import { homedir } from 'os'
 
 const CSV_PATH = join(homedir(), 'Downloads', 'products_export_1.csv')
 
+type CSVRow = {
+  Title?: string
+  Handle?: string
+  'Variant Inventory Qty'?: string
+  [key: string]: string | undefined
+}
+
 async function updateStock() {
   console.log('📦 Reading CSV file...\n')
   
@@ -14,7 +21,7 @@ async function updateStock() {
     columns: true,
     skip_empty_lines: true,
     trim: true,
-  })
+  }) as CSVRow[]
   
   console.log(`Found ${records.length} rows in CSV\n`)
   
@@ -28,7 +35,7 @@ async function updateStock() {
     const inventoryQty = row['Variant Inventory Qty']?.trim()
     
     // Skip empty rows or headers
-    if (!title || !handle || inventoryQty === '') {
+    if (!title || !handle || !inventoryQty) {
       skipped++
       continue
     }
