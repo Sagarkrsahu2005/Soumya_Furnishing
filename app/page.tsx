@@ -13,7 +13,7 @@ import { Footer } from "@/components/footer"
 
 export default function Home() {
   return (
-    <main className="bg-black overflow-hidden">
+    <main className="bg-black overflow-x-hidden">
       <Navbar />
       <HeroParallax />
       <ImmersiveMarquee />

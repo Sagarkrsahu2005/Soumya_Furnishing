@@ -142,7 +142,7 @@ export default function ContactPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-black overflow-hidden pt-20">
+    <main className="min-h-screen bg-black overflow-x-hidden pt-20">
       <Navbar />
 
       {/* Hero Section with Parallax */}
