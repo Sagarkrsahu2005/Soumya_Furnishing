@@ -101,7 +101,54 @@ export default function CheckoutPage() {
 
   const handleRazorpayPayment = async () => {
     try {
-      // Create order on backend
+      // First create order in database
+      const orderResponse = await fetch("/api/orders/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: items.map(item => ({
+            title: item.title,
+            variant: item.variant,
+            sku: item.sku,
+            quantity: item.quantity,
+            price: item.price,
+            productId: item.id,
+          })),
+          customer: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            phone: formData.phone,
+          },
+          shipping: {
+            address: formData.address,
+            apartment: formData.apartment,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode,
+            notes: formData.notes,
+          },
+          payment: {
+            method: 'razorpay',
+          },
+          totals: {
+            subtotal,
+            shipping,
+            tax,
+            total,
+          },
+        }),
+      })
+
+      const orderData = await orderResponse.json()
+
+      if (!orderData.success) {
+        throw new Error("Failed to create order")
+      }
+
+      // Create Razorpay payment order
       const response = await fetch("/api/razorpay/create-order", {
         method: "POST",
         headers: {
@@ -110,8 +157,10 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           amount: total * 100, // convert to paise
           currency: "INR",
-          receipt: `receipt_${Date.now()}`,
+          receipt: orderData.order.id,
           notes: {
+            orderId: orderData.order.id,
+            orderNumber: orderData.order.orderNumber,
             customerEmail: formData.email,
             customerPhone: formData.phone,
             customerName: `${formData.firstName} ${formData.lastName}`,
@@ -122,7 +171,7 @@ export default function CheckoutPage() {
       const data = await response.json()
 
       if (!data.success) {
-        throw new Error("Failed to create order")
+        throw new Error("Failed to create payment order")
       }
 
       // Initialize Razorpay checkout
@@ -146,10 +195,31 @@ export default function CheckoutPage() {
           const verifyData = await verifyResponse.json()
 
           if (verifyData.success) {
-            // Payment successful
+            // Payment successful - Now create shipment with Delhivery
+            try {
+              await fetch("/api/shipping/create", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  orderId: orderData.order.id,
+                  shipmentDetails: {
+                    weight: 1000, // Default 1kg - adjust based on items
+                    length: 30,
+                    width: 20,
+                    height: 15,
+                  },
+                }),
+              })
+            } catch (shipError) {
+              console.error("Failed to create shipment:", shipError)
+              // Continue anyway - admin can create shipment later
+            }
+
             clearCart()
             router.push(
-              `/checkout/success?orderId=${data.order.receipt}&total=${total}&payment=razorpay&paymentId=${response.razorpay_payment_id}`
+              `/checkout/success?orderId=${orderData.order.name}&orderNumber=${orderData.order.orderNumber}&total=${total}&payment=razorpay&paymentId=${response.razorpay_payment_id}`
             )
           } else {
             alert("Payment verification failed")
@@ -203,12 +273,85 @@ export default function CheckoutPage() {
       }
       await handleRazorpayPayment()
     } else {
-      // COD order
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      clearCart()
-      router.push(
-        `/checkout/success?orderId=ORD-${Date.now()}&total=${total}&payment=${selectedPayment}`
-      )
+      // COD order - create order in database
+      try {
+        const orderResponse = await fetch("/api/orders/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            items: items.map(item => ({
+              title: item.title,
+              variant: item.variant,
+              sku: item.sku,
+              quantity: item.quantity,
+              price: item.price,
+              productId: item.id,
+            })),
+            customer: {
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              email: formData.email,
+              phone: formData.phone,
+            },
+            shipping: {
+              address: formData.address,
+              apartment: formData.apartment,
+              city: formData.city,
+              state: formData.state,
+              pincode: formData.pincode,
+              notes: formData.notes,
+            },
+            payment: {
+              method: 'cod',
+            },
+            totals: {
+              subtotal,
+              shipping,
+              tax,
+              total,
+            },
+          }),
+        })
+
+        const orderData = await orderResponse.json()
+
+        if (!orderData.success) {
+          throw new Error("Failed to create order")
+        }
+
+        // Create shipment with Delhivery
+        try {
+          await fetch("/api/shipping/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderId: orderData.order.id,
+              shipmentDetails: {
+                weight: 1000, // Default 1kg
+                length: 30,
+                width: 20,
+                height: 15,
+              },
+            }),
+          })
+        } catch (shipError) {
+          console.error("Failed to create shipment:", shipError)
+          // Continue anyway - admin can create shipment later
+        }
+
+        clearCart()
+        router.push(
+          `/checkout/success?orderId=${orderData.order.name}&orderNumber=${orderData.order.orderNumber}&total=${total}&payment=${selectedPayment}`
+        )
+      } catch (error) {
+        console.error("Order creation error:", error)
+        alert("Failed to create order. Please try again.")
+        setIsProcessing(false)
+      }
     }
   }
 

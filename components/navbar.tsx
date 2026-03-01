@@ -43,26 +43,42 @@ export function Navbar() {
 
   return (
     <>
+      {/* Backdrop Blur Overlay - Apple Style */}
+      <AnimatePresence>
+        {active !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-md"
+            onClick={() => setActive(null)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Unified Navigation Bar with Logo, Menu, and Cart */}
       <div className={cn(
-        "fixed top-6 md:top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300",
-        isVisible ? "translate-y-0 opacity-100" : "-translate-y-32 opacity-0"
+        "fixed top-10 inset-x-0 max-w-fit mx-auto z-50 transition-transform duration-300 px-4",
+        isVisible ? "translate-y-0" : "-translate-y-32"
       )}>
-        <div className="flex items-center justify-center px-2">
-          <Menu setActive={setActive}>
-            {/* Logo - Responsive sizing */}
-            <Link href="/" className="flex-shrink-0 mr-3 md:mr-5 touch-manipulation">
-              <Image
-                src="/logo.webp"
-                alt="Soumya Furnishings"
-                width={110}
-                height={40}
-                className="h-6 md:h-8 w-auto"
-                priority
-              />
-            </Link>
+        <div className="flex items-center justify-center">
+          {/* Navigation Menu with Logo and Cart inside - Visible on all screens */}
+          <div className="w-full">
+            <Menu setActive={setActive}>
+              {/* Logo inside menu */}
+              <Link href="/" className="flex-shrink-0 mr-2 md:mr-4">
+                <Image
+                  src="/logo.webp"
+                  alt="Soumya Furnishings"
+                  width={140}
+                  height={51}
+                  className="h-7 md:h-8 w-auto"
+                  priority
+                />
+              </Link>
               
-              <MenuItem setActive={setActive} active={active} item="Shop">
+              <MenuItem setActive={setActive} active={active} item="Shop by Category">
                 <div className="flex flex-col space-y-3 text-sm w-56">
                   <HoveredLink href="/products">All Products</HoveredLink>
                   <div className="border-t border-white/10 my-2"></div>
@@ -288,17 +304,17 @@ export function Navbar() {
               {/* Cart Button inside menu */}
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-1.5 md:p-2 text-white hover:text-[#4A90E2] active:scale-95 transition-all ml-2 md:ml-4 touch-manipulation"
-                aria-label="Open cart"
+                className="relative p-1 md:p-1.5 text-white hover:text-[#4A90E2] transition-colors ml-2 md:ml-3"
               >
-                <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+                <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold leading-none text-white bg-[#4A90E2] rounded-full">
-                    {cartCount > 99 ? '99+' : cartCount}
+                  <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-[#4A90E2] rounded-full">
+                    {cartCount}
                   </span>
                 )}
               </button>
             </Menu>
+          </div>
         </div>
       </div>
 

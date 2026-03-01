@@ -27,11 +27,33 @@ pnpm start
 - If you add remote images, update `next.config.mjs` `images.domains`.
 
 ## Environment Variables
-Currently no required env vars. If you add any, create `.env.local` (not committed). Example:
+Configure these in `.env.local` (see `.env.example` for template):
 
+### Required
 ```bash
-NEXT_PUBLIC_ANALYTICS_ID=your-id
+DATABASE_URL=postgresql://...
+ADMIN_SECRET=your-secret-key
 ```
+
+### Integrations (Optional)
+```bash
+# Razorpay Payment Gateway
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxx
+RAZORPAY_KEY_SECRET=xxx
+
+# Delhivery Shipping Partner
+DELHIVERY_API_KEY=your-api-key
+DELHIVERY_API_URL=https://track.delhivery.com/api
+
+# Shopify (for migration)
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+SHOPIFY_ADMIN_ACCESS_TOKEN=shpat_xxx
+```
+
+See setup guides:
+- [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md) - Payment gateway integration  
+- [DELHIVERY_SETUP.md](DELHIVERY_SETUP.md) - Shipping & tracking integration  
+- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Production deployment
 
 ## Deploy
 ### Vercel (recommended)
@@ -87,15 +109,31 @@ pnpm seed
 Export products from Shopify Admin (Products > Export) as CSV or JSON. Convert to the shape used in `scripts/seed.ts` and extend the seed script to parse the CSV and create products. (We can automate this next.)
 
 ## Migration Strategy From Shopify
-1. Phase 1: Mirror product catalog (done via seed).
-2. Phase 2: Add inventory & order schema (not yet implemented).
-3. Phase 3: Replace cart & checkout with Stripe/Razorpay.
+1. ✅ Phase 1: Mirror product catalog (done via seed)
+2. ✅ Phase 2: Add inventory & order schema (completed)
+3. ✅ Phase 3: Payment integration with Razorpay (completed)
+4. ✅ Phase 4: Shipping integration with Delhivery (completed)
+5. 🔄 Phase 5: Order management & fulfillment workflow (in progress)
+
+## Integrations
+
+### ✅ Razorpay Payment Gateway
+- Online payments (Cards, UPI, Net Banking, Wallets)
+- Cash on Delivery support
+- See [RAZORPAY_SETUP.md](RAZORPAY_SETUP.md) for setup
+
+### ✅ Delhivery Shipping Partner
+- Automatic shipment creation
+- Real-time tracking
+- Pincode serviceability check
+- See [DELHIVERY_SETUP.md](DELHIVERY_SETUP.md) for setup
 
 ## Next Steps
-- Add API routes (`app/api/products`) for external consumers.
-- Implement search index (e.g., Meilisearch) for advanced filtering.
-- Add inventory & order models.
-- Add payment integration and order workflow.
+- Implement order fulfillment workflow in admin panel
+- Add email/SMS notifications for order updates
+- Integrate inventory management
+- Add search index (e.g., Meilisearch) for advanced filtering
+- Implement customer reviews & ratings system
 ```bash
 pnpm lint
 ```

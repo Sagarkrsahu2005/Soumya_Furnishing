@@ -46,52 +46,61 @@ export default function TrackOrderPage() {
     setError("")
     setTrackingData(null)
 
-    // Simulate API call - Replace with actual Delhivery API
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      // Call tracking API with either waybill or orderId
+      const paramName = trackingNumber.startsWith('DLV') || trackingNumber.startsWith('TEST') ? 'waybill' : 'orderId'
+      const encodedValue = encodeURIComponent(trackingNumber.trim())
+      const response = await fetch(
+        `/api/shipping/track?${paramName}=${encodedValue}`
+      )
 
-    // Mock data - In production, this would come from your backend which calls Delhivery API
-    const mockData: TrackingData = {
-      orderId: trackingNumber,
-      awbNumber: "DLV" + trackingNumber.slice(-8),
-      status: "shipped",
-      currentLocation: "Mumbai Distribution Center",
-      estimatedDelivery: "17 Jan 2026",
-      timeline: [
-        {
-          status: "Order Placed",
-          location: "Soumya Furnishings",
-          timestamp: "14 Jan 2026, 10:30 AM",
-          description: "Your order has been confirmed",
+      const data = await response.json()
+
+      if (!response.ok || !data.success) {
+        setError(data.error || "Unable to track shipment. Please check your tracking number and try again.")
+        setIsLoading(false)
+        return
+      }
+
+      // Map API response to our TrackingData format
+      const mapStatusToDeliveryStatus = (status: string): DeliveryStatus => {
+        const statusLower = status.toLowerCase()
+        if (statusLower.includes('placed') || statusLower.includes('booked')) return 'order-placed'
+        if (statusLower.includes('processing') || statusLower.includes('manifest')) return 'processing'
+        if (statusLower.includes('shipped') || statusLower.includes('dispatch')) return 'shipped'
+        if (statusLower.includes('out for delivery')) return 'out-for-delivery'
+        if (statusLower.includes('delivered')) return 'delivered'
+        return 'shipped'
+      }
+
+      const trackingData: TrackingData = {
+        orderId: data.orderId || trackingNumber,
+        awbNumber: data.waybill,
+        status: mapStatusToDeliveryStatus(data.status.status),
+        currentLocation: data.status.currentLocation || 'In Transit',
+        estimatedDelivery: data.status.estimatedDelivery 
+          ? new Date(data.status.estimatedDelivery).toLocaleDateString('en-IN', { 
+              day: 'numeric', 
+              month: 'short', 
+              year: 'numeric' 
+            })
+          : 'TBD',
+        timeline: data.timeline || [],
+        shippingDetails: {
+          from: 'Mumbai, Maharashtra',
+          to: data.status.currentLocation || 'Destination',
+          courierName: 'Delhivery',
+          courierPhone: '+91 9876543210',
         },
-        {
-          status: "Processing",
-          location: "Warehouse - Mumbai",
-          timestamp: "14 Jan 2026, 02:45 PM",
-          description: "Order is being packed",
-        },
-        {
-          status: "Shipped",
-          location: "Mumbai Hub",
-          timestamp: "15 Jan 2026, 09:15 AM",
-          description: "Package picked up by Delhivery",
-        },
-        {
-          status: "In Transit",
-          location: "Mumbai Distribution Center",
-          timestamp: "15 Jan 2026, 03:30 PM",
-          description: "Package is on the way to your city",
-        },
-      ],
-      shippingDetails: {
-        from: "Mumbai, Maharashtra",
-        to: "Pune, Maharashtra",
-        courierName: "Delhivery",
-        courierPhone: "+91 9876543210",
-      },
+      }
+
+      setTrackingData(trackingData)
+    } catch (err) {
+      console.error('Tracking error:', err)
+      setError("Failed to fetch tracking information. Please try again later.")
+    } finally {
+      setIsLoading(false)
     }
-
-    setTrackingData(mockData)
-    setIsLoading(false)
   }
 
   const getStatusIcon = (status: DeliveryStatus) => {
@@ -145,14 +154,14 @@ export default function TrackOrderPage() {
   }
 
   return (
-    <main className="min-h-screen bg-brand-ivory">
+    <main className="min-h-screen bg-black">
       <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-brand-charcoal mb-4">Track Your Order</h1>
-          <p className="text-lg text-brand-charcoal/70">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-white to-gray-400 bg-clip-text text-transparent mb-4">Track Your Order</h1>
+          <p className="text-lg text-gray-400">
             Enter your order ID or tracking number to get real-time updates
           </p>
         </div>
@@ -161,11 +170,11 @@ export default function TrackOrderPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded border border-brand-sand/30 p-6 md:p-8 mb-8"
+          className="bg-[#0f0f0f] rounded-2xl border border-white/10 p-6 md:p-8 mb-8"
         >
           <form onSubmit={handleTrack} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-brand-charcoal mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 Order ID or Tracking Number
               </label>
               <div className="flex gap-3">
@@ -176,13 +185,13 @@ export default function TrackOrderPage() {
                     setTrackingNumber(e.target.value)
                     setError("")
                   }}
-                  placeholder="e.g., ORD-1234567890 or DLV12345678"
-                  className="flex-1 px-4 py-3 border-2 border-brand-sand focus:border-accent-gold outline-none transition-colors"
+                  placeholder="e.g., 1001, #TEST001 or TEST123456789"
+                  className="flex-1 px-4 py-3 bg-[#1a1a1a] border border-white/10 text-white placeholder:text-gray-500 focus:border-[#4A90E2] outline-none transition-colors rounded-lg"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-6 py-3 bg-accent-gold text-white font-semibold hover:bg-opacity-90 transition-all border-2 border-accent-gold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-6 py-3 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] text-white font-semibold hover:opacity-90 transition-all rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {isLoading ? (
                     <>
@@ -197,10 +206,10 @@ export default function TrackOrderPage() {
                   )}
                 </button>
               </div>
-              {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+              {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
             </div>
 
-            <p className="text-xs text-brand-charcoal/60">
+            <p className="text-xs text-gray-500">
               You can find your order ID in the confirmation email we sent you
             </p>
           </form>
@@ -214,72 +223,72 @@ export default function TrackOrderPage() {
             className="space-y-6"
           >
             {/* Status Card */}
-            <div className="bg-white rounded border border-brand-sand/30 p-6 md:p-8">
+            <div className="bg-[#0f0f0f] rounded-2xl border border-white/10 p-6 md:p-8">
               <div className="flex items-center gap-4 mb-6">
                 <div className={`w-16 h-16 rounded-full ${getStatusColor(trackingData.status)} flex items-center justify-center text-white`}>
                   {getStatusIcon(trackingData.status)}
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-brand-charcoal mb-1">
+                  <h2 className="text-2xl font-bold text-white mb-1">
                     {getStatusText(trackingData.status)}
                   </h2>
-                  <p className="text-brand-charcoal/70">
-                    Current Location: <span className="font-semibold">{trackingData.currentLocation}</span>
+                  <p className="text-gray-400">
+                    Current Location: <span className="font-semibold text-white">{trackingData.currentLocation}</span>
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-brand-sand/30">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-white/10">
                 <div>
-                  <p className="text-sm text-brand-charcoal/60 mb-1">Order ID</p>
-                  <p className="font-mono font-semibold text-brand-charcoal">{trackingData.orderId}</p>
+                  <p className="text-sm text-gray-500 mb-1">Order ID</p>
+                  <p className="font-mono font-semibold text-white">{trackingData.orderId}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-brand-charcoal/60 mb-1">AWB Number</p>
-                  <p className="font-mono font-semibold text-brand-charcoal">{trackingData.awbNumber}</p>
+                  <p className="text-sm text-gray-500 mb-1">AWB Number</p>
+                  <p className="font-mono font-semibold text-white">{trackingData.awbNumber}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-brand-charcoal/60 mb-1">Est. Delivery</p>
-                  <p className="font-semibold text-accent-gold">{trackingData.estimatedDelivery}</p>
+                  <p className="text-sm text-gray-500 mb-1">Est. Delivery</p>
+                  <p className="font-semibold text-[#4A90E2]">{trackingData.estimatedDelivery}</p>
                 </div>
               </div>
             </div>
 
             {/* Shipping Details */}
-            <div className="bg-white rounded border border-brand-sand/30 p-6 md:p-8">
-              <h3 className="text-lg font-bold text-brand-charcoal mb-4">Shipping Details</h3>
+            <div className="bg-[#0f0f0f] rounded-2xl border border-white/10 p-6 md:p-8">
+              <h3 className="text-lg font-bold text-white mb-4">Shipping Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <div className="flex items-start gap-3 mb-4">
-                    <MapPin className="w-5 h-5 text-accent-gold flex-shrink-0 mt-0.5" />
+                    <MapPin className="w-5 h-5 text-[#4A90E2] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm text-brand-charcoal/60 mb-1">From</p>
-                      <p className="font-semibold text-brand-charcoal">{trackingData.shippingDetails.from}</p>
+                      <p className="text-sm text-gray-500 mb-1">From</p>
+                      <p className="font-semibold text-white">{trackingData.shippingDetails.from}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-accent-gold flex-shrink-0 mt-0.5" />
+                    <MapPin className="w-5 h-5 text-[#4A90E2] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm text-brand-charcoal/60 mb-1">To</p>
-                      <p className="font-semibold text-brand-charcoal">{trackingData.shippingDetails.to}</p>
+                      <p className="text-sm text-gray-500 mb-1">To</p>
+                      <p className="font-semibold text-white">{trackingData.shippingDetails.to}</p>
                     </div>
                   </div>
                 </div>
                 <div>
                   <div className="flex items-start gap-3 mb-4">
-                    <Truck className="w-5 h-5 text-accent-gold flex-shrink-0 mt-0.5" />
+                    <Truck className="w-5 h-5 text-[#4A90E2] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm text-brand-charcoal/60 mb-1">Courier Partner</p>
-                      <p className="font-semibold text-brand-charcoal">{trackingData.shippingDetails.courierName}</p>
+                      <p className="text-sm text-gray-500 mb-1">Courier Partner</p>
+                      <p className="font-semibold text-white">{trackingData.shippingDetails.courierName}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Phone className="w-5 h-5 text-accent-gold flex-shrink-0 mt-0.5" />
+                    <Phone className="w-5 h-5 text-[#4A90E2] flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm text-brand-charcoal/60 mb-1">Contact</p>
+                      <p className="text-sm text-gray-500 mb-1">Contact</p>
                       <a
                         href={`tel:${trackingData.shippingDetails.courierPhone}`}
-                        className="font-semibold text-accent-gold hover:underline"
+                        className="font-semibold text-[#4A90E2] hover:underline"
                       >
                         {trackingData.shippingDetails.courierPhone}
                       </a>
@@ -290,11 +299,11 @@ export default function TrackOrderPage() {
             </div>
 
             {/* Timeline */}
-            <div className="bg-white rounded border border-brand-sand/30 p-6 md:p-8">
-              <h3 className="text-lg font-bold text-brand-charcoal mb-6">Tracking Timeline</h3>
+            <div className="bg-[#0f0f0f] rounded-2xl border border-white/10 p-6 md:p-8">
+              <h3 className="text-lg font-bold text-white mb-6">Tracking Timeline</h3>
               <div className="relative">
                 {/* Timeline Line */}
-                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-brand-sand/50" />
+                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-white/10" />
 
                 {/* Timeline Items */}
                 <div className="space-y-6">
@@ -307,18 +316,18 @@ export default function TrackOrderPage() {
                       className="relative pl-12"
                     >
                       {/* Timeline Dot */}
-                      <div className="absolute left-0 w-8 h-8 rounded-full bg-accent-gold flex items-center justify-center">
+                      <div className="absolute left-0 w-8 h-8 rounded-full bg-[#4A90E2] flex items-center justify-center">
                         <div className="w-3 h-3 rounded-full bg-white" />
                       </div>
 
                       {/* Content */}
-                      <div className="bg-brand-sand/10 rounded p-4">
+                      <div className="bg-[#1a1a1a] rounded-lg p-4 border border-white/5">
                         <div className="flex items-start justify-between gap-4 mb-2">
-                          <h4 className="font-semibold text-brand-charcoal">{item.status}</h4>
-                          <span className="text-sm text-brand-charcoal/60 whitespace-nowrap">{item.timestamp}</span>
+                          <h4 className="font-semibold text-white">{item.status}</h4>
+                          <span className="text-sm text-gray-500 whitespace-nowrap">{item.timestamp}</span>
                         </div>
-                        <p className="text-sm text-brand-charcoal/70 mb-1">{item.description}</p>
-                        <p className="text-xs text-brand-charcoal/50 flex items-center gap-1">
+                        <p className="text-sm text-gray-400 mb-1">{item.description}</p>
+                        <p className="text-xs text-gray-600 flex items-center gap-1">
                           <MapPin className="w-3 h-3" />
                           {item.location}
                         </p>
@@ -330,20 +339,20 @@ export default function TrackOrderPage() {
             </div>
 
             {/* Help Section */}
-            <div className="bg-accent-gold/5 rounded border border-accent-gold/20 p-6">
+            <div className="bg-[#4A90E2]/10 rounded-2xl border border-[#4A90E2]/20 p-6">
               <div className="flex items-start gap-4">
-                <Mail className="w-6 h-6 text-accent-gold flex-shrink-0 mt-1" />
+                <Mail className="w-6 h-6 text-[#4A90E2] flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-brand-charcoal mb-2">Need Help?</h3>
-                  <p className="text-sm text-brand-charcoal/70 mb-3">
+                  <h3 className="font-semibold text-white mb-2">Need Help?</h3>
+                  <p className="text-sm text-gray-400 mb-3">
                     If you have any questions about your order or delivery, our support team is here to help.
                   </p>
                   <div className="flex flex-wrap gap-4 text-sm">
-                    <a href="mailto:support@soumyafurnishings.com" className="text-accent-gold font-medium hover:underline">
+                    <a href="mailto:support@soumyafurnishings.com" className="text-[#4A90E2] font-medium hover:underline">
                       support@soumyafurnishings.com
                     </a>
-                    <span className="text-brand-charcoal/30">|</span>
-                    <a href="tel:+911234567890" className="text-accent-gold font-medium hover:underline">
+                    <span className="text-gray-600">|</span>
+                    <a href="tel:+911234567890" className="text-[#4A90E2] font-medium hover:underline">
                       +91 12345 67890
                     </a>
                   </div>
