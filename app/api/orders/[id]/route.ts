@@ -7,10 +7,10 @@ import { prisma } from '@/lib/prisma'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const orderId = params.id
+    const { id: orderId } = await params
 
     // Try to find order by ID, name (#1006), or orderNumber (1006)
     const order = await prisma.order.findFirst({
