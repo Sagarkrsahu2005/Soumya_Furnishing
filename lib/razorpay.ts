@@ -8,14 +8,26 @@ export const getRazorpayInstance = () => {
     const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
     const keySecret = process.env.RAZORPAY_KEY_SECRET
     
+    console.log("Initializing Razorpay with Key ID:", keyId?.substring(0, 10) + "...")
+    
     if (!keyId || !keySecret) {
+      console.error("Razorpay credentials missing:", { 
+        hasKeyId: !!keyId, 
+        hasKeySecret: !!keySecret 
+      })
       throw new Error("Razorpay credentials not found in environment variables")
     }
     
-    razorpayInstance = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
-    })
+    try {
+      razorpayInstance = new Razorpay({
+        key_id: keyId,
+        key_secret: keySecret,
+      })
+      console.log("Razorpay instance created successfully")
+    } catch (error) {
+      console.error("Error creating Razorpay instance:", error)
+      throw error
+    }
   }
   return razorpayInstance
 }

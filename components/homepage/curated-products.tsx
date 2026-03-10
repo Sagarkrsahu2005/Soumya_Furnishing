@@ -93,7 +93,7 @@ export default function CuratedProducts() {
               <div className="space-y-2">
                 <p className="text-white text-lg font-playfair line-clamp-2">{product.title}</p>
                 <p className="text-sm tracking-[0.3em] text-gray-400 uppercase">
-                  {formatPrice(product.price, product.currency)}
+                  {formatPrice(product.price / 100, product.currency)}
                 </p>
                 {product.materials && product.materials.length > 0 && (
                   <p className="text-xs text-gray-400 tracking-[0.2em] uppercase">

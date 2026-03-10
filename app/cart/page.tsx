@@ -85,7 +85,7 @@ export default function CartPage() {
                       >
                         {item.product.title}
                       </Link>
-                      <p className="text-lg font-bold text-white mb-2">{formatPrice(item.product.price)}</p>
+                      <p className="text-lg font-bold text-white mb-2">{formatPrice(item.product.price / 100)}</p>
                     </div>
 
                     {/* Quantity Controls */}
@@ -111,7 +111,7 @@ export default function CartPage() {
                       {/* Subtotal & Remove */}
                       <div className="text-right">
                         <p className="text-sm text-gray-400 mb-2">
-                          {formatPrice(item.product.price * item.quantity)}
+                          {formatPrice((item.product.price * item.quantity) / 100)}
                         </p>
                         <button
                           onClick={() => removeItem(item.productId, item.variantId)}
@@ -151,7 +151,7 @@ export default function CartPage() {
               <div className="space-y-4 mb-6 pb-6 border-b border-white/10">
                 <div className="flex justify-between text-gray-300">
                   <span>Subtotal</span>
-                  <span>{formatPrice(subtotal)}</span>
+                  <span>{formatPrice(subtotal / 100)}</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
                   <span>Shipping</span>
@@ -159,7 +159,7 @@ export default function CartPage() {
                     {shipping === 0 ? (
                       <span className="text-[#7CB342] font-semibold">Free</span>
                     ) : (
-                      formatPrice(shipping)
+                      formatPrice(shipping / 100)
                     )}
                   </span>
                 </div>
@@ -171,7 +171,7 @@ export default function CartPage() {
               <div className="mb-6">
                 <div className="flex justify-between font-bold text-lg text-white">
                   <span>Total</span>
-                  <span>{formatPrice(total)}</span>
+                  <span>{formatPrice(total / 100)}</span>
                 </div>
               </div>
 
@@ -186,7 +186,7 @@ export default function CartPage() {
                 <p className="font-medium text-white mb-2">Free Shipping Threshold</p>
                 <p>
                   {subtotal < 2000
-                    ? `Add ${formatPrice(2000 - subtotal)} more to get free shipping`
+                    ? `Add ${formatPrice((2000 - subtotal) / 100)} more to get free shipping`
                     : "You have qualified for free shipping!"}
                 </p>
               </div>

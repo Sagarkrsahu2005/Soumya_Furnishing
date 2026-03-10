@@ -303,11 +303,11 @@ export default function ProductsPage() {
   const rooms = Array.from(new Set(products.map(p => p.room).filter(Boolean)))
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Products</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Products</h1>
           <p className="text-gray-600 mt-1">
             {products.length} total products • {filteredProducts.length} shown
           </p>
@@ -329,7 +329,7 @@ export default function ProductsPage() {
           </Link>
           <Link
             href="/admin/products/new"
-            className="flex items-center gap-2 bg-gradient-to-r from-[#7CB342] to-[#558B2F] text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all"
+            className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-2 rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all shadow-lg shadow-emerald-500/20"
           >
             <Plus size={20} />
             Add Product
@@ -349,7 +349,7 @@ export default function ProductsPage() {
                 placeholder="Search products..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white transition-colors"
               />
             </div>
           </div>
@@ -359,7 +359,7 @@ export default function ProductsPage() {
             <select
               value={filterRoom}
               onChange={(e) => setFilterRoom(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 bg-gray-50/50 hover:bg-white transition-colors"
             >
               <option value="all">All Rooms</option>
               {rooms.map(room => (
@@ -373,7 +373,7 @@ export default function ProductsPage() {
             <select
               value={filterCollection}
               onChange={(e) => setFilterCollection(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 bg-gray-50/50 hover:bg-white transition-colors"
             >
               <option value="all">All Collections</option>
               {collections.map(col => (
@@ -387,7 +387,7 @@ export default function ProductsPage() {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 bg-gray-50/50 hover:bg-white transition-colors"
             >
               <option value="all">All Categories</option>
               {categories.map(cat => (
@@ -401,7 +401,7 @@ export default function ProductsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7CB342]"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-900 bg-gray-50/50 hover:bg-white transition-colors"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>

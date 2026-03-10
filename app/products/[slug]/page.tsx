@@ -17,6 +17,8 @@ import { useParams } from "next/navigation"
 import { useWishlist } from "@/hooks/use-wishlist"
 import { useToast } from "@/components/toasts"
 
+type ProductVariant = NonNullable<Product['variants']>[number]
+
 export default function ProductDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const [product, setProduct] = useState<Product | null>(null)
@@ -28,13 +30,30 @@ export default function ProductDetailPage() {
   const { addToast } = useToast()
   
   const [isWishlisted, setIsWishlisted] = useState(false)
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null)
+  const [displayPrice, setDisplayPrice] = useState<number>(0)
+  const [displayComparePrice, setDisplayComparePrice] = useState<number | undefined>(undefined)
 
   // Sync wishlist state
   useEffect(() => {
     if (product) {
       setIsWishlisted(isInWishlist(product.id))
+      // Set initial display price
+      setDisplayPrice(product.price)
+      setDisplayComparePrice(product.compareAtPrice)
     }
   }, [product, isInWishlist])
+
+  // Handle variant selection
+  const handleVariantSelect = (variantId: string) => {
+    if (!product?.variants) return
+    const variant = product.variants.find(v => v.id === variantId)
+    if (variant) {
+      setSelectedVariant(variant)
+      setDisplayPrice(variant.price || product.price)
+      setDisplayComparePrice(variant.compareAtPrice || product.compareAtPrice)
+    }
+  }
 
   const handleToggleWishlist = () => {
     if (!product) return
@@ -114,7 +133,7 @@ export default function ProductDetailPage() {
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-white text-sm line-clamp-2">{product?.title}</h3>
-              <p className="text-lg font-bold text-white mt-1">{product && formatPrice(product.price)}</p>
+              <p className="text-lg font-bold text-white mt-1">{product && formatPrice(displayPrice / 100)}</p>
             </div>
           </div>
           <motion.button
@@ -217,14 +236,14 @@ export default function ProductDetailPage() {
             {/* Price Section */}
             <div className="mb-8 pb-8 border-b border-white/10">
               <div className="flex items-baseline gap-4 mb-3">
-                <span className="text-4xl md:text-5xl font-bold text-white">{formatPrice(product.price)}</span>
-                {product.compareAtPrice && (
+                <span className="text-4xl md:text-5xl font-bold text-white">{formatPrice(displayPrice / 100)}</span>
+                {displayComparePrice && (
                   <>
                     <span className="text-2xl text-gray-500 line-through">
-                      {formatPrice(product.compareAtPrice)}
+                      {formatPrice(displayComparePrice / 100)}
                     </span>
                     <span className="px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
-                      Save {Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}%
+                      Save {Math.round(((displayComparePrice - displayPrice) / displayComparePrice) * 100)}%
                     </span>
                   </>
                 )}
@@ -267,7 +286,10 @@ export default function ProductDetailPage() {
 
             {product.variants && product.variants.length > 0 && (
               <div className="mb-8">
-                <VariantSelector variants={product.variants} />
+                <VariantSelector 
+                  variants={product.variants} 
+                  onSelectVariant={handleVariantSelect}
+                />
               </div>
             )}
 

@@ -33,16 +33,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
 
-    // Default warehouse/pickup location details
+    // Default warehouse/pickup location details from environment variables
     const fromAddress = {
-      name: 'Soumya Furnishings Warehouse',
-      address: shipmentDetails?.fromAddress || 'Warehouse Address, Area',
-      city: shipmentDetails?.fromCity || 'Mumbai',
-      state: shipmentDetails?.fromState || 'Maharashtra',
-      pincode: shipmentDetails?.fromPincode || '400001',
-      phone: shipmentDetails?.fromPhone || '+919876543210',
-      email: 'warehouse@soumyafurnishings.com',
+      name: process.env.WAREHOUSE_NAME || 'Soumya Furnishings',
+      address: process.env.WAREHOUSE_ADDRESS || 'Warehouse Address, Area',
+      city: process.env.WAREHOUSE_CITY || 'Panipat',
+      state: process.env.WAREHOUSE_STATE || 'Haryana',
+      pincode: process.env.WAREHOUSE_PINCODE || '132103',
+      phone: process.env.WAREHOUSE_PHONE || '+919876543210',
+      email: process.env.WAREHOUSE_EMAIL || 'warehouse@soumyafurnishings.com',
     }
+
+    console.log('Creating Delhivery shipment from:', fromAddress.city, fromAddress.pincode)
 
     // Customer shipping address
     const toAddress = {
@@ -54,6 +56,17 @@ export async function POST(request: NextRequest) {
       phone: order.phone || order.customer?.phone || '',
       email: order.email || order.customer?.email || '',
     }
+
+    // Validate customer address
+    if (!toAddress.name || !toAddress.address || !toAddress.city || !toAddress.pincode) {
+      console.error('Incomplete customer address:', toAddress)
+      return NextResponse.json(
+        { error: 'Incomplete shipping address. Please ensure all address fields are filled.' },
+        { status: 400 }
+      )
+    }
+
+    console.log('Shipping to:', toAddress.city, toAddress.pincode)
 
     // Prepare product details
     const products = order.items.map((item) => ({
@@ -68,25 +81,33 @@ export async function POST(request: NextRequest) {
       orderNumber: order.name || order.id,
       referenceId: order.id,
       paymentMode: order.financialStatus === 'PAID' ? 'Prepaid' : 'COD',
-      codAmount: order.financialStatus !== 'PAID' ? order.total / 100 : 0,
-      shipmentLength: shipmentDetails?.length || 30, // default 30cm
-      shipmentWidth: shipmentDetails?.width || 20, // default 20cm
-      shipmentHeight: shipmentDetails?.height || 15, // default 15cm
-      weight: shipmentDetails?.weight || 1000, // default 1kg
+      codAmount: order.financialStatus === 'PAID' ? 0 : order.total / 100,
+      shipmentLength: shipmentDetails?.length || 30,
+      shipmentWidth: shipmentDetails?.width || 20,
+      shipmentHeight: shipmentDetails?.height || 15,
+      weight: shipmentDetails?.weight || 1000,
       from: fromAddress,
       to: toAddress,
       products,
     }
 
     // Create shipment with Delhivery
+    console.log('Calling Delhivery API to create shipment...')
     const result = await createShipment(shipmentRequest)
 
     if (!result.success) {
+      console.error('Delhivery shipment creation failed:', result.error)
       return NextResponse.json(
-        { error: result.error || 'Failed to create shipment' },
+        { 
+          success: false,
+          error: result.error || 'Failed to create shipment',
+          details: 'The order has been placed but shipment creation failed. Admin will create shipment manually.' 
+        },
         { status: 500 }
       )
     }
+
+    console.log('Delhivery shipment created successfully. Waybill:', result.waybill)
 
     // Update order with tracking information
     const updatedOrder = await prisma.order.update({
@@ -97,25 +118,29 @@ export async function POST(request: NextRequest) {
         trackingUrl: result.trackingUrl,
         delhiveryStatus: 'Booked',
         courierName: 'Delhivery',
-        fulfillmentStatus: 'SHIPPED',
-        status: 'SHIPPED',
-        estimatedDelivery: result.estimatedDelivery
-          ? new Date(result.estimatedDelivery)
-          : new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // Default 5 days
+        status: 'PROCESSING',
       },
     })
+
+    console.log('Order updated with tracking details:', updatedOrder.id)
 
     return NextResponse.json({
       success: true,
       waybill: result.waybill,
       trackingUrl: result.trackingUrl,
       orderId: updatedOrder.id,
-      message: 'Shipment created successfully',
+      orderNumber: updatedOrder.orderNumber,
+      message: 'Shipment created successfully with Delhivery',
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating shipment:', error)
+    console.error('Error stack:', error.stack)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        success: false,
+        error: 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     )
   }

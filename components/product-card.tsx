@@ -225,11 +225,11 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Price */}
           <div className="flex items-baseline gap-2 flex-wrap">
             <span className={`text-xl font-bold ${isOutOfStock ? 'text-gray-600' : 'bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'}`}>
-              {formatPrice(product.price)}
+              {formatPrice(product.price / 100)}
             </span>
             {product.compareAtPrice && (
               <span className="text-xs text-gray-600 line-through">
-                {formatPrice(product.compareAtPrice)}
+                {formatPrice(product.compareAtPrice / 100)}
               </span>
             )}
             {isOutOfStock && (

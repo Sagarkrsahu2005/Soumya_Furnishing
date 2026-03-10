@@ -99,7 +99,7 @@ export default function FeaturedProductsGrid() {
                 
                 <div className="flex items-center justify-between pt-2">
                   <p className="text-sm tracking-[0.3em] text-gray-200 font-semibold">
-                    {formatPrice(product.price, product.currency)}
+                    {formatPrice(product.price / 100, product.currency)}
                   </p>
                   <span className="text-xs uppercase tracking-[0.3em] text-[#c8b27c] flex items-center gap-2 group-hover:gap-3 transition-all">
                     View

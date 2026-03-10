@@ -44,28 +44,28 @@ export default function AdminLayout({
       {/* Sidebar */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white 
-        flex flex-col shadow-2xl
+        w-64 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white 
+        flex flex-col shadow-2xl border-r border-slate-700
         transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Header */}
-        <div className="p-6 border-b border-gray-700 bg-gray-900/50">
+        <div className="p-6 border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-3">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-[#7CB342] to-[#558B2F] bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-600 bg-clip-text text-transparent">
               Soumya Admin
             </h1>
             <button 
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-gray-400 hover:text-white"
+              className="lg:hidden text-slate-400 hover:text-white transition-colors"
             >
               <X size={20} />
             </button>
           </div>
-          <p className="text-sm text-gray-400">Furniture Management</p>
+          <p className="text-sm text-slate-400">Furniture Management</p>
           {session?.user && (
-            <div className="mt-3 p-2 bg-gray-800/50 rounded-lg">
-              <p className="text-xs text-gray-300 font-medium truncate">{session.user.email}</p>
+            <div className="mt-3 p-2.5 bg-slate-800/70 rounded-lg border border-slate-700/50">
+              <p className="text-xs text-slate-300 font-medium truncate">{session.user.email}</p>
             </div>
           )}
         </div>
@@ -123,10 +123,10 @@ export default function AdminLayout({
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-gray-700 bg-gray-900/50">
+        <div className="p-4 border-t border-slate-700/50 bg-slate-900/80">
           <button 
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-red-500/10 rounded-lg transition-all group text-gray-300 hover:text-red-400"
+            className="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-red-500/10 rounded-lg transition-all group text-slate-300 hover:text-red-400 border border-transparent hover:border-red-500/20"
           >
             <LogOut size={20} className="group-hover:scale-110 transition-transform" />
             <span className="font-medium">Logout</span>
@@ -137,7 +137,7 @@ export default function AdminLayout({
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <header className="bg-white border-b border-gray-200 shadow-sm">
+        <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
           <div className="px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -152,14 +152,14 @@ export default function AdminLayout({
                 <input
                   type="text"
                   placeholder="Search products, orders, customers..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7CB342] focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all bg-gray-50/50 hover:bg-white text-gray-900 placeholder:text-gray-400"
                 />
               </div>
             </div>
 
-            <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Notifications">
+              <Bell size={20} className="text-gray-700" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </button>
           </div>
         </header>
@@ -194,8 +194,8 @@ function NavLink({
         flex items-center gap-3 px-4 py-3 rounded-lg 
         transition-all font-medium group
         ${active 
-          ? "bg-gradient-to-r from-[#7CB342] to-[#558B2F] text-white shadow-lg shadow-green-500/20" 
-          : "hover:bg-gray-800/50 text-gray-300 hover:text-white"
+          ? "bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-500/50" 
+          : "hover:bg-slate-800/60 text-slate-300 hover:text-white border border-transparent hover:border-slate-700"
         }
       `}
     >

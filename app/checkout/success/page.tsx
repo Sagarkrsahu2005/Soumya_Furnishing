@@ -4,16 +4,81 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { CheckCircle, Package, Truck, Home, Mail } from "lucide-react"
+import { CheckCircle, Package, Truck, Home, Mail, MapPin, User } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { formatPrice } from "@/lib/utils"
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
+import Image from "next/image"
+
+interface OrderItem {
+  id: string
+  title: string
+  quantity: number
+  unitPrice: number
+  totalPrice: number
+  product: {
+    id: string
+    title: string
+    images: string[]
+  } | null
+}
+
+interface OrderDetails {
+  id: string
+  name: string
+  orderNumber: number
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  shippingAddress: {
+    line1: string
+    line2: string | null
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
+  subtotal: number
+  shipping: number
+  tax: number
+  total: number
+  paymentMethod: string
+  trackingNumber: string | null
+  trackingUrl: string | null
+  delhiveryWaybill: string | null
+  courierName: string | null
+  items: OrderItem[]
+  createdAt: string
+}
 
 function OrderSuccessContent() {
   const searchParams = useSearchParams()
-  const orderId = searchParams.get("orderId")
+  const orderId = searchParams.get("orderId")?.replace('#', '') || searchParams.get("orderNumber")
   const total = searchParams.get("total")
   const payment = searchParams.get("payment")
+  
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null)
+  const [loading, setLoading] = useState(true)
+  
+  useEffect(() => {
+    if (orderId) {
+      fetch(`/api/orders/${orderId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setOrderDetails(data.order)
+          }
+          setLoading(false)
+        })
+        .catch(error => {
+          console.error('Failed to fetch order details:', error)
+          setLoading(false)
+        })
+    } else {
+      setLoading(false)
+    }
+  }, [orderId])
 
   const paymentMethodNames: Record<string, string> = {
     cod: "Cash on Delivery",
@@ -61,39 +126,200 @@ function OrderSuccessContent() {
         >
           <h2 className="text-xl font-bold text-white mb-6">Order Details</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm text-gray-400 mb-1">Order Number</p>
-              <p className="font-mono font-semibold text-white">{orderId}</p>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="inline-block w-8 h-8 border-4 border-[#4A90E2] border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-gray-400 mt-4">Loading order details...</p>
             </div>
+          ) : orderDetails ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Order Number</p>
+                  <p className="font-mono font-semibold text-white text-lg">{orderDetails.name}</p>
+                </div>
 
-            <div>
-              <p className="text-sm text-gray-400 mb-1">Order Total</p>
-              <p className="font-semibold text-white text-lg">
-                {total ? formatPrice(Number(total)) : "N/A"}
-              </p>
-            </div>
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Order Total</p>
+                  <p className="font-semibold text-white text-lg">
+                    {formatPrice(orderDetails.total / 100)}
+                  </p>
+                </div>
 
-            <div>
-              <p className="text-sm text-gray-400 mb-1">Payment Method</p>
-              <p className="font-semibold text-white">
-                {payment ? paymentMethodNames[payment] || payment : "N/A"}
-              </p>
-            </div>
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Payment Method</p>
+                  <p className="font-semibold text-white">
+                    {paymentMethodNames[orderDetails.paymentMethod] || orderDetails.paymentMethod}
+                  </p>
+                </div>
 
-            <div>
-              <p className="text-sm text-gray-400 mb-1">Estimated Delivery</p>
-              <p className="font-semibold text-white">
-                {estimatedDelivery.toLocaleDateString("en-IN", {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">via Delhivery</p>
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Estimated Delivery</p>
+                  <p className="font-semibold text-white">
+                    {estimatedDelivery.toLocaleDateString("en-IN", {
+                      weekday: "short",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">via {orderDetails.courierName || 'Delhivery'}</p>
+                </div>
+
+                {orderDetails.delhiveryWaybill && (
+                  <>
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Tracking Number</p>
+                      <p className="font-mono font-semibold text-[#4A90E2]">{orderDetails.delhiveryWaybill}</p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Track Shipment</p>
+                      {orderDetails.trackingUrl ? (
+                        <a 
+                          href={orderDetails.trackingUrl} 
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#4A90E2] hover:underline font-semibold inline-flex items-center gap-2"
+                        >
+                          <Truck className="w-4 h-4" />
+                          Track on Delhivery
+                        </a>
+                      ) : (
+                        <Link 
+                          href={`/track?order=${orderDetails.name}`}
+                          className="text-[#4A90E2] hover:underline font-semibold inline-flex items-center gap-2"
+                        >
+                          <Package className="w-4 h-4" />
+                          Track Order
+                        </Link>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Customer & Shipping Info */}
+              <div className="border-t border-white/10 pt-6 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <User className="w-5 h-5 text-[#4A90E2]" />
+                      <h3 className="font-semibold text-white">Customer</h3>
+                    </div>
+                    <p className="text-gray-300">{orderDetails.firstName} {orderDetails.lastName}</p>
+                    <p className="text-gray-400 text-sm">{orderDetails.email}</p>
+                    <p className="text-gray-400 text-sm">{orderDetails.phone}</p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="w-5 h-5 text-[#4A90E2]" />
+                      <h3 className="font-semibold text-white">Shipping Address</h3>
+                    </div>
+                    <p className="text-gray-300">{orderDetails.shippingAddress.line1}</p>
+                    {orderDetails.shippingAddress.line2 && (
+                      <p className="text-gray-300">{orderDetails.shippingAddress.line2}</p>
+                    )}
+                    <p className="text-gray-300">
+                      {orderDetails.shippingAddress.city}, {orderDetails.shippingAddress.state} {orderDetails.shippingAddress.postalCode}
+                    </p>
+                    <p className="text-gray-300">{orderDetails.shippingAddress.country}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Items */}
+              <div className="border-t border-white/10 pt-6">
+                <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
+                  <Package className="w-5 h-5 text-[#4A90E2]" />
+                  Items Ordered ({orderDetails.items.length})
+                </h3>
+                <div className="space-y-4">
+                  {orderDetails.items.map((item) => (
+                    <div key={item.id} className="flex gap-4 pb-4 border-b border-white/5 last:border-0">
+                      {item.product?.images[0] && (
+                        <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-[#1a1a1a] flex-shrink-0">
+                          <Image
+                            src={item.product.images[0]}
+                            alt={item.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-white truncate">{item.title}</h4>
+                        <p className="text-sm text-gray-400">Quantity: {item.quantity}</p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-semibold text-white">{formatPrice(item.totalPrice / 100)}</p>
+                        <p className="text-xs text-gray-500">{formatPrice(item.unitPrice / 100)} each</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Order Summary */}
+                <div className="mt-6 pt-6 border-t border-white/10 space-y-2">
+                  <div className="flex justify-between text-gray-300">
+                    <span>Subtotal</span>
+                    <span>{formatPrice(orderDetails.subtotal / 100)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-300">
+                    <span>Shipping</span>
+                    <span>{formatPrice(orderDetails.shipping / 100)}</span>
+                  </div>
+                </div>
+                
+                {/* Tax Note */}
+                <div className="mb-4 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                  <p className="text-xs text-emerald-400 text-center font-medium">✓ All taxes included in product prices</p>
+                </div>
+                
+                <div className="border-t border-white/10 pt-3">
+                  <div className="flex justify-between text-white font-bold text-lg">
+                    <span>Total</span>
+                    <span>{formatPrice(orderDetails.total / 100)}</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Order Number</p>
+                <p className="font-mono font-semibold text-white">{orderId || "N/A"}</p>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Order Total</p>
+                <p className="font-semibold text-white text-lg">
+                  {total ? formatPrice(Number(total) / 100) : "N/A"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Payment Method</p>
+                <p className="font-semibold text-white">
+                  {payment ? paymentMethodNames[payment] || payment : "N/A"}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Estimated Delivery</p>
+                <p className="font-semibold text-white">
+                  {estimatedDelivery.toLocaleDateString("en-IN", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">via Delhivery</p>
+              </div>
             </div>
-          </div>
+          )}
         </motion.div>
 
         {/* What's Next */}

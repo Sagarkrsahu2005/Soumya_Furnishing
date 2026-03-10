@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import { prisma } from "@/lib/db"
 import bcrypt from "bcryptjs"
@@ -11,6 +12,17 @@ function hashPassword(password: string): string {
 
 export const authOptions = {
   providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
+    }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
@@ -70,9 +82,34 @@ export const authOptions = {
     signIn: "/auth/login"
   },
   callbacks: {
-    async jwt({ token, user }: any) {
+    async signIn({ user, account, profile }: any) {
+      // For Google sign-in, automatically create customer if doesn't exist
+      if (account?.provider === "google" && user?.email) {
+        try {
+          const existingCustomer = await prisma.customer.findUnique({
+            where: { email: user.email }
+          })
+
+          if (!existingCustomer) {
+            // Create new customer from Google profile
+            await prisma.customer.create({
+              data: {
+                email: user.email,
+                firstName: profile?.given_name || user.name?.split(' ')[0] || 'User',
+                lastName: profile?.family_name || user.name?.split(' ').slice(1).join(' ') || '',
+                acceptsMarketing: false,
+              }
+            })
+          }
+        } catch (error) {
+          console.error('Error creating customer:', error)
+        }
+      }
+      return true
+    },
+    async jwt({ token, user, account }: any) {
       if (user) {
-        token.role = user.role
+        token.role = user.role || 'customer'
         token.firstName = user.firstName
         token.lastName = user.lastName
       }

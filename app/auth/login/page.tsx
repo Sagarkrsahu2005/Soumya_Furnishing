@@ -1,334 +1,169 @@
 "use client"
 
-import { useState } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { motion } from "framer-motion"
-import { Mail, Lock, User, Phone } from "lucide-react"
+import { Chrome, ShoppingBag, Shield, Sparkles, Zap, Lock, ArrowLeft } from "lucide-react"
+import { Suspense } from "react"
 
-export default function AuthPage() {
+function LoginContent() {
   const router = useRouter()
-  const [isLogin, setIsLogin] = useState(true)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/account"
 
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  })
-
-  const [signupData, setSignupData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-  })
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-
+  const handleGoogleSignIn = async () => {
     try {
-      const result = await signIn("credentials", {
-        email: loginData.email,
-        password: loginData.password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setError("Invalid email or password")
-      } else {
-        router.push("/account")
-        router.refresh()
-      }
-    } catch (err) {
-      setError("Something went wrong. Please try again.")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-
-    if (signupData.password !== signupData.confirmPassword) {
-      setError("Passwords do not match")
-      setLoading(false)
-      return
-    }
-
-    if (signupData.password.length < 6) {
-      setError("Password must be at least 6 characters")
-      setLoading(false)
-      return
-    }
-
-    try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: signupData.firstName,
-          lastName: signupData.lastName,
-          email: signupData.email,
-          phone: signupData.phone,
-          password: signupData.password,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.error || "Failed to create account")
-        return
-      }
-
-      // Auto login after signup
-      const result = await signIn("credentials", {
-        email: signupData.email,
-        password: signupData.password,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setError("Account created but login failed. Please try logging in.")
-      } else {
-        router.push("/account")
-        router.refresh()
-      }
-    } catch (err) {
-      setError("Something went wrong. Please try again.")
-    } finally {
-      setLoading(false)
+      await signIn("google", { callbackUrl })
+    } catch (error) {
+      console.error("Sign in error:", error)
     }
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-black">
       <Navbar />
-      <main className="min-h-screen bg-black pt-32 pb-16 px-4">
-        <div className="max-w-md mx-auto">
+      
+      {/* Background Effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl" />
+      </div>
+      
+      <main className="flex-1 flex items-center justify-center px-4 py-12 relative z-10 pt-33.5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          {/* Logo/Header */}
+          <div className="text-center mb-8">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-600 rounded-2xl shadow-2xl shadow-emerald-500/50 mb-6 relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-green-500 rounded-2xl blur opacity-50 animate-pulse" />
+              <ShoppingBag className="text-white relative z-10" size={40} strokeWidth={2.5} />
+            </motion.div>
+            <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
+              Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Soumya</span>
+            </h1>
+            <p className="text-gray-400 text-lg">Sign in to continue shopping</p>
+          </div>
+
+          {/* Google Sign In Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#1a1a1a] rounded-2xl shadow-lg p-8 border border-white/10"
+            transition={{ delay: 0.3 }}
+            className="bg-gradient-to-br from-zinc-900/90 to-zinc-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8 relative overflow-hidden"
           >
-            {/* Toggle Buttons */}
-            <div className="flex gap-2 mb-8 bg-[#2d2d2d] p-1 rounded-lg">
-              <button
-                onClick={() => {
-                  setIsLogin(true)
-                  setError("")
-                }}
-                className={`flex-1 py-2 rounded-lg font-medium transition-all ${
-                  isLogin
-                    ? "bg-[#4A90E2] text-white shadow"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                Login
-              </button>
-              <button
-                onClick={() => {
-                  setIsLogin(false)
-                  setError("")
-                }}
-                className={`flex-1 py-2 rounded-lg font-medium transition-all ${
-                  !isLogin
-                    ? "bg-[#4A90E2] text-white shadow"
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                Sign Up
-              </button>
-            </div>
-
-            {error && (
-              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
-                {error}
+            {/* Gradient overlay */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
+            
+            <button
+              onClick={handleGoogleSignIn}
+              className="w-full relative group overflow-hidden bg-white hover:bg-gray-50 text-gray-900 px-6 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-emerald-500/20 font-semibold"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+              <div className="relative flex items-center justify-center gap-3">
+                <Chrome className="text-emerald-600" size={24} />
+                <span className="text-lg">Continue with Google</span>
               </div>
-            )}
+            </button>
 
-            {isLogin ? (
-              <form onSubmit={handleLogin} className="space-y-6">
-                <h1 className="text-2xl font-bold text-white mb-2">Welcome Back</h1>
-                <p className="text-gray-300 mb-6">Sign in to your account</p>
-
+            {/* Features */}
+            <div className="mt-8 pt-6 border-t border-white/10 space-y-4">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex items-center gap-4 group hover:bg-white/5 p-3 rounded-lg transition-colors"
+              >
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Lock className="text-emerald-400" size={20} />
+                </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      type="email"
-                      required
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="you@example.com"
-                    />
-                  </div>
+                  <p className="text-white font-medium">Secure Authentication</p>
+                  <p className="text-gray-500 text-sm">Protected by Google</p>
                 </div>
+              </motion.div>
 
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex items-center gap-4 group hover:bg-white/5 p-3 rounded-lg transition-colors"
+              >
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Zap className="text-emerald-400" size={20} />
+                </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      type="password"
-                      required
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="••••••••"
-                    />
-                  </div>
+                  <p className="text-white font-medium">Lightning Fast</p>
+                  <p className="text-gray-500 text-sm">Instant checkout & tracking</p>
                 </div>
+              </motion.div>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 bg-[#4A90E2] text-white rounded-lg font-medium hover:bg-[#3A7BC8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? "Signing in..." : "Sign In"}
-                </button>
-              </form>
-            ) : (
-              <form onSubmit={handleSignup} className="space-y-5">
-                <h1 className="text-2xl font-bold text-white mb-2">Create Account</h1>
-                <p className="text-gray-300 mb-6">Join us to start shopping</p>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      First Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                      <input
-                        type="text"
-                        required
-                        value={signupData.firstName}
-                        onChange={(e) => setSignupData({ ...signupData, firstName: e.target.value })}
-                        className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                        placeholder="John"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={signupData.lastName}
-                      onChange={(e) => setSignupData({ ...signupData, lastName: e.target.value })}
-                      className="w-full px-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="Doe"
-                    />
-                  </div>
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+                className="flex items-center gap-4 group hover:bg-white/5 p-3 rounded-lg transition-colors"
+              >
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <ShoppingBag className="text-emerald-400" size={20} />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      type="email"
-                      required
-                      value={signupData.email}
-                      onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="you@example.com"
-                    />
-                  </div>
+                  <p className="text-white font-medium">Personalized Experience</p>
+                  <p className="text-gray-500 text-sm">Save preferences & addresses</p>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      type="tel"
-                      required
-                      value={signupData.phone}
-                      onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="+91 98765 43210"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      type="password"
-                      required
-                      value={signupData.password}
-                      onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Confirm Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                    <input
-                      type="password"
-                      required
-                      value={signupData.confirmPassword}
-                      onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
-                      className="w-full pl-10 pr-4 py-3 border border-white/20 bg-[#2d2d2d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A90E2]"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 bg-[#4A90E2] text-white rounded-lg font-medium hover:bg-[#3A7BC8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? "Creating Account..." : "Create Account"}
-                </button>
-              </form>
-            )}
-
-            <div className="mt-6 text-center">
-              <Link href="/" className="text-sm text-gray-400 hover:text-[#4A90E2]">
-                ← Back to Home
-              </Link>
+              </motion.div>
             </div>
           </motion.div>
-        </div>
+
+          {/* Back to Store */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="text-center mt-6"
+          >
+            <Link 
+              href="/" 
+              className="text-gray-400 hover:text-emerald-400 transition-colors inline-flex items-center gap-2 font-medium group"
+            >
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+              <span>Continue shopping as guest</span>
+            </Link>
+          </motion.div>
+
+          {/* Privacy Notice */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="text-xs text-gray-500 text-center mt-8 px-4 leading-relaxed"
+          >
+            By signing in, you agree to our <span className="text-emerald-400">Terms of Service</span> and <span className="text-emerald-400">Privacy Policy</span>.<br />
+            Your data is secure and never shared with third parties.
+          </motion.p>
+        </motion.div>
       </main>
+
       <Footer />
-    </>
+    </div>
+  )
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   )
 }

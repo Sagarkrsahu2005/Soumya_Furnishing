@@ -29,10 +29,13 @@ export default function CheckoutPage() {
 
   // Load Razorpay script
   useEffect(() => {
+    console.log("Loading Razorpay script...")
     loadRazorpayScript().then((loaded) => {
       setRazorpayLoaded(loaded)
       if (!loaded) {
         console.error("Failed to load Razorpay SDK")
+      } else {
+        console.log("Razorpay SDK loaded successfully")
       }
     })
   }, [])
@@ -60,7 +63,7 @@ export default function CheckoutPage() {
 
   const subtotal = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
   const shipping = subtotal > 2000 ? 0 : 299
-  const tax = Math.round(subtotal * 0.18) // 18% GST
+  const tax = 0 // All taxes included in product prices
   const total = subtotal + shipping + tax
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -101,6 +104,9 @@ export default function CheckoutPage() {
 
   const handleRazorpayPayment = async () => {
     try {
+      console.log("Starting Razorpay payment flow...")
+      console.log("Razorpay Key ID:", process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID?.substring(0, 10) + "...")
+      
       // First create order in database
       const orderResponse = await fetch("/api/orders/create", {
         method: "POST",
@@ -109,12 +115,12 @@ export default function CheckoutPage() {
         },
         body: JSON.stringify({
           items: items.map(item => ({
-            title: item.title,
-            variant: item.variant,
-            sku: item.sku,
+            title: item.product.title,
+            variant: item.variantId,
+            sku: item.product.sku,
             quantity: item.quantity,
-            price: item.price,
-            productId: item.id,
+            price: item.product.price,
+            productId: item.productId,
           })),
           customer: {
             firstName: formData.firstName,
@@ -171,8 +177,11 @@ export default function CheckoutPage() {
       const data = await response.json()
 
       if (!data.success) {
-        throw new Error("Failed to create payment order")
+        console.error("Failed to create Razorpay order:", data)
+        throw new Error(data.error || "Failed to create payment order")
       }
+
+      console.log("Razorpay order created successfully:", data.order)
 
       // Initialize Razorpay checkout
       const options = {
@@ -196,8 +205,9 @@ export default function CheckoutPage() {
 
           if (verifyData.success) {
             // Payment successful - Now create shipment with Delhivery
+            console.log('Payment verified, creating Delhivery shipment...')
             try {
-              await fetch("/api/shipping/create", {
+              const shipmentResponse = await fetch("/api/shipping/create", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -212,9 +222,19 @@ export default function CheckoutPage() {
                   },
                 }),
               })
+              
+              const shipmentData = await shipmentResponse.json()
+              
+              if (shipmentData.success) {
+                console.log('✅ Delhivery shipment created! Waybill:', shipmentData.waybill)
+              } else {
+                console.error('⚠️ Shipment creation failed:', shipmentData.error)
+                // Show warning but continue - admin can create shipment manually
+                console.warn('Order placed successfully but shipment creation failed. Admin will create shipment manually.')
+              }
             } catch (shipError) {
               console.error("Failed to create shipment:", shipError)
-              // Continue anyway - admin can create shipment later
+              // Continue anyway - order is placed, admin can create shipment later
             }
 
             clearCart()
@@ -249,9 +269,9 @@ export default function CheckoutPage() {
 
       const razorpay = new window.Razorpay(options)
       razorpay.open()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Razorpay payment error:", error)
-      alert("Failed to initiate payment. Please try again.")
+      alert(`Failed to initiate payment: ${error.message || "Please try again."}`)
       setIsProcessing(false)
     }
   }
@@ -271,6 +291,14 @@ export default function CheckoutPage() {
         setIsProcessing(false)
         return
       }
+      
+      if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) {
+        console.error("NEXT_PUBLIC_RAZORPAY_KEY_ID is not set")
+        alert("Payment gateway is not configured. Please contact support.")
+        setIsProcessing(false)
+        return
+      }
+      
       await handleRazorpayPayment()
     } else {
       // COD order - create order in database
@@ -282,12 +310,12 @@ export default function CheckoutPage() {
           },
           body: JSON.stringify({
             items: items.map(item => ({
-              title: item.title,
-              variant: item.variant,
-              sku: item.sku,
+              title: item.product.title,
+              variant: item.variantId,
+              sku: item.product.sku,
               quantity: item.quantity,
-              price: item.price,
-              productId: item.id,
+              price: item.product.price,
+              productId: item.productId,
             })),
             customer: {
               firstName: formData.firstName,
@@ -322,8 +350,9 @@ export default function CheckoutPage() {
         }
 
         // Create shipment with Delhivery
+        console.log('COD order created, creating Delhivery shipment...')
         try {
-          await fetch("/api/shipping/create", {
+          const shipmentResponse = await fetch("/api/shipping/create", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -338,9 +367,22 @@ export default function CheckoutPage() {
               },
             }),
           })
+          
+          const shipmentData = await shipmentResponse.json()
+          
+          if (shipmentData.success) {
+            console.log('✅ Delhivery shipment created! Waybill:', shipmentData.waybill)
+            console.log('Tracking URL:', shipmentData.trackingUrl)
+          } else {
+            console.error('⚠️ Shipment creation failed:', shipmentData.error)
+            console.error('Details:', shipmentData.details)
+            // Show warning but continue - admin can create shipment manually
+            alert('Order placed successfully! However, automatic shipping creation failed. Our team will create your shipment manually and send you tracking details via email.')
+          }
         } catch (shipError) {
           console.error("Failed to create shipment:", shipError)
-          // Continue anyway - admin can create shipment later
+          // Continue anyway - order is placed, admin can create shipment later
+          alert('Order placed successfully! Shipping will be processed manually by our team.')
         }
 
         clearCart()
@@ -702,7 +744,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-white truncate">{item.product.title}</p>
-                        <p className="text-sm text-gray-400">{formatPrice(item.product.price)}</p>
+                        <p className="text-sm text-gray-400">{formatPrice(item.product.price / 100)}</p>
                       </div>
                     </div>
                   ))}
@@ -712,7 +754,7 @@ export default function CheckoutPage() {
                 <div className="space-y-3 mb-6 pb-6 border-b border-white/10">
                   <div className="flex justify-between text-gray-400">
                     <span>Subtotal</span>
-                    <span>{formatPrice(subtotal)}</span>
+                    <span>{formatPrice(subtotal / 100)}</span>
                   </div>
                   <div className="flex justify-between text-gray-400">
                     <span>Shipping</span>
@@ -720,21 +762,22 @@ export default function CheckoutPage() {
                       {shipping === 0 ? (
                         <span className="text-[#7CB342] font-semibold">Free</span>
                       ) : (
-                        formatPrice(shipping)
+                        formatPrice(shipping / 100)
                       )}
                     </span>
                   </div>
-                  <div className="flex justify-between text-gray-400">
-                    <span>Tax (GST 18%)</span>
-                    <span>{formatPrice(tax)}</span>
-                  </div>
+                </div>
+
+                {/* Tax Note */}
+                <div className="mb-4 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                  <p className="text-xs text-emerald-400 text-center font-medium">✓ All taxes included in product prices</p>
                 </div>
 
                 {/* Total */}
                 <div className="mb-6">
                   <div className="flex justify-between font-bold text-xl text-white">
                     <span>Total</span>
-                    <span>{formatPrice(total)}</span>
+                    <span>{formatPrice(total / 100)}</span>
                   </div>
                 </div>
 
@@ -750,7 +793,7 @@ export default function CheckoutPage() {
                       Processing...
                     </span>
                   ) : (
-                    `Place Order - ${formatPrice(total)}`
+                    `Place Order - ${formatPrice(total / 100)}`
                   )}
                 </button>
 

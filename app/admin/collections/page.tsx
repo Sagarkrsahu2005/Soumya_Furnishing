@@ -28,13 +28,13 @@ export default function CollectionsPage() {
   }, [])
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-white min-h-screen">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Collections</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Collections</h1>
           <p className="text-gray-600 mt-2">Organize products into collections</p>
         </div>
-        <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+        <button className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-2.5 rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all shadow-lg shadow-emerald-500/20">
           <Plus size={20} />
           Add Collection
         </button>
@@ -51,17 +51,17 @@ export default function CollectionsPage() {
           </div>
         ) : (
           collections.map((collection) => (
-            <div key={collection.id} className="bg-white rounded-lg shadow hover:shadow-md transition-shadow">
+            <div key={collection.id} className="bg-white rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="bg-blue-50 p-3 rounded-lg">
-                    <FolderOpen className="text-blue-600" size={24} />
+                  <div className="bg-emerald-50 p-3 rounded-lg">
+                    <FolderOpen className="text-emerald-600" size={24} />
                   </div>
                   <div className="flex gap-2">
-                    <button className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors">
+                    <button className="p-2 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all">
                       <Edit size={18} />
                     </button>
-                    <button className="p-2 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded transition-colors">
+                    <button className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
                       <Trash2 size={18} />
                     </button>
                   </div>
@@ -84,7 +84,7 @@ export default function CollectionsPage() {
                   <Link
                     href={`/collections/${collection.handle}`}
                     target="_blank"
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    className="text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
                   >
                     View →
                   </Link>

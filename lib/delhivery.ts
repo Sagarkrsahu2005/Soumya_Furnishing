@@ -153,31 +153,56 @@ export async function createShipment(
       },
     }
 
+    console.log('🚀 Calling Delhivery API:', `${apiUrl}/cmu/create.json`)
+    console.log('📦 Shipment request:', JSON.stringify(shipmentData, null, 2))
+    
+    // Delhivery API requires form-urlencoded data, not JSON
+    const formData = new URLSearchParams({
+      format: 'json',
+      data: JSON.stringify(shipmentData),
+    })
+    
     const response = await fetch(`${apiUrl}/cmu/create.json`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `Token ${apiKey}`,
       },
-      body: JSON.stringify({
-        format: 'json',
-        data: JSON.stringify(shipmentData),
-      }),
+      body: formData.toString(),
     })
 
     const data = await response.json()
+    console.log('📥 Delhivery API Response:', JSON.stringify(data, null, 2))
+    console.log('Response status:', response.status, response.statusText)
 
     if (!response.ok || !data.success) {
+      const errorMessage = data.remark || data.error || 'Failed to create shipment with Delhivery'
+      console.error('❌ Delhivery API Error:', errorMessage)
+      console.error('Full error response:', data)
       return {
         success: false,
         waybill: '',
         shipmentId: '',
         trackingUrl: '',
-        error: data.remark || 'Failed to create shipment',
+        error: errorMessage,
       }
     }
 
     const waybill = data.packages?.[0]?.waybill || data.waybill
+    
+    if (!waybill) {
+      console.error('❌ No waybill returned from Delhivery API')
+      console.error('API response:', data)
+      return {
+        success: false,
+        waybill: '',
+        shipmentId: '',
+        trackingUrl: '',
+        error: 'No waybill received from Delhivery. Please check API configuration.',
+      }
+    }
+    
+    console.log('✅ Real Delhivery Waybill Generated:', waybill)
     
     return {
       success: true,

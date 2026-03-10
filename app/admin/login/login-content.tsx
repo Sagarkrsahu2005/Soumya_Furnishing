@@ -40,11 +40,11 @@ export default function AdminLoginContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-lg mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-600 to-green-600 rounded-2xl shadow-lg shadow-emerald-500/30 mb-4">
             <Lock className="text-white" size={32} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Login</h1>
@@ -52,7 +52,7 @@ export default function AdminLoginContent() {
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
@@ -71,7 +71,7 @@ export default function AdminLoginContent() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white transition-colors"
                   placeholder="admin@soumyafurnishings.com"
                 />
               </div>
@@ -88,7 +88,7 @@ export default function AdminLoginContent() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900 placeholder:text-gray-400 bg-gray-50/50 hover:bg-white transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -97,23 +97,23 @@ export default function AdminLoginContent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="w-full bg-gradient-to-r from-emerald-600 to-green-600 text-white py-3 rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-xs font-semibold text-gray-700 mb-2">Demo Credentials:</p>
-            <p className="text-xs text-gray-600">Email: admin@soumyafurnishings.com</p>
-            <p className="text-xs text-gray-600">Password: admin123</p>
+          <div className="mt-6 p-4 bg-emerald-50 border border-emerald-100 rounded-lg">
+            <p className="text-xs font-semibold text-emerald-900 mb-2">Demo Credentials:</p>
+            <p className="text-xs text-emerald-700">Email: admin@soumyafurnishings.com</p>
+            <p className="text-xs text-emerald-700">Password: admin123</p>
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-center mt-6">
-          <a href="/" className="text-sm text-gray-600 hover:text-gray-900">
+          <a href="/" className="text-sm text-gray-600 hover:text-emerald-600 transition-colors font-medium">
             ← Back to Store
           </a>
         </div>

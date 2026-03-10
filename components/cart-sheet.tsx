@@ -84,7 +84,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                         >
                           {item.product.title}
                         </Link>
-                        <p className="text-sm font-bold text-gray-300 mb-2">{formatPrice(item.product.price)}</p>
+                        <p className="text-sm font-bold text-gray-300 mb-2">{formatPrice(item.product.price / 100)}</p>
 
                         {/* Quantity Controls */}
                         <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1 w-fit">
@@ -123,7 +123,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between text-gray-400">
                       <span>Subtotal</span>
-                      <span>{formatPrice(subtotal)}</span>
+                      <span>{formatPrice(subtotal / 100)}</span>
                     </div>
                     <div className="flex justify-between text-gray-400">
                       <span>Shipping</span>
@@ -131,7 +131,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                         {shipping === 0 ? (
                           <span className="text-[#7CB342] font-semibold">Free</span>
                         ) : (
-                          formatPrice(shipping)
+                          formatPrice(shipping / 100)
                         )}
                       </span>
                     </div>
@@ -141,7 +141,7 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
                   <div className="border-t border-white/10 pt-4">
                     <div className="flex justify-between font-bold text-lg text-white mb-4">
                       <span>Total</span>
-                      <span>{formatPrice(total)}</span>
+                      <span>{formatPrice(total / 100)}</span>
                     </div>
                     <Link
                       href="/checkout"
