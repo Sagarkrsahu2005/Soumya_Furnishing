@@ -8,6 +8,7 @@ import { AddToCart } from "@/components/add-to-cart"
 import { ProductTabs } from "@/components/product-tabs"
 import { PairWith } from "@/components/pair-with"
 import { TrustBadges } from "@/components/trust-badges"
+import { MultiVariantCart } from "@/components/multi-variant-cart"
 import type { Product } from "@/lib/types"
 import { formatPrice, formatRating } from "@/lib/utils"
 import { motion, useScroll, useTransform } from "framer-motion"
@@ -24,6 +25,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null)
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
   const [showStickyCart, setShowStickyCart] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { scrollY } = useScroll()
   const opacity = useTransform(scrollY, [0, 200], [1, 0])
   const { isInWishlist, toggleItem } = useWishlist()
@@ -75,7 +77,17 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     if (slug) {
-      void fetch(`/api/products/${slug}`).then((r) => r.json()).then((p) => setProduct(p || null))
+      setIsLoading(true)
+      void fetch(`/api/products/${slug}`)
+        .then((r) => r.json())
+        .then((p) => {
+          setProduct(p || null)
+          setIsLoading(false)
+        })
+        .catch(() => {
+          setProduct(null)
+          setIsLoading(false)
+        })
     }
   }, [slug])
 
@@ -87,12 +99,38 @@ export default function ProductDetailPage() {
     }
   }, [product])
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-black">
+        <Navbar />
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent mb-4"></div>
+            <p className="text-xl text-gray-400">Loading product...</p>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    )
+  }
+
+  // Product not found state
   if (!product) {
     return (
       <main className="min-h-screen bg-black">
         <Navbar />
         <div className="flex items-center justify-center h-screen">
-          <p className="text-2xl text-white">Product not found</p>
+          <div className="text-center">
+            <p className="text-2xl text-white mb-2">Product not found</p>
+            <p className="text-gray-400 mb-6">The product you're looking for doesn't exist.</p>
+            <a 
+              href="/products" 
+              className="inline-block px-6 py-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+            >
+              Browse Products
+            </a>
+          </div>
         </div>
         <Footer />
       </main>
@@ -255,54 +293,86 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Material & Color Info */}
-            {(product.materials || product.colors) && (
-              <div className="mb-8 pb-8 border-b border-white/10 space-y-4">
-                {product.materials && (
-                  <div>
-                    <p className="text-sm font-bold text-white mb-2 uppercase tracking-wider">Material</p>
-                    <div className="flex flex-wrap gap-2">
-                      {product.materials.map((material) => (
-                        <span key={material} className="px-3 py-1.5 bg-[#2d2d2d] text-gray-300 text-sm font-medium rounded-lg">
-                          {material}
-                        </span>
-                      ))}
+            <div className="mb-8 pb-8 border-b border-white/10 space-y-4">
+              {/* Material Section */}
+              <div>
+                <p className="text-sm font-bold text-white mb-2 uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-1 h-4 bg-emerald-500 rounded-full"></span>
+                  Material
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {product.materials && product.materials.length > 0 ? (
+                    product.materials.map((material) => (
+                      <motion.span
+                        key={material}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="px-4 py-2 bg-gradient-to-br from-[#2d2d2d] to-[#1a1a1a] text-gray-300 text-sm font-medium rounded-lg border border-white/5 hover:border-emerald-500/30 transition-all"
+                      >
+                        {material}
+                      </motion.span>
+                    ))
+                  ) : (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500/5 to-blue-500/5 border border-emerald-500/20 rounded-lg">
+                      <Sparkles className="w-4 h-4 text-emerald-400" />
+                      <span className="text-emerald-400 text-sm font-medium">Premium Quality Materials</span>
                     </div>
-                  </div>
-                )}
-                {product.colors && (
-                  <div>
-                    <p className="text-sm font-bold text-white mb-2 uppercase tracking-wider">Color</p>
-                    <div className="flex flex-wrap gap-2">
-                      {product.colors.map((color) => (
-                        <span key={color} className="px-3 py-1.5 bg-[#2d2d2d] text-gray-300 text-sm font-medium rounded-lg capitalize">
-                          {color.toLowerCase()}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            )}
 
-            {product.variants && product.variants.length > 0 && (
+              {/* Color Section */}
+              <div>
+                <p className="text-sm font-bold text-white mb-2 uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-1 h-4 bg-blue-500 rounded-full"></span>
+                  Color
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {product.colors && product.colors.length > 0 ? (
+                    product.colors.map((color) => (
+                      <motion.span
+                        key={color}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="px-4 py-2 bg-gradient-to-br from-[#2d2d2d] to-[#1a1a1a] text-gray-300 text-sm font-medium rounded-lg border border-white/5 hover:border-blue-500/30 transition-all capitalize"
+                      >
+                        {color.toLowerCase()}
+                      </motion.span>
+                    ))
+                  ) : product.variants && product.variants.length > 0 ? (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/5 to-purple-500/5 border border-blue-500/20 rounded-lg">
+                      <div className="flex -space-x-1">
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-red-400 to-pink-400 border border-white/20"></div>
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 border border-white/20"></div>
+                        <div className="w-3 h-3 rounded-full bg-gradient-to-br from-green-400 to-emerald-400 border border-white/20"></div>
+                      </div>
+                      <span className="text-blue-400 text-sm font-medium">Multiple Color Options Available</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500/5 to-gray-600/5 border border-gray-500/20 rounded-lg">
+                      <span className="text-gray-400 text-sm font-medium">As Shown in Image</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {product.variants && product.variants.length > 0 ? (
               <div className="mb-8">
-                <VariantSelector 
-                  variants={product.variants} 
-                  onSelectVariant={handleVariantSelect}
-                />
+                <MultiVariantCart product={product} variants={product.variants} />
               </div>
+            ) : (
+              /* Add to Cart Section - Only show if no variants */
+              <motion.div 
+                id="main-add-to-cart"
+                className="mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <AddToCart product={product} />
+              </motion.div>
             )}
-
-            {/* Add to Cart Section */}
-            <motion.div 
-              id="main-add-to-cart"
-              className="mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <AddToCart product={product} />
-            </motion.div>
 
             {/* Action Buttons */}
             <div className="flex gap-3 mb-8 pb-8 border-b border-white/10">

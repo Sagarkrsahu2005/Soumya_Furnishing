@@ -55,67 +55,110 @@ export function CartSheet({ isOpen, onClose }: CartSheetProps) {
             {items.length > 0 ? (
               <>
                 <div className="p-4 md:p-6 space-y-4">
-                  {items.map((item) => (
-                    <motion.div
-                      key={`${item.productId}-${item.variantId}`}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="flex gap-4 pb-4 border-b border-white/10 last:border-0"
-                    >
-                      {/* Image */}
-                      <Link
-                        href={`/products/${item.product.slug}`}
-                        className="relative w-20 h-20 flex-shrink-0 overflow-hidden bg-[#1a1a1a] rounded-lg"
+                  {items.map((item) => {
+                    // Get variant if exists
+                    const variant = item.variantId 
+                      ? item.product.variants?.find(v => v.id === item.variantId)
+                      : null
+                    
+                    // Generate unique color for each variant
+                    const variantColors = [
+                      { border: 'border-l-emerald-500', bg: 'bg-emerald-500/10', text: 'text-emerald-400', borderColor: 'border-emerald-500/30' },
+                      { border: 'border-l-blue-500', bg: 'bg-blue-500/10', text: 'text-blue-400', borderColor: 'border-blue-500/30' },
+                      { border: 'border-l-purple-500', bg: 'bg-purple-500/10', text: 'text-purple-400', borderColor: 'border-purple-500/30' },
+                      { border: 'border-l-pink-500', bg: 'bg-pink-500/10', text: 'text-pink-400', borderColor: 'border-pink-500/30' },
+                      { border: 'border-l-orange-500', bg: 'bg-orange-500/10', text: 'text-orange-400', borderColor: 'border-orange-500/30' },
+                      { border: 'border-l-yellow-500', bg: 'bg-yellow-500/10', text: 'text-yellow-400', borderColor: 'border-yellow-500/30' },
+                      { border: 'border-l-cyan-500', bg: 'bg-cyan-500/10', text: 'text-cyan-400', borderColor: 'border-cyan-500/30' },
+                      { border: 'border-l-rose-500', bg: 'bg-rose-500/10', text: 'text-rose-400', borderColor: 'border-rose-500/30' },
+                    ]
+                    
+                    // Hash variant ID to get consistent color
+                    const colorIndex = variant 
+                      ? variant.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % variantColors.length
+                      : 0
+                    const colors = variantColors[colorIndex]
+                    
+                    return (
+                      <motion.div
+                        key={`${item.productId}-${item.variantId}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className={`flex gap-4 pb-4 border-b border-white/10 last:border-0 pl-3 border-l-4 ${variant ? colors.border : 'border-l-gray-700'}`}
                       >
-                        <Image
-                          src={item.product.images[0]?.src || "/placeholder.svg?key=crts"}
-                          alt={item.product.title}
-                          fill
-                          className="object-cover hover:scale-110 transition-transform"
-                        />
-                      </Link>
-
-                      {/* Details */}
-                      <div className="flex-1 min-w-0">
+                        {/* Image */}
                         <Link
                           href={`/products/${item.product.slug}`}
-                          className="block text-sm font-semibold text-white hover:text-[#4A90E2] transition-colors truncate mb-2"
+                          className={`relative w-20 h-20 flex-shrink-0 overflow-hidden bg-[#1a1a1a] rounded-lg border-2 ${variant ? colors.borderColor : 'border-white/10'}`}
                         >
-                          {item.product.title}
+                          <Image
+                            src={item.product.images[0]?.src || "/placeholder.svg?key=crts"}
+                            alt={item.product.title}
+                            fill
+                            className="object-cover hover:scale-110 transition-transform"
+                          />
+                          {variant && (
+                            <div className={`absolute top-0 right-0 w-3 h-3 ${colors.bg} rounded-bl-lg border-l ${colors.borderColor} border-b`}></div>
+                          )}
                         </Link>
-                        <p className="text-sm font-bold text-gray-300 mb-2">{formatPrice(item.product.price / 100)}</p>
 
-                        {/* Quantity Controls */}
-                        <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1 w-fit">
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
-                            className="p-1 hover:bg-white/10 rounded transition-colors text-white"
-                            aria-label="Decrease quantity"
+                        {/* Details */}
+                        <div className="flex-1 min-w-0">
+                          <Link
+                            href={`/products/${item.product.slug}`}
+                            className="block text-sm font-semibold text-white hover:text-[#4A90E2] transition-colors truncate mb-1"
                           >
-                            <Minus className="w-3 h-3" />
-                          </button>
-                          <span className="px-2 text-xs font-semibold text-white">{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
-                            className="p-1 hover:bg-white/10 rounded transition-colors text-white"
-                            aria-label="Increase quantity"
-                          >
-                            <Plus className="w-3 h-3" />
-                          </button>
+                            {item.product.title}
+                          </Link>
+                          
+                          {/* Variant Badge */}
+                          {variant && (
+                            <div className={`mb-2 px-2 py-1 ${colors.bg} rounded-md border ${colors.borderColor} inline-block`}>
+                              <div className="flex items-center gap-1">
+                                <svg className={`w-3 h-3 ${colors.text}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                                <span className={`text-xs font-semibold ${colors.text} uppercase tracking-wide`}>
+                                  {variant.name}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                          
+                          <p className="text-sm font-bold text-gray-300 mb-2">{formatPrice(item.product.price / 100)}</p>
+
+                          {/* Quantity Controls */}
+                          <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1 w-fit">
+                            <button
+                              onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
+                              className="p-1 hover:bg-white/10 rounded transition-colors text-white"
+                              aria-label="Decrease quantity"
+                            >
+                              <Minus className="w-3 h-3" />
+                            </button>
+                            <span className="px-2 text-xs font-semibold text-white">{item.quantity}</span>
+                            <button
+                              onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
+                              className="p-1 hover:bg-white/10 rounded transition-colors text-white"
+                              aria-label="Increase quantity"
+                            >
+                              <Plus className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Remove Button */}
-                      <button
-                        onClick={() => removeItem(item.productId, item.variantId)}
-                        className="p-2 text-gray-400 hover:text-red-400 transition-colors"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </motion.div>
-                  ))}
+                        {/* Remove Button */}
+                        <button
+                          onClick={() => removeItem(item.productId, item.variantId)}
+                          className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                          aria-label="Remove item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </motion.div>
+                    )
+                  })}
                 </div>
 
                 {/* Pricing Summary */}
